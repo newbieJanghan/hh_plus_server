@@ -57,7 +57,9 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         ```json
         {
             "code": "OK",
-            "balance": 0
+            "data": {
+                "balance": 0
+            }
         }
         ```
     - 400 Bad Request: 충전 금액이 적절하지 않은 경우
@@ -95,7 +97,10 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         ```json
         {
             "code": "OK",
-            "balance": 0
+            "data": {
+                "userId": 1,
+                "balance": 0
+            }
         }
         ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
@@ -132,7 +137,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         ```json
         {
             "code": "OK",
-            "products": [
+            "data": [
                 {
                     "id": 1,
                     "name": "상품1",
@@ -179,29 +184,32 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         ```json
         {
             "code": "OK",
-            "id": 1,
+            "data": {
+                "id": 1,
                 "totalPrice": 0,
                 "balance": 0,
-            "items": [
-                {
-                    "product": {
-                        "id": 1,
-                        "name": "상품1",
-                        "price": 1000,
-                        "stock": 10
+                "status": "ORDERED",
+                "items": [
+                    {
+                        "product": {
+                            "id": 1,
+                            "name": "상품1",
+                            "price": 1000,
+                            "stock": 10
+                        },
+                        "quantity": 1
                     },
-                    "quantity": 1
-                },
-                {
-                    "product": {
-                        "id": 2,
-                        "name": "상품2",
-                        "price": 2000,
-                        "stock": 10
-                    },
-                    "quantity": 2
-                }
-            ]
+                    {
+                        "product": {
+                            "id": 2,
+                            "name": "상품2",
+                            "price": 2000,
+                            "stock": 10
+                        },
+                        "quantity": 2
+                    }
+                ]
+            }
         }
         ```
     - 400 Bad Request: 주문 상품이 적절하지 않은 경우
@@ -266,7 +274,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         ```json
         {
             "code": "OK",
-            "products": [
+            "data": [
                 {
                     "id": 1,
                     "name": "상품1",
