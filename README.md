@@ -28,6 +28,7 @@ gantt
 |4| 주문 | 사용자는 상품을 주문/결제할 수 있다.              | 기능  |||
 |5| 인기 판매 상품 조회 | 사용자는 인기 판매 상품을 조회할 수 있다.           | 기능  |||
 |6| 주문 | 마지막 재고에 여러 주문이 들어오는 경우 첫 주문만 허용한다. | 비기능 |||
+|7| 주문 | 잔액이 부족한 경우 주문을 거부한다.                | 비기능 |||
 # API 명세
 **Authorization**: Bearer token 대신 userId 값으로 사용자를 식별한다.
 Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
@@ -45,13 +46,13 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         }
         ```
 - Response
-  - 200 OK: 성공적으로 충전
-      ```json
-      {
-          "code": "OK",
-          "balance": 0
-      }
-      ```
+    - 200 OK: 성공적으로 충전
+        ```json
+        {
+            "code": "OK",
+            "balance": 0
+        }
+        ```
     - 400 Bad Request: 충전 금액이 적절하지 않은 경우
         ```json
         {
@@ -66,13 +67,13 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
             "message": "user token is not valid"
         }
         ```
-        - 404 Not Found User: 유저 정보가 없는 경우
-            ```json
-            {
-                "code": "NOT_FOUND_USER",
-                "message": "no user information was found"
-            }
-            ```
+    - 404 Not Found User: 유저 정보가 없는 경우
+        ```json
+        {
+            "code": "NOT_FOUND_USER",
+            "message": "no user information was found"
+        }
+        ```
 ### 잔액 조회
 - Request
     - Method: GET
@@ -82,12 +83,12 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         - Authorization: Bearer {token}
 - Response
     - 200 OK: 성공적으로 조회
-      ```json
-      {
-          "code": "OK",
-          "balance": 0
-      }
-      ```
+        ```json
+        {
+            "code": "OK",
+            "balance": 0
+        }
+        ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
         ```json
         {
@@ -96,12 +97,12 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         }
         ```
     - 404 Not Found User: 유저 정보가 없는 경우
-      ```json
-      {
-      "code": "NOT_FOUND_USER",
-      "message": "no user information was found"
-      }
-      ```
+        ```json
+        {
+            "code": "NOT_FOUND_USER",
+            "message": "no user information was found"
+        }
+        ```
 ### 상품 목록 조회
 - Request
     - Method: GET
@@ -116,24 +117,24 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         - category?: ${category}
 - Response
     - 200 OK: 성공적으로 조회
-      ```json
-      {
-          "code": "OK",
-          "products": [
-              {
-                  "id": 1,
-                  "name": "상품1",
-                  "price": 1000,
-                  "stock": 10
-              }
-          ],
-          "pageInfo": {
-              "offset": 1,
-              "size": 10,
-              "total": 1
-          }
-      }
-      ```
+        ```json
+        {
+            "code": "OK",
+            "products": [
+                {
+                    "id": 1,
+                    "name": "상품1",
+                    "price": 1000,
+                    "stock": 10
+                }
+            ],
+            "pageInfo": {
+                "offset": 1,
+                "size": 10,
+                "total": 1
+            }
+        }
+        ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
         ```json
         {
@@ -152,86 +153,86 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - Body:
         ```json
         { 
-           "items":  [ 
+           "items": [ 
                 { "productId": 1, "quantity": 1 },
                 { "productId": 2, "quantity": 2 }
             ],
-          "totalPrice": 0,
-          "eventId": 1
+           "totalPrice": 0,
+           "eventId": 1
         }
         ```
 - Response
-  - 200 OK: 성공적으로 주문
-      ```json
-      {
-          "code": "OK",
-          "id": 1,
-            "totalPrice": 0,
-            "balance": 0,
-          "items": [
-            {
-              "product": {
-                "id": 1,
-                "name": "상품1",
-                "price": 1000,
-                "stock": 10
-              },
-              "quantity": 1
-            },
-              {
-                "product": {
-                  "id": 2,
-                  "name": "상품2",
-                  "price": 2000,
-                  "stock": 10
+    - 200 OK: 성공적으로 주문
+        ```json
+        {
+            "code": "OK",
+            "id": 1,
+                "totalPrice": 0,
+                "balance": 0,
+            "items": [
+                {
+                    "product": {
+                        "id": 1,
+                        "name": "상품1",
+                        "price": 1000,
+                        "stock": 10
+                    },
+                    "quantity": 1
                 },
-                "quantity": 2
-              }
-        ]
-      }
-      ```
-      - 400 Bad Request: 주문 상품이 적절하지 않은 경우
-          ```json
-          {
-                "code": "BAD_REQUEST",
-              "message": "order item is not valid"
-          }
-          ```
-      - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
-          ```json
-          {
-                "code": "UNAUTHORIZED",
-              "message": "user token is not valid"
-          }
-          ```
-        - 404 Not Found User: 유저 정보가 없는 경우
-            ```json
-            {
-                "code": "NOT_FOUND_USER",
-                "message": "no user information was found"
-            }
-            ```
-          - 404 Not Found Product: 상품 정보가 없는 경우
-              ```json
-              {
-                    "code": "NOT_FOUND_PRODUCT",
-                  "message": "no product information was found"
-              }
-              ```
-        - 422 Insufficient Product Stock: 재고가 부족한 경우
-          ```json
-          {
-                "code": "INSUFFICIENT_PRODUCT_STOCK",
-              "message": "product stock is insufficient"
-          }
-          ```
-          - 422 Insufficient Balance: 잔액이 부족한 경우
-              ```json
-              {
-                    "code": "INSUFFICIENT_BALANCE",
-                  "message": "balance is insufficient"
-              }
-              ```
+                {
+                    "product": {
+                        "id": 2,
+                        "name": "상품2",
+                        "price": 2000,
+                        "stock": 10
+                    },
+                    "quantity": 2
+                }
+            ]
+        }
+        ```
+    - 400 Bad Request: 주문 상품이 적절하지 않은 경우
+        ```json
+        {
+            "code": "BAD_REQUEST",
+            "message": "order item is not valid"
+        }
+        ```
+    - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
+        ```json
+        {
+            "code": "UNAUTHORIZED",
+            "message": "user token is not valid"
+        }
+        ```
+    - 404 Not Found User: 유저 정보가 없는 경우
+        ```json
+        {
+            "code": "NOT_FOUND_USER",
+            "message": "no user information was found"
+        }
+        ```
+    - 404 Not Found Product: 상품 정보가 없는 경우
+        ```json
+        {
+            "code": "NOT_FOUND_PRODUCT",
+            "message": "no product information was found"
+        }
+        ```
+    - 422 Insufficient Product Stock: 재고가 부족한 경우
+        ```json
+        {
+            "code": "INSUFFICIENT_PRODUCT_STOCK",
+            "message": "product stock is insufficient"
+        }
+        ```
+    - 422 Insufficient Balance: 잔액이 부족한 경우
+        ```json
+        {
+            "code": "INSUFFICIENT_BALANCE",
+            "message": "balance is insufficient"
+        }
+        ```
 ### 인기 판매 상품 조회
 - Request
     - Method: GET
