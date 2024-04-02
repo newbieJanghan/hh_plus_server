@@ -321,6 +321,10 @@ erDiagram
         long product_id
         long quantity
     }
+    VIEW_PRODUCT_SELL_COUNT_WITHIN_3_DAYS {
+        long product_id
+        long count
+    }
     USER ||--o{ USER_BALANCE_LOG: "잔액 충전/사용 로그"
     USER ||--o{ ORDER: "주문"
     ORDER ||--o{ ORDER_ITEM: "주문 상품"
