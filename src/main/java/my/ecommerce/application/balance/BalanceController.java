@@ -1,7 +1,7 @@
 package my.ecommerce.application.balance;
 
-import my.ecommerce.application.balance.request.ChargeRequestDto;
-import my.ecommerce.application.balance.response.BalanceResponseDto;
+import my.ecommerce.application.balance.dto.BalanceResponseDto;
+import my.ecommerce.application.balance.dto.ChargeRequestDto;
 import my.ecommerce.domain.balance.Balance;
 import my.ecommerce.domain.balance.BalanceService;
 import org.springframework.beans.factory.annotation.Autowired;

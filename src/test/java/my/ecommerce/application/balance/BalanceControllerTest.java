@@ -43,7 +43,7 @@ public class BalanceControllerTest {
         mockMvc
                 .perform(get("/api/v1/balance").header("Authorization", userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("ok"))
+                .andExpect(jsonPath("$.code").value("OK"))
                 .andExpect(jsonPath("$.data.amount").value(amount));
     }
 
@@ -67,7 +67,7 @@ public class BalanceControllerTest {
                                 .content(body.toString())
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("ok"))
+                .andExpect(jsonPath("$.code").value("OK"))
                 .andExpect(jsonPath("$.data.amount").value(amount));
     }
 }
