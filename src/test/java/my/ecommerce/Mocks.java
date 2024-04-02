@@ -1,8 +1,10 @@
 package my.ecommerce;
 
+import my.ecommerce.application.balance.dto.BalanceResponseDto;
+import my.ecommerce.application.common.pagination.CursorPageInfo;
+import my.ecommerce.application.products.dto.ProductsResponseDto;
 import my.ecommerce.domain.balance.Balance;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.dto.ProductList;
 
 import java.util.List;
 
@@ -13,8 +15,17 @@ public class Mocks {
                 .build();
     }
 
-    public static ProductList mockProductList() {
-        return new ProductList(2, mockProducts());
+    public static BalanceResponseDto mockBalanceResponseDto(long amount) {
+        return new BalanceResponseDto(mockBalance(amount));
+    }
+
+    public static ProductsResponseDto mockProductsResponseDto() {
+        CursorPageInfo pageInfo = CursorPageInfo.builder()
+                .total(2)
+                .cursor(2)
+                .size(2)
+                .build();
+        return new ProductsResponseDto(mockProducts(), pageInfo);
     }
 
     public static List<Product> mockProducts() {

@@ -6,20 +6,12 @@ import my.ecommerce.domain.product.Product;
 import java.util.List;
 
 @Getter
-public class ProductList {
+public class ProductSearchResult {
     private final long total;
     private final List<Product> list;
 
-    public ProductList(long total, List<Product> list) {
+    public ProductSearchResult(long total, List<Product> list) {
         this.total = total;
         this.list = list;
-    }
-
-    public long getCursor() {
-        return list.getLast().getId();
-    }
-
-    public long getSize() {
-        return list.size();
     }
 }
