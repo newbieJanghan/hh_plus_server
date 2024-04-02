@@ -1,7 +1,6 @@
 package my.ecommerce.application.balance;
 
 import my.ecommerce.Mocks;
-import my.ecommerce.domain.balance.BalanceService;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,8 +36,8 @@ public class BalanceControllerTest {
     public void findBalance_success() throws Exception {
         long userId = 1;
         long amount = 1000;
-        when(balanceService.findOne(userId))
-                .thenReturn(Mocks.mockBalance(amount));
+        when(balanceService.getOne(userId))
+                .thenReturn(Mocks.mockBalanceResponseDto(amount));
 
         mockMvc
                 .perform(get("/api/v1/balance").header("Authorization", userId))
@@ -54,7 +53,7 @@ public class BalanceControllerTest {
         long userId = 1;
         long amount = 1000;
         when(balanceService.charge(userId, amount))
-                .thenReturn(Mocks.mockBalance(amount));
+                .thenReturn(Mocks.mockBalanceResponseDto(amount));
 
         JSONObject body = new JSONObject();
         body.put("amount", amount);
