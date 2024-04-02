@@ -2,7 +2,7 @@ package my.ecommerce;
 
 import my.ecommerce.application.balance.dto.BalanceResponseDto;
 import my.ecommerce.application.common.pagination.CursorPageInfo;
-import my.ecommerce.application.products.dto.ProductsResponseDto;
+import my.ecommerce.application.products.dto.PaginatedProductsResponseDto;
 import my.ecommerce.domain.balance.Balance;
 import my.ecommerce.domain.product.Product;
 
@@ -15,30 +15,22 @@ public class Mocks {
                 .build();
     }
 
-    public static BalanceResponseDto mockBalanceResponseDto(long amount) {
-        return new BalanceResponseDto(mockBalance(amount));
+    public static BalanceResponseDto mockBalanceResponseDto() {
+        return new BalanceResponseDto(new Balance());
     }
 
-    public static ProductsResponseDto mockProductsResponseDto() {
-        CursorPageInfo pageInfo = CursorPageInfo.builder()
-                .total(2)
-                .cursor(2)
-                .size(2)
+    public static PaginatedProductsResponseDto mockProductsResponseDto() {
+        CursorPageInfo pageInfo = new CursorPageInfo();
+        return new PaginatedProductsResponseDto(List.of(new Product()), pageInfo);
+    }
+
+    public static Product mockProduct(long id) {
+        return Product.builder()
+                .id(id)
                 .build();
-        return new ProductsResponseDto(mockProducts(), pageInfo);
     }
 
-    public static List<Product> mockProducts() {
-        return List.of(
-                Product.builder()
-                        .id(1)
-                        .name("상품1")
-                        .price(1000)
-                        .build(),
-                Product.builder()
-                        .id(2)
-                        .name("상품2")
-                        .price(2000)
-                        .build());
+    public static List<Product> mockProducts(long id) {
+        return List.of(mockProduct(id));
     }
 }
