@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/balance")
 public class BalanceController {
 
-    private BalanceService service;
+    private final BalanceService balanceService;
 
     @Autowired
-    public BalanceController(BalanceService service) {
-        this.service = service;
+    public BalanceController(BalanceService balanceService) {
+        this.balanceService = balanceService;
     }
 
     @GetMapping("")
-    public Response<Balance> getBalance(@RequestHeader String authorization) {
-        return new Response<>("ok", service.getBalance(parseUserId(authorization)));
+    public Response<Balance> myBalance(@RequestHeader String authorization) {
+        return new Response<>("ok", balanceService.findOne(parseUserId(authorization)));
     }
 
     @PostMapping("/charge")
     public Response<Balance> charge(@RequestHeader String authorization, @RequestBody ChargeRequestDto chargeRequestDto) {
         System.out.println(chargeRequestDto);
-        return new Response<>("ok", service.charge(parseUserId(authorization), chargeRequestDto.getAmount()));
+        return new Response<>("ok", balanceService.charge(parseUserId(authorization), chargeRequestDto.getAmount()));
     }
 
     private long parseUserId(String userIdFromHeader) {

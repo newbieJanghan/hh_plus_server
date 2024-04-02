@@ -23,21 +23,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BalanceControllerTest {
     private MockMvc mockMvc;
     @MockBean
-    private BalanceService service;
+    private BalanceService balanceService;
 
     @BeforeEach
     void setMockMvc() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(service)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(balanceService)).build();
 
     }
 
     @Test
     @DisplayName("잔액 조회 성공")
     @WithMockUser
-    public void getBalance_success() throws Exception {
+    public void findBalance_success() throws Exception {
         long userId = 1;
         long amount = 1000;
-        when(service.getBalance(userId))
+        when(balanceService.findOne(userId))
                 .thenReturn(Mocks.mockBalance(amount));
 
         mockMvc
@@ -53,7 +53,7 @@ public class BalanceControllerTest {
     public void charge_success() throws Exception {
         long userId = 1;
         long amount = 1000;
-        when(service.charge(userId, amount))
+        when(balanceService.charge(userId, amount))
                 .thenReturn(Mocks.mockBalance(amount));
 
         JSONObject body = new JSONObject();
