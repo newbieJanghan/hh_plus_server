@@ -6,11 +6,11 @@ gantt
     dateFormat YYYY-MM-DD
     section API 명세
         요구사항 분석: Done, 2024-03-30, 2024-04-01
-        API 명세 작성: active, 2024-04-01, 2024-04-02
+        API 명세 작성: Done, 2024-04-01, 2024-04-02
     section DB 설계
-        DB 설계: future, 2024-04-02, 2024-04-03
+        DB 설계: Done, 2024-04-02, 2024-04-03
     section API Application 세팅
-        MOCK API 개발: future, 2024-04-03, 2024-04-04
+        MOCK API 개발: active, 2024-04-03, 2024-04-04
         서버 프로젝트 셋업: future, 2024-04-04, 2024-04-05
     section API 기본 기능 구현
         잔액 충전 / 조회 API: future, 2024-04-05, 2024-04-06
@@ -124,7 +124,8 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - Query:
         - cursor: 1
         - size?: 10
-        - sort?: desc
+        - sort?: createdAt
+        - direction?: desc
         - category?: ${category}
 - Response
     - 200 OK: 성공적으로 조회
@@ -257,7 +258,8 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - Query:
         - cursor: 1
         - size?: 10
-        - sort?: desc
+        - sort?: createdAt
+        - direction?: desc
         - category?: ${category}
 - Response
     - 200 OK: 성공적으로 조회
