@@ -1,7 +1,10 @@
 package my.ecommerce.application.common;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public abstract class PaginatedResponse<T, P> {
     String code;
     List<T> data;

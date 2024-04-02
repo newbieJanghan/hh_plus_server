@@ -1,4 +1,4 @@
-package my.ecommerce.application.balance.response;
+package my.ecommerce.application.balance.dto;
 
 import lombok.Builder;
 import lombok.Getter;

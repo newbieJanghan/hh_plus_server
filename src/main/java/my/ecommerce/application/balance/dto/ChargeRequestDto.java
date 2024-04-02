@@ -1,4 +1,4 @@
-package my.ecommerce.application.balance.request;
+package my.ecommerce.application.balance.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

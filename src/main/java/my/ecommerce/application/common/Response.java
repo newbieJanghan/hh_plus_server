@@ -1,5 +1,8 @@
 package my.ecommerce.application.common;
 
+import lombok.Getter;
+
+@Getter
 public abstract class Response<T> {
     String code;
     T data;
