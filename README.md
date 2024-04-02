@@ -35,7 +35,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
 ### 잔액 충전
 - Request
     - Method: POST
-    - URL: /api/v1/charge
+    - URL: /api/v1/balance/charge
     - Header: 
         - Content-Type: application/json
         - Authorization: Bearer {token}
