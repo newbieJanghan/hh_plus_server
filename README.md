@@ -142,7 +142,8 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
             "pageInfo": {
                 "cursor": 1,
                 "size": 10,
-                "total": 1
+                "total": 1,
+                "totalPages": 1
             }
         }
         ```
@@ -274,7 +275,8 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
             "pageInfo": {
                 "cursor": 1,
                 "size": 10,
-                "total": 1
+                "total": 1,
+                "totalPages": 1
             }
         }
         ```
