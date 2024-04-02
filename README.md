@@ -157,8 +157,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
                 { "productId": 1, "quantity": 1 },
                 { "productId": 2, "quantity": 2 }
             ],
-           "totalPrice": 0,
-           "eventId": 1
+           "totalPrice": 0
         }
         ```
 - Response
@@ -273,3 +272,39 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
         }
         ```
           
+
+# ERD
+```mermaid
+erDiagram
+    USER {
+        long id
+        long balance
+    }
+    USER_BALANCE_LOG {
+        long id
+        long user_id
+        long amount
+        string type
+    }
+    PRODUCT {
+        long product_id
+        string name
+        long price
+        long stock
+    }
+    ORDER {
+        long id
+        long user_id
+        long totalPrice
+        string status
+    }
+    ORDER_ITEM {
+        long order_id
+        long product_id
+        long quantity
+    }
+    USER ||--o{ USER_BALANCE_LOG : "잔액 충전/사용 로그"
+    USER ||--o{ ORDER : "주문"
+    ORDER ||--o{ ORDER_ITEM : "주문 상품"
+    PRODUCT ||--o{ ORDER_ITEM : "주문 상품"
+```
