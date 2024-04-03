@@ -79,7 +79,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - 404 Not Found User: 유저 정보가 없는 경우
         ```json
         {
-            "code": "NOT_FOUND_USER",
+            "code": "NOT_FOUND",
             "message": "no user information was found"
         }
         ```
@@ -113,7 +113,7 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - 404 Not Found User: 유저 정보가 없는 경우
         ```json
         {
-            "code": "NOT_FOUND_USER",
+            "code": "NOT_FOUND",
             "message": "no user information was found"
         }
         ```
@@ -229,14 +229,14 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
     - 404 Not Found User: 유저 정보가 없는 경우
         ```json
         {
-            "code": "NOT_FOUND_USER",
+            "code": "NOT_FOUND",
             "message": "no user information was found"
         }
         ```
     - 404 Not Found Product: 상품 정보가 없는 경우
         ```json
         {
-            "code": "NOT_FOUND_PRODUCT",
+            "code": "NOT_FOUND",
             "message": "no product information was found"
         }
         ```
