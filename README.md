@@ -303,38 +303,53 @@ Session 로그인 기능이 들어온 이후 jwt 로 대체한다.
 ```mermaid
 erDiagram
     USER {
-        long id
-        long balance
+        uuid id PK
     }
-    USER_BALANCE_LOG {
-        long id
-        long user_id
+    USER_BALANCE {
+        uuid id PK
+        long user_id FK
+        long amount
+    }
+    USER_BALANCE_HISTORY {
+        uuid id PK
+        uuid user_balance_id FK
         long amount
         string type
     }
     PRODUCT {
-        long product_id
+        uuid id PK
         string name
         long price
         long stock
     }
+    STOCK_HISTORY {
+        uuid product_id FK
+        long quantity
+        string type
+    }
     ORDER {
-        long id
-        long user_id
-        long totalPrice
+        uuid id PK
+        uuid user_id FK
+        long total_price
         string status
     }
     ORDER_ITEM {
-        long order_id
-        long product_id
+        uuid id PK
+        uuid order_id FK
+        uuid product_id FK
         long quantity
     }
-    VIEW_PRODUCT_SELL_COUNT_WITHIN_3_DAYS {
-        long product_id
-        long count
+    DAILY_PRODUCT_RANK {
+        uuid id PK
+        uuid product_id FK
+        date ranked_date
+        long rank
     }
-    USER ||--o{ USER_BALANCE_LOG: "잔액 충전/사용 로그"
+    USER ||--|| USER_BALANCE: "포인트"
+    USER_BALANCE ||--o{ USER_BALANCE_HISTORY: "잔액 충전/사용 로그"
     USER ||--o{ ORDER: "주문"
     ORDER ||--o{ ORDER_ITEM: "주문 상품"
+    PRODUCT ||--o{ DAILY_PRODUCT_RANK: "인기 상품"
     PRODUCT ||--o{ ORDER_ITEM: "주문 상품"
+    PRODUCT ||--o| STOCK_HISTORY: "재고"
 ```
