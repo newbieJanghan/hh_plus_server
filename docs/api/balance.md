@@ -1,0 +1,147 @@
+# 잔액 API
+
+## 잔액 조회
+
+### API 명세
+
+- Request
+    - Method: GET
+    - URL: /api/v1/balance
+    - Header:
+        - Content-Type: application/json
+        - Authorization: Bearer {token}
+- Response
+    - 200 OK: 성공적으로 조회
+        ```json
+        {
+            "code": "OK",
+            "data": {
+                "id": "uuid",
+                "userId": "uuid",
+                "balance": 0
+            }
+        }
+        ```
+    - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
+        ```json
+        {
+            "code": "UNAUTHORIZED",
+            "message": "user token is not valid"
+        }
+        ```
+    - 404 Not Found User: 유저 정보가 없는 경우
+        ```json
+        {
+            "code": "NOT_FOUND",
+            "message": "no user information was found"
+        }
+        ```
+
+### 플로우 차트
+
+```mermaid
+sequenceDiagram
+    participant client
+#
+    box Application
+        participant BalanceController
+        participant BalanceService
+    end
+#
+    box Domain
+        participant UserBalanceRepository
+    end
+#
+    client ->> BalanceController: GET /api/v1/balance
+    BalanceController ->> BalanceService: myBalance(userId)
+#
+    BalanceService ->> UserBalanceRepository: findOneByUserId(userId)
+    UserBalanceRepository -->> BalanceService: UserBalance
+#
+    BalanceService -->> BalanceController: UserBalanceResponse
+    BalanceController -->> client: 200 OK, UserBalanceResponse
+```
+
+## 잔액 충전
+
+### API 명세
+
+- Request
+    - Method: POST
+    - URL: /api/v1/balance/charge
+    - Header:
+        - Content-Type: application/json
+        - Authorization: Bearer {token}
+    - Body:
+        ```json
+        {
+            "amount": 0
+        }
+        ```
+- Response
+    - 200 OK: 성공적으로 충전
+        ```json
+        {
+            "code": "OK",
+            "data": {
+                "id": "uuid",
+                "userId": "uuid",
+                "balance": 0
+            }
+        }
+        ```
+    - 400 Bad Request: 충전 금액이 적절하지 않은 경우
+        ```json
+        {
+            "code": "BAD_REQUEST",
+            "message": "requested amount is not valid"
+        }
+        ```
+    - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
+        ```json
+        {
+            "code": "UNAUTHORIZED",
+            "message": "user token is not valid"
+        }
+        ```
+    - 404 Not Found User: 유저 정보가 없는 경우
+        ```json
+        {
+            "code": "NOT_FOUND",
+            "message": "no user information was found"
+        }
+        ```
+
+### 플로우 차트
+
+```mermaid
+sequenceDiagram
+    participant client
+    box Application
+        participant BalanceController
+        participant BalanceService
+    end
+
+    box Domain
+        participant UserBalanceApp
+        participant UserBalanceRepository
+        participant UserBalanceHistoryRepository
+    end
+
+    client ->> BalanceController: POST /api/v1/balance
+    BalanceController ->> BalanceService: charge(userId, amount)
+    BalanceService ->> UserBalanceApp: chargeToUser(userId, amount)
+#
+    UserBalanceApp ->> UserBalanceRepository: findOneByUserId(userId)
+    UserBalanceRepository -->> UserBalanceApp: UserBalance
+    Note over UserBalanceApp: UserBalance.charge(amount)
+    
+    UserBalanceApp ->> UserBalanceRepository: save(UserBalance)
+    UserBalanceRepository -->> UserBalanceApp: UserBalance
+    UserBalanceApp ->> UserBalanceHistoryRepository: save(UserBalanceHistory)
+    
+#
+    UserBalanceApp -->> BalanceService: UserBalance
+    BalanceService -->> BalanceController: UserBalanceResponse
+    BalanceController -->> client: 200 OK, UserBalanceResponse
+```
