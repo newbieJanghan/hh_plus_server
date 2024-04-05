@@ -44,17 +44,17 @@ gantt
 Bearer token 대신 userId 값으로 사용자를 식별한다.
 이후 jwt 로 대체한다.
 
-## [잔액 API](./docs/flowcharts/balance.md)
+## [잔액 API](./docs/api/balance.md)
 
 - 잔액 조회
 - 잔액 충전
 
-## [상품 API](./docs/flowcharts/products.md)
+## [상품 API](./docs/api/products.md)
 
 - 상품 목록 조회
 - 인기 상품 조회
 
-## [주문 API](./docs/flowcharts/orders.md)
+## [주문 API](./docs/api/orders.md)
 
 - 주문
 
