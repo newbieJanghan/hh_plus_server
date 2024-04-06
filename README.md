@@ -91,25 +91,27 @@ erDiagram
         uuid id PK
         uuid user_id FK
         long total_price
-        string status
     }
     ORDER_ITEM {
         uuid id PK
         uuid order_id FK
         uuid product_id FK
+        string status
         long quantity
+        long paid_price
     }
-    DAILY_PRODUCT_SALES {
+    PAYMENT {
         uuid id PK
-        uuid product_id FK
-        long sales_count
-        datetime counted_at
+        uuid order_id FK
+        uuid paymet_method_id
+        string type
+        string status
     }
     USER ||--|| USER_BALANCE: "포인트"
     USER_BALANCE ||--o{ USER_BALANCE_HISTORY: "잔액 충전/사용 로그"
     USER ||--o{ ORDER: "주문"
     ORDER ||--o{ ORDER_ITEM: "주문 상품"
-    PRODUCT ||--o{ DAILY_PRODUCT_SALES: "인기 상품"
     PRODUCT ||--o{ ORDER_ITEM: "주문 상품"
-    PRODUCT ||--o| STOCK_HISTORY: "재고"
+    PRODUCT ||--o| STOCK_HISTORY: "재고 이력"
+    ORDER ||--o| PAYMENT: "결제"
 ```
