@@ -55,6 +55,18 @@
 ```mermaid
 sequenceDiagram
     participant client
+    participant server
+    participant db
+    client ->> server: GET /api/v1/products
+    server ->> db: PRODUCT db에 query
+    db -->> server: PRODUCT row list 와 total count
+    server -->> client: 200 OK, PaginatedProductsResponse
+```
+
+#### server
+
+```mermaid
+sequenceDiagram
     box Application
         participant ProductsController
         participant ProductsService
@@ -64,7 +76,6 @@ sequenceDiagram
         participant ProductRepository
     end
 #
-    client ->> ProductsController: GET /api/v1/products
     ProductsController ->> ProductsService: search(SearchRequestParamDto)
     ProductsService ->> ProductReader: searchAndCount(searchParamDto)
 #
@@ -73,7 +84,6 @@ sequenceDiagram
 #
     ProductReader -->> ProductsService: { List<Product>, count }
     ProductsService -->> ProductsController: PaginatedProductsResponse
-    ProductsController -->> client: 200 OK, PaginatedProductsResponse
 ```
 
 ## 인기 상품 조회
@@ -142,18 +152,28 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant client
+    participant server
+    participant db
+    client ->> server: GET /api/v1/products/popular
+    server ->> db: ""
+    db -->> server: ""
+    server -->> client: 200 OK, PaginatedPopularProductsResponse
+
+```
+
+#### server
+
+```mermaid
+sequenceDiagram
     box Application
         participant ProductsController
         participant ProductsService
     end
-#
     box PopularProductDomain
         participant PopularProductReader
         participant DailyProductRankRepository
     end
 
-#
-    client ->> ProductsController: GET /api/v1/products/popular
     ProductsController ->> ProductsService: getPopularProducts(RequestParamDto)
     ProductsService ->> PopularProductReader: getWithCount(ParamDto)
 #
@@ -162,5 +182,4 @@ sequenceDiagram
     PopularProductReader --> PopularProductReader: makePopularProductList(List<DailyProductRank>)
     PopularProductReader -->> ProductsService: { List<PopularProduct>, count }
     ProductsService -->> ProductsController: PaginatedPopularProductsResponse
-    ProductsController -->> client: 200 OK, PaginatedPopularProductsResponse
 ```

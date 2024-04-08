@@ -28,7 +28,6 @@
             "data": {
                 "id": "uuid",
                 "totalPrice": 0,
-                "status": "ORDERED",
                 "items": [
                     {
                         "id": "uuid",
@@ -39,7 +38,8 @@
                             "price": 1000,
                             "stock": 10
                         },
-                        "quantity": 1
+                        "quantity": 1,
+                        "status": "ORDERED"
                     },
                     {
                         "id": "uuid",
@@ -50,7 +50,8 @@
                             "price": 2000,
                             "stock": 10
                         },
-                        "quantity": 2
+                        "quantity": 2,
+                        "status": "ORDERED"
                     }
                 ]
             }
@@ -104,30 +105,37 @@
 #### Rest API
 
 ```mermaid
-
 sequenceDiagram
     participant client
-#
-    box Application
-        participant OrdersController
-        participant OrdersService
-    end
-#
-    box Domain
-        participant OrderApp
-    end
+    participant server
+    participant db
 
 #
-    client ->> OrdersController: POST /api/v1/order
-    OrdersController ->> OrdersService: create(userId, CreateOrderRequestDto)
-    OrdersService ->> OrderApp: order(userId, CreateOrderDto)
-#
-    OrderApp ->> OrdersService: Order
-    OrdersService ->> OrdersController: OrderResponse
-    OrdersController ->> client: 200 OK, OrderResponse
+    client ->> server: POST /api/v1/order
+    server ->> db: PRODUCT에 재고 조회
+    opt 재고 부족
+        db -->> server: PRODUCT
+        server -->> client: 422 INSUFFICIENT_PRODUCT_STOCK
+    end
+    note over server: Product
+    server ->> db: USER_BALANCE에 잔액 조회
+    opt 잔액 부족
+        db -->> server: USER_BALANCE
+        server -->> client: 422 INSUFFICIENT_BALANCE
+    end
+    note over server: Product
+    server ->> db: USER_BALANCE에 잔액 차감
+    server ->> db: USER_BALANCE_HISTORY에 잔액 이력 저장
+    server ->> db: PRODUCT에 재고 차감
+    server ->> db: ORDER에 주문 저장
+    note over server: Product, Order
+    server ->> db: ORDER_ITEM에 주문 상품 저장
+    server ->> dataLake: 주문 데이터 저장
+    note over server: Order, List<OrderItem>
+    server -->> client: 200 OK, OrderResponse
 ```
 
-#### OrderApp.order()
+#### server
 
 - Product Domain 으로부터 재고 검증
 

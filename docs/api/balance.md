@@ -42,24 +42,40 @@
 ```mermaid
 sequenceDiagram
     participant client
-#
+    participant server
+    participant db
+    client ->> server: GET /api/v1/balance
+    server ->> db: USER_BALANCE에 userId로 조회
+    opt not found
+        db -->> server: null
+        server -->> client: 404 Not Found User
+    end
+    db -->> server: UserBalance
+    server -->> client: 200 OK, UserBalanceResponse
+
+```
+
+#### server
+
+```mermaid
+sequenceDiagram
     box Application
         participant BalanceController
         participant BalanceService
     end
-#
     box Domain
         participant UserBalanceRepository
     end
 #
-    client ->> BalanceController: GET /api/v1/balance
     BalanceController ->> BalanceService: myBalance(userId)
-#
     BalanceService ->> UserBalanceRepository: findOneByUserId(userId)
+    opt UserNotFoundException
+        UserBalanceRepository -->> BalanceService: foreign key insert exception
+        BalanceService -->> BalanceController: 404 Not Found User
+    end
     UserBalanceRepository -->> BalanceService: UserBalance
 #
     BalanceService -->> BalanceController: UserBalanceResponse
-    BalanceController -->> client: 200 OK, UserBalanceResponse
 ```
 
 ## 잔액 충전
@@ -117,6 +133,24 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant client
+    participant server
+    participant db
+    client ->> server: POST /api/v1/balance/charge
+    server ->> db: USER_BALANCE에 userId로 조회
+    opt not found
+        db -->> server: foreign key insert exception
+        server -->> client: 404 Not Found User
+    end
+    db -->> server: UserBalance
+    server ->> db: update(UserBalance)
+    db -->> server: UserBalance
+    server -->> client: 200 OK, UserBalanceResponse
+```
+
+#### Server
+
+```mermaid
+sequenceDiagram
     box Application
         participant BalanceController
         participant BalanceService
@@ -128,20 +162,21 @@ sequenceDiagram
         participant UserBalanceHistoryRepository
     end
 
-    client ->> BalanceController: POST /api/v1/balance
     BalanceController ->> BalanceService: charge(userId, amount)
     BalanceService ->> UserBalanceApp: chargeToUser(userId, amount)
 #
     UserBalanceApp ->> UserBalanceRepository: findOneByUserId(userId)
+    opt UserNotFoundException
+        UserBalanceRepository -->> UserBalanceApp: foreign key insert exception
+        UserBalanceApp -->> BalanceController: 404 Not Found User
+    end
     UserBalanceRepository -->> UserBalanceApp: UserBalance
     Note over UserBalanceApp: UserBalance.charge(amount)
-    
     UserBalanceApp ->> UserBalanceRepository: save(UserBalance)
     UserBalanceRepository -->> UserBalanceApp: UserBalance
     UserBalanceApp ->> UserBalanceHistoryRepository: save(UserBalanceHistory)
-    
+
 #
     UserBalanceApp -->> BalanceService: UserBalance
     BalanceService -->> BalanceController: UserBalanceResponse
-    BalanceController -->> client: 200 OK, UserBalanceResponse
 ```
