@@ -1,4 +1,4 @@
-package my.ecommerce.application.common.pagination;
+package my.ecommerce.application.response.pagination;
 
 import lombok.Builder;
 import lombok.Getter;

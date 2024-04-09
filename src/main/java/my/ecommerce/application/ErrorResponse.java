@@ -1,4 +1,4 @@
-package my.ecommerce.application.common.dto;
+package my.ecommerce.application;
 
 public record ErrorResponse(String code, String message) {
 }

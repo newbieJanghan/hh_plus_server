@@ -1,7 +1,6 @@
-package my.ecommerce.application.common;
+package my.ecommerce.application;
 
 import jakarta.persistence.EntityNotFoundException;
-import my.ecommerce.application.common.dto.ErrorResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestHeaderException;

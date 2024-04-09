@@ -1,4 +1,4 @@
-package my.ecommerce.application.common;
+package my.ecommerce.application.api.abstracts;
 
 import my.ecommerce.domain.user.User;
 import org.springframework.security.core.Authentication;
