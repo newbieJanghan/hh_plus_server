@@ -1,4 +1,4 @@
-package my.ecommerce.application.balance.dto;
+package my.ecommerce.application.api.balance.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ChargeRequestDto {
+public class ChargeBalanceRequestDto {
     @NotNull
     @Min(1)
     public long amount;
