@@ -1,4 +1,4 @@
-package my.ecommerce.application.config.security;
+package my.ecommerce.application.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -7,7 +7,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import my.ecommerce.application.common.dto.ErrorResponse;
+import my.ecommerce.application.ErrorResponse;
 import my.ecommerce.domain.user.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,8 +52,8 @@ public class AuthenticationFilter extends GenericFilterBean {
         try {
             UUID userId = UUID.fromString(authToken);
             return User.builder().id(userId).build();
-        } catch (NumberFormatException e) {
-            throw new BadRequestException("Invalid userId");
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid token");
         }
     }
 

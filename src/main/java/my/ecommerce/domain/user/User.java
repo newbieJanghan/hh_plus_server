@@ -4,13 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 public class User {
-    private long id;
+    private UUID id;
 
     @Builder
-    private User(long id) {
+    private User(UUID id) {
         this.id = id;
     }
 }

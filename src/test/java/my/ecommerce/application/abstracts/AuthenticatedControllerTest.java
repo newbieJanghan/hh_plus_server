@@ -1,10 +1,11 @@
-package my.ecommerce.application.common;
+package my.ecommerce.application.abstracts;
 
-import my.ecommerce.application.config.security.AuthenticationFilter;
+import my.ecommerce.application.ApiControllerAdvice;
+import my.ecommerce.application.security.AuthenticationFilter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-public class AuthenticatedControllerTest {
+public abstract class AuthenticatedControllerTest {
     protected MockMvc mockMvc;
 
     protected void buildAuthConfiguredMockMvc(Object controller) {
