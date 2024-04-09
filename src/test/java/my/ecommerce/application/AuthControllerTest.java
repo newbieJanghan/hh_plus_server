@@ -1,12 +1,14 @@
 package my.ecommerce.application;
 
-import my.ecommerce.application.abstracts.AuthenticatedControllerTest;
 import my.ecommerce.application.api.AuthController;
+import my.ecommerce.application.security.AuthenticationFilter;
 import my.ecommerce.utils.UUIDGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
@@ -15,10 +17,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthController.class)
-public class AuthControllerTest extends AuthenticatedControllerTest {
+public class AuthControllerTest {
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setMockMvc() {
-        buildAuthConfiguredMockMvc(new AuthController());
+        mockMvc = MockMvcBuilders.standaloneSetup(new AuthController())
+                .addFilter(new AuthenticationFilter())
+                .alwaysDo(result -> System.out.println("status: " + result.getResponse().getStatus()))
+                .alwaysDo(result -> System.out.println("content: " + result.getResponse().getContentAsString()))
+                .build();
     }
 
     @Test
