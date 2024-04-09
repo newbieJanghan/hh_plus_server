@@ -1,6 +1,7 @@
 package my.ecommerce.application.common;
 
 import jakarta.persistence.EntityNotFoundException;
+import my.ecommerce.application.common.dto.ErrorResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -26,8 +27,5 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse("NOT_FOUND", e.getMessage());
         return ResponseEntity.status(404).body(errorResponse);
-    }
-
-    public record ErrorResponse(String code, String message) {
     }
 }

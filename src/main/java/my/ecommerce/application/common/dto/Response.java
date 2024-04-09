@@ -1,4 +1,4 @@
-package my.ecommerce.application.common;
+package my.ecommerce.application.common.dto;
 
 import lombok.Getter;
 

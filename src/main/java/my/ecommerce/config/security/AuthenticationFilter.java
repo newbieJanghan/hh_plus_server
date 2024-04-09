@@ -1,10 +1,13 @@
 package my.ecommerce.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import my.ecommerce.application.common.dto.ErrorResponse;
 import my.ecommerce.domain.user.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +25,22 @@ public class AuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        User user = parseUser(httpRequest);
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null);
+        try {
+            User user = parseUser(httpRequest);
 
-        context.setAuthentication(token);
-        SecurityContextHolder.setContext(context);
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null);
 
-        chain.doFilter(httpRequest, response);
+            context.setAuthentication(token);
+            SecurityContextHolder.setContext(context);
+
+            chain.doFilter(httpRequest, httpResponse);
+        } catch (BadRequestException exception) {
+            handleException(httpResponse, exception);
+        }
+
     }
 
     private User parseUser(HttpServletRequest httpRequest) throws BadRequestException {
@@ -42,9 +52,14 @@ public class AuthenticationFilter extends GenericFilterBean {
             long userId = Long.parseLong(authToken);
             return User.builder().id(userId).build();
         } catch (NumberFormatException e) {
-            throw new BadRequestException("Invalid auth token", e);
+            throw new BadRequestException("Invalid userId");
         }
+    }
 
-
+    private void handleException(HttpServletResponse response, Exception exception) throws IOException {
+        ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", exception.getMessage());
+        ObjectMapper om = new ObjectMapper();
+        response.setStatus(400);
+        response.getWriter().write(om.writeValueAsString(errorResponse));
     }
 }
