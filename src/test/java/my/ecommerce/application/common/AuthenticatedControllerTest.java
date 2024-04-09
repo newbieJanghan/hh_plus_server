@@ -1,6 +1,6 @@
 package my.ecommerce.application.common;
 
-import my.ecommerce.config.security.AuthenticationFilter;
+import my.ecommerce.application.config.security.AuthenticationFilter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 

@@ -1,10 +1,13 @@
 package my.ecommerce.application;
 
 import my.ecommerce.application.common.AuthenticatedControllerTest;
+import my.ecommerce.utils.UUIDGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +23,7 @@ public class ApiControllerTest extends AuthenticatedControllerTest {
     @Test
     @DisplayName("Authorization 토큰으로 유저 객체 획득")
     public void getAuthenticatedUser() throws Exception {
-        long userId = 1;
+        UUID userId = UUIDGenerator.generate();
         mockMvc.perform(get("/test/auth").header("Authorization", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(userId));

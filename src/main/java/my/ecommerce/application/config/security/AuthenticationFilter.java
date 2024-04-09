@@ -1,4 +1,4 @@
-package my.ecommerce.config.security;
+package my.ecommerce.application.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class AuthenticationFilter extends GenericFilterBean {
 
@@ -49,7 +50,7 @@ public class AuthenticationFilter extends GenericFilterBean {
             throw new BadRequestException("Authorization header is missing");
         }
         try {
-            long userId = Long.parseLong(authToken);
+            UUID userId = UUID.fromString(authToken);
             return User.builder().id(userId).build();
         } catch (NumberFormatException e) {
             throw new BadRequestException("Invalid userId");
