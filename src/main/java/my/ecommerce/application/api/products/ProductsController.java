@@ -1,8 +1,8 @@
-package my.ecommerce.application.products;
+package my.ecommerce.application.api.products;
 
-import my.ecommerce.application.products.dto.GetProductsRequestParamDto;
-import my.ecommerce.application.products.dto.PaginatedProductsResponseDto;
-import my.ecommerce.application.products.dto.ProductsResponseDto;
+import jakarta.validation.Valid;
+import my.ecommerce.application.api.products.dto.GetProductsRequestParamDto;
+import my.ecommerce.application.api.products.dto.PaginatedProductsResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +20,12 @@ public class ProductsController {
     }
 
     @GetMapping("")
-    public PaginatedProductsResponseDto getProducts(@ModelAttribute GetProductsRequestParamDto paramDto) {
+    public PaginatedProductsResponseDto getProducts(@Valid @ModelAttribute GetProductsRequestParamDto paramDto) {
         return productsService.findMany(paramDto);
     }
 
     @GetMapping("/popular")
-    public ProductsResponseDto getPopularProducts() {
+    public PaginatedProductsResponseDto getPopularProducts() {
         return productsService.findPopularProducts();
     }
 }

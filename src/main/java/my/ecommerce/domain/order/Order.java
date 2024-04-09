@@ -4,13 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 public class Order {
-    private long id;
+    private UUID id;
 
     @Builder
-    private Order(long id) {
+    private Order(UUID id) {
         this.id = id;
     }
 }

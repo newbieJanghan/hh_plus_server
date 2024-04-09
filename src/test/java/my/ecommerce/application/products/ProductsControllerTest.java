@@ -1,9 +1,12 @@
 package my.ecommerce.application.products;
 
-import my.ecommerce.application.common.pagination.CursorPageInfo;
-import my.ecommerce.application.products.dto.GetProductsRequestParamDto;
-import my.ecommerce.application.products.dto.PaginatedProductsResponseDto;
-import my.ecommerce.application.products.dto.ProductsResponseDto;
+import my.ecommerce.application.api.products.ProductsController;
+import my.ecommerce.application.api.products.ProductsService;
+import my.ecommerce.application.api.products.dto.GetProductsRequestParamDto;
+import my.ecommerce.application.api.products.dto.PaginatedProductsResponseDto;
+import my.ecommerce.application.api.products.dto.ProductResponseDto;
+import my.ecommerce.application.response.pagination.CursorPageInfo;
+import my.ecommerce.application.utils.MockAuthentication;
 import my.ecommerce.domain.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +15,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -38,44 +40,44 @@ public class ProductsControllerTest {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new ProductsController(productsService)).build();
+        MockAuthentication.setAuthenticatedContext();
     }
 
     @Test
     @DisplayName("상품 목록 조회 성공 - 기본 limit 값 적용")
-    @WithMockUser
     public void findProducts_success_whenLimitParamDefaultValue() throws Exception {
-        long userId = 1;
         // when
-        when(productsService.findMany(new GetProductsRequestParamDto())).thenReturn(mockPaginatedResponse());
+        when(productsService.findMany(new GetProductsRequestParamDto())).thenReturn(emptyResponseDto());
         // then
-        mockMvc.perform(get("/api/v1/products").header("Authorization", userId))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/products")).andExpect(status().isOk());
 
         verify(productsService).findMany(paramDtoCaptor.capture());
         assertEquals(10, paramDtoCaptor.getValue().getLimit());
     }
 
     @Test
-    @DisplayName("인기 상품 목룍 조회 성공")
-    @WithMockUser
-    public void findPopularProducts_success() throws Exception {
-        long userId = 1;
+    @DisplayName("상폼 목록 조회 실패 - Query 오류")
+    public void findProducts_fail_whenQueryError() throws Exception {
+        // then
+        mockMvc.perform(get("/api/v1/products?limit=0"))
+                .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    @DisplayName("인기 상품 목룍 조회 성공")
+    public void findPopularProducts_success() throws Exception {
         // when
-        when(productsService.findPopularProducts()).thenReturn(mockResponse());
+        when(productsService.findPopularProducts()).thenReturn(emptyResponseDto());
 
         // then
-        mockMvc.perform(get("/api/v1/products/popular").header("Authorization", userId))
+        mockMvc.perform(get("/api/v1/products/popular"))
                 .andExpect(status().isOk());
     }
 
 
-    private PaginatedProductsResponseDto mockPaginatedResponse() {
+    private PaginatedProductsResponseDto emptyResponseDto() {
+        ProductResponseDto productResponseDto = new ProductResponseDto(new Product());
         CursorPageInfo cursorPageInfo = new CursorPageInfo();
-        return new PaginatedProductsResponseDto(List.of(new Product()), cursorPageInfo);
-    }
-
-    private ProductsResponseDto mockResponse() {
-        return new ProductsResponseDto(List.of(new Product()));
+        return new PaginatedProductsResponseDto(List.of(productResponseDto), cursorPageInfo);
     }
 }

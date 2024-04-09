@@ -4,16 +4,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 public class Product {
-    private long id;
+    private UUID id;
     private String name;
     private long price;
     private long stock;
 
     @Builder
-    private Product(long id, String name, long price, long stock) {
+    private Product(UUID id, String name, long price, long stock) {
         this.id = id;
         this.name = name;
         this.price = price;
