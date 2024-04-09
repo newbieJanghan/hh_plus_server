@@ -20,26 +20,23 @@
     - 200 OK: 성공적으로 조회
         ```json
         {
-            "code": "OK",
-            "data": {
-                "items": [
-                    {
-                        "id": 1,
-                        "name": "상품1",
-                        "price": 1000,
-                        "stock": 10
-                    }
-                ],
-                "pageInfo": {
-                    "cursor": 1,
-                    "size": 10,
-                    "total": 1,
-                    "totalPages": 1,
-                    "order": {
-                        "createdAt": "desc"
-                    }
-                }   
-            } 
+            "items": [
+                {
+                    "id": 1,
+                    "name": "상품1",
+                    "price": 1000,
+                    "stock": 10
+                }
+            ],
+            "pageInfo": {
+                "cursor": 1,
+                "size": 10,
+                "total": 1,
+                "totalPages": 1,
+                "order": {
+                    "createdAt": "desc"
+                }
+            }
         }
         ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
@@ -106,28 +103,25 @@ sequenceDiagram
     - 200 OK: 성공적으로 조회
         ```json
         {
-            "code": "OK",
-            "data": {
-                "items": [
-                    {
-                        "id": 1,
-                        "name": "상품1",
-                        "price": 1000,
-                        "stock": 10,
-                        "sellCountByDaily": 1
-                    }
-                ],
-                "metadata": {
-                    "rankedAt": "2024-04-04T00:00:00Z"
-                },
-                "pageInfo": {
-                    "cursor": 1,
-                    "size": 10,
-                    "total": 1,
-                    "totalPages": 1,
-                    "order": {
-                        "sellCountByDaily": "desc"
-                    }
+            "items": [
+                {
+                    "id": 1,
+                    "name": "상품1",
+                    "price": 1000,
+                    "stock": 10,
+                    "sellCountByDaily": 1
+                }
+            ],
+            "metadata": {
+                "rankedAt": "2024-04-04T00:00:00Z"
+            },
+            "pageInfo": {
+                "cursor": 1,
+                "size": 10,
+                "total": 1,
+                "totalPages": 1,
+                "order": {
+                    "sellCountByDaily": "desc"
                 }
             }
         }

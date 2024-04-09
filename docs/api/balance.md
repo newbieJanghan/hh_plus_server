@@ -14,12 +14,9 @@
     - 200 OK: 성공적으로 조회
         ```json
         {
-            "code": "OK",
-            "data": {
-                "id": "uuid",
-                "userId": "uuid",
-                "balance": 0
-            }
+            "id": "uuid",
+            "userId": "uuid",
+            "balance": 0
         }
         ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
@@ -98,12 +95,9 @@ sequenceDiagram
     - 200 OK: 성공적으로 충전
         ```json
         {
-            "code": "OK",
-            "data": {
-                "id": "uuid",
-                "userId": "uuid",
-                "balance": 0
-            }
+            "id": "uuid",
+            "userId": "uuid",
+            "balance": 0
         }
         ```
     - 400 Bad Request: 충전 금액이 적절하지 않은 경우

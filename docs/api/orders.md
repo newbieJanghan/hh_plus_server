@@ -24,37 +24,34 @@
     - 200 OK: 성공적으로 주문
         ```json
         {
-            "code": "OK",
-            "data": {
-                "id": "uuid",
-                "totalPrice": 0,
-                "items": [
-                    {
+            "id": "uuid",
+            "totalPrice": 0,
+            "items": [
+                {
+                    "id": "uuid",
+                    "orderId": "uuid",
+                    "product": {
                         "id": "uuid",
-                        "orderId": "uuid",
-                        "product": {
-                            "id": "uuid",
-                            "name": "상품1",
-                            "price": 1000,
-                            "stock": 10
-                        },
-                        "quantity": 1,
-                        "status": "ORDERED"
+                        "name": "상품1",
+                        "price": 1000,
+                        "stock": 10
                     },
-                    {
+                    "quantity": 1,
+                    "status": "ORDERED"
+                },
+                {
+                    "id": "uuid",
+                    "orderId": "uuid",
+                    "product": {
                         "id": "uuid",
-                        "orderId": "uuid",
-                        "product": {
-                            "id": "uuid",
-                            "name": "상품2",
-                            "price": 2000,
-                            "stock": 10
-                        },
-                        "quantity": 2,
-                        "status": "ORDERED"
-                    }
-                ]
-            }
+                        "name": "상품2",
+                        "price": 2000,
+                        "stock": 10
+                    },
+                    "quantity": 2,
+                    "status": "ORDERED"
+                }
+            ]
         }
         ```
     - 400 Bad Request: 주문 상품이 적절하지 않은 경우
