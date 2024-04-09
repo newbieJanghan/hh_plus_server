@@ -3,7 +3,6 @@ package my.ecommerce.application;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -16,7 +15,7 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(500).body(errorResponse);
     }
 
-    @ExceptionHandler({BadRequestException.class, IllegalArgumentException.class, MissingRequestHeaderException.class})
+    @ExceptionHandler({BadRequestException.class, IllegalArgumentException.class})
     public ResponseEntity<ErrorResponse> handleBadRequestException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", e.getMessage());
         return ResponseEntity.status(400).body(errorResponse);
