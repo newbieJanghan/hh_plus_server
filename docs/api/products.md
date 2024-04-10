@@ -69,17 +69,12 @@ sequenceDiagram
         participant ProductsService
     end
     box Domain
-        participant ProductReader
         participant ProductRepository
     end
 #
-    ProductsController ->> ProductsService: search(SearchRequestParamDto)
-    ProductsService ->> ProductReader: searchAndCount(searchParamDto)
-#
-    ProductReader ->> ProductRepository: findAllByAndCount(cursor, size, sort, direction, category)
-    ProductRepository -->> ProductReader: { List<Product>, count }
-#
-    ProductReader -->> ProductsService: { List<Product>, count }
+    ProductsController ->> ProductsService: findAllWithPage(GetProductsRequestParamDto)
+    ProductsService ->> ProductRepository: findAllWithPage(pageQueryDto)
+    ProductRepository -->> ProductsService: Page<Product>
     ProductsService -->> ProductsController: PaginatedProductsResponse
 ```
 
@@ -164,16 +159,16 @@ sequenceDiagram
         participant ProductsService
     end
     box PopularProductDomain
-        participant PopularProductReader
+        participant PopularProductApp
         participant DailyProductRankRepository
     end
 
-    ProductsController ->> ProductsService: getPopularProducts(RequestParamDto)
-    ProductsService ->> PopularProductReader: getWithCount(ParamDto)
+    ProductsController ->> ProductsService: getDailyPopularProducts(RequestParamDto)
+    ProductsService ->> PopularProductApp: getDailyPopularProductsWithPage(ParamDto)
 #
-    PopularProductReader ->> DailyProductRankRepository: findAllAndCount(date, limit)
-    DailyProductRankRepository -->> PopularProductReader: { List<DailyProductRank>, count }
-    PopularProductReader --> PopularProductReader: makePopularProductList(List<DailyProductRank>)
-    PopularProductReader -->> ProductsService: { List<PopularProduct>, count }
+    PopularProductApp ->> DailyProductRankRepository: findAllWithPage(date, limit)
+    DailyProductRankRepository -->> PopularProductApp: Page<DailyProductRank>
+    PopularProductApp --> PopularProductApp: new PopularProduct(DailyProductRank)
+    PopularProductApp -->> ProductsService: Page<PopularProduct>
     ProductsService -->> ProductsController: PaginatedPopularProductsResponse
 ```
