@@ -4,7 +4,7 @@ import my.ecommerce.application.api.balance.BalanceController;
 import my.ecommerce.application.api.balance.BalanceService;
 import my.ecommerce.application.api.balance.dto.BalanceResponseDto;
 import my.ecommerce.application.utils.MockAuthentication;
-import my.ecommerce.domain.balance.Balance;
+import my.ecommerce.domain.balance.UserBalance;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -88,6 +88,6 @@ public class BalanceControllerTest {
     }
 
     private BalanceResponseDto emptyResponseDto() {
-        return new BalanceResponseDto(new Balance());
+        return new BalanceResponseDto(new UserBalance());
     }
 }
