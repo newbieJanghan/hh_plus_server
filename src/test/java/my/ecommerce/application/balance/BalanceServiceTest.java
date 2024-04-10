@@ -58,7 +58,6 @@ public class BalanceServiceTest {
         // given
         UUID userId = UUIDGenerator.generate();
         User existUser = User.builder().id(userId).build();
-        UserBalance newUserBalance = UserBalance.newBalance(userId);
 
         when(userBalanceRepository.findByUserId(userId)).thenReturn(null);
         when(userRepository.findOneById(userId)).thenReturn(existUser);

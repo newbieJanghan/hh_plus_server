@@ -2,10 +2,10 @@ package my.ecommerce.application.products;
 
 import my.ecommerce.application.api.products.ProductsController;
 import my.ecommerce.application.api.products.ProductsService;
-import my.ecommerce.application.api.products.dto.GetProductsRequestParamDto;
-import my.ecommerce.application.api.products.dto.PaginatedProductsResponseDto;
+import my.ecommerce.application.api.products.dto.GetProductsPageRequestParamDto;
 import my.ecommerce.application.api.products.dto.ProductResponseDto;
-import my.ecommerce.application.response.pagination.CursorPageInfo;
+import my.ecommerce.application.api.products.dto.ProductsPageResponseDto;
+import my.ecommerce.application.page.CursorPageInfo;
 import my.ecommerce.application.utils.MockAuthentication;
 import my.ecommerce.domain.product.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductsControllerTest {
 
     @Captor
-    ArgumentCaptor<GetProductsRequestParamDto> paramDtoCaptor;
+    ArgumentCaptor<GetProductsPageRequestParamDto> paramDtoCaptor;
 
     private MockMvc mockMvc;
     @MockBean
@@ -47,12 +47,12 @@ public class ProductsControllerTest {
     @DisplayName("상품 목록 조회 성공 - 기본 limit 값 적용")
     public void findProducts_success_whenLimitParamDefaultValue() throws Exception {
         // when
-        when(productsService.findMany(new GetProductsRequestParamDto())).thenReturn(emptyResponseDto());
+        when(productsService.findAllWithPage(GetProductsPageRequestParamDto.empty())).thenReturn(emptyResponseDto());
         // then
         mockMvc.perform(get("/api/v1/products")).andExpect(status().isOk());
 
-        verify(productsService).findMany(paramDtoCaptor.capture());
-        assertEquals(10, paramDtoCaptor.getValue().getLimit());
+        verify(productsService).findAllWithPage(paramDtoCaptor.capture());
+        assertEquals(10, paramDtoCaptor.getValue().getSize());
     }
 
     @Test
@@ -65,9 +65,9 @@ public class ProductsControllerTest {
 
     @Test
     @DisplayName("인기 상품 목룍 조회 성공")
-    public void findPopularProducts_success() throws Exception {
+    public void findPopularProductsWithPage_success() throws Exception {
         // when
-        when(productsService.findPopularProducts()).thenReturn(emptyResponseDto());
+        when(productsService.findPopularProductsWithPage()).thenReturn(emptyResponseDto());
 
         // then
         mockMvc.perform(get("/api/v1/products/popular"))
@@ -75,9 +75,9 @@ public class ProductsControllerTest {
     }
 
 
-    private PaginatedProductsResponseDto emptyResponseDto() {
+    private ProductsPageResponseDto emptyResponseDto() {
         ProductResponseDto productResponseDto = new ProductResponseDto(new Product());
         CursorPageInfo cursorPageInfo = new CursorPageInfo();
-        return new PaginatedProductsResponseDto(List.of(productResponseDto), cursorPageInfo);
+        return new ProductsPageResponseDto(List.of(productResponseDto), cursorPageInfo);
     }
 }
