@@ -3,6 +3,7 @@ package my.ecommerce.application.page;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 
 
@@ -36,6 +37,15 @@ public class CursorPageInfo implements PageInfo {
 
     public static CursorPageInfo empty() {
         return new CursorPageInfo(0, 0, 0, null);
+    }
+
+    public static CursorPageInfo fromPage(Page page, @Nullable String cursor) {
+        return CursorPageInfo.builder()
+                .size(page.getNumberOfElements())
+                .totalCounts((int) page.getTotalElements())
+                .currentPage(page.getNumber())
+                .cursor(cursor)
+                .build();
     }
 
 }

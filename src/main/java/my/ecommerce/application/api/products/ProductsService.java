@@ -5,28 +5,32 @@ import my.ecommerce.application.api.products.dto.ProductResponseDto;
 import my.ecommerce.application.api.products.dto.ProductsPageResponseDto;
 import my.ecommerce.application.page.CursorPageInfo;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.dto.ProductSearchResult;
-import my.ecommerce.utils.UUIDGenerator;
+import my.ecommerce.domain.product.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductsService {
-    public ProductsService() {
+    private final ProductRepository productRepository;
+
+    @Autowired
+    public ProductsService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public ProductsPageResponseDto findAllWithPage(GetProductsPageRequestParamDto paramDto) {
-        ProductSearchResult result = new ProductSearchResult(1, List.of(Product.builder().id(UUIDGenerator.generate()).build()));
-        CursorPageInfo pageInfo = CursorPageInfo.builder().build();
+        Page<Product> page = productRepository.findAllWithPage(paramDto.toCursorQueryDto());
+        CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, getCursorFromPage(page));
 
-        return new ProductsPageResponseDto(result.getList().stream().map(ProductResponseDto::new).toList(), pageInfo);
+        return new ProductsPageResponseDto(page.map(ProductResponseDto::new).toList(), pageInfo);
     }
 
     public ProductsPageResponseDto findPopularProductsWithPage() {
-        ProductSearchResult result = new ProductSearchResult(1, List.of(Product.builder().id(UUIDGenerator.generate()).build()));
-        CursorPageInfo pageInfo = CursorPageInfo.builder().build();
+        return ProductsPageResponseDto.empty();
+    }
 
-        return new ProductsPageResponseDto(result.getList().stream().map(ProductResponseDto::new).toList(), pageInfo);
+    private String getCursorFromPage(Page<Product> page) {
+        return page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public abstract class PageResponse<T, P> {
+public abstract class PageResponse<T, P extends PageInfo> {
     List<T> data;
     P pageInfo;
 

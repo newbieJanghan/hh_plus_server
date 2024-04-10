@@ -11,4 +11,8 @@ public class ProductsPageResponseDto extends PageResponse<ProductResponseDto, Cu
     public ProductsPageResponseDto(List<ProductResponseDto> data, CursorPageInfo pageInfo) {
         super(data, pageInfo);
     }
+
+    public static ProductsPageResponseDto empty() {
+        return new ProductsPageResponseDto(List.of(), CursorPageInfo.empty());
+    }
 }
