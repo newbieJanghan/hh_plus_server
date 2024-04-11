@@ -1,4 +1,4 @@
-package my.ecommerce.application.utils;
+package my.ecommerce.configuration;
 
 import java.time.Clock;
 

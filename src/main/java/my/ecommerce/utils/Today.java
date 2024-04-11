@@ -1,4 +1,4 @@
-package my.ecommerce.application.utils;
+package my.ecommerce.utils;
 
 import java.time.Clock;
 import java.time.LocalDateTime;

@@ -7,8 +7,8 @@ import org.springframework.lang.Nullable;
 import lombok.Getter;
 import my.ecommerce.application.page.CursorPageRequest;
 import my.ecommerce.application.page.Sort;
-import my.ecommerce.application.utils.Today;
 import my.ecommerce.domain.product.dto.CursorPagedPopularProductsQueryDto;
+import my.ecommerce.utils.Today;
 
 @Getter
 public class GetPopularProductsPageRequestParamDto extends CursorPageRequest {
