@@ -1,4 +1,4 @@
-package my.ecommerce.domain.order;
+package my.ecommerce.domain.order.dto;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,19 +6,16 @@ import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.ecommerce.domain.order.order_item.OrderItem;
 
 @Getter
 @NoArgsConstructor
-public class Order {
-	private UUID id;
+public class CreateOrderDto {
 	private UUID userId;
 	private long totalPrice;
-	private List<OrderItem> items;
+	private List<CreateOrderItemDto> items;
 
 	@Builder
-	private Order(UUID id, UUID userId, long totalPrice, List<OrderItem> items) {
-		this.id = id;
+	private CreateOrderDto(UUID userId, long totalPrice, List<CreateOrderItemDto> items) {
 		this.userId = userId;
 		this.totalPrice = totalPrice;
 		this.items = items;

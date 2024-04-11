@@ -1,18 +1,30 @@
 package my.ecommerce.application.api.orders.dto;
 
+import org.hibernate.validator.constraints.UUID;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UUID;
+import my.ecommerce.domain.order.dto.CreateOrderItemDto;
 
 @Getter
-@NoArgsConstructor
 public class CreateOrderRequestOrderItemDto {
-    @UUID
-    private java.util.UUID productId;
+	@UUID
+	private java.util.UUID productId;
 
-    @NotNull
-    @Min(1)
-    private long quantity;
+	@NotNull
+	@Min(1)
+	private long quantity;
+
+	public CreateOrderRequestOrderItemDto(java.util.UUID productId, long quantity) {
+		this.productId = productId;
+		this.quantity = quantity;
+	}
+
+	public CreateOrderItemDto toDomain() {
+		return CreateOrderItemDto.builder()
+			.productId(productId)
+			.quantity(quantity)
+			.build();
+	}
 }

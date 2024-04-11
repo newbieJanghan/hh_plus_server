@@ -1,12 +1,13 @@
 package my.ecommerce.application.orders;
 
-import my.ecommerce.application.api.orders.OrdersController;
-import my.ecommerce.application.api.orders.OrdersService;
-import my.ecommerce.application.api.orders.dto.CreateOrderRequestDto;
-import my.ecommerce.application.api.orders.dto.OrderResponseDto;
-import my.ecommerce.application.utils.MockAuthentication;
-import my.ecommerce.domain.order.Order;
-import my.ecommerce.utils.UUIDGenerator;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.UUID;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,81 +23,80 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import my.ecommerce.application.api.orders.OrdersController;
+import my.ecommerce.application.api.orders.OrdersService;
+import my.ecommerce.application.api.orders.dto.CreateOrderRequestDto;
+import my.ecommerce.application.api.orders.dto.OrderResponseDto;
+import my.ecommerce.application.utils.MockAuthentication;
+import my.ecommerce.utils.UUIDGenerator;
 
 @WebMvcTest(OrdersController.class)
 public class OrdersControllerTest {
-    @Captor
-    ArgumentCaptor<CreateOrderRequestDto> createRequestDtoCaptor;
+	@Captor
+	ArgumentCaptor<CreateOrderRequestDto> createRequestDtoCaptor;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    @MockBean
-    private OrdersService orderService;
+	@MockBean
+	private OrdersService orderService;
 
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new OrdersController(orderService))
-                .alwaysDo(result -> System.out.println("status: " + result.getResponse().getStatus()))
-                .alwaysDo(result -> System.out.println("content: " + result.getResponse().getContentAsString()))
-                .build();
-        MockAuthentication.setAuthenticatedContext();
-    }
+	@BeforeEach
+	void setup() {
+		mockMvc = MockMvcBuilders.standaloneSetup(new OrdersController(orderService))
+			.alwaysDo(result -> System.out.println("status: " + result.getResponse().getStatus()))
+			.alwaysDo(result -> System.out.println("content: " + result.getResponse().getContentAsString()))
+			.build();
+		MockAuthentication.setAuthenticatedContext();
+	}
 
-    @Test
-    @DisplayName("주문 성공")
-    public void order_success() throws Exception {
-        // when
-        when(orderService.create(any(UUID.class), any(CreateOrderRequestDto.class))).thenReturn(emptyResponseDto());
+	@Test
+	@DisplayName("주문 성공")
+	public void order_success() throws Exception {
+		// when
+		when(orderService.create(any(UUID.class), any(CreateOrderRequestDto.class))).thenReturn(emptyResponseDto());
 
-        // then
-        mockMvc.perform(post("/api/v1/orders")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(createRequestContent()))
-                .andExpect(status().isOk());
+		// then
+		mockMvc.perform(post("/api/v1/orders")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(createRequestContent()))
+			.andExpect(status().isOk());
 
-        verify(orderService, times(1)).create(any(UUID.class), any(CreateOrderRequestDto.class));
-    }
+		verify(orderService, times(1)).create(any(UUID.class), any(CreateOrderRequestDto.class));
+	}
 
-    @Test
-    @DisplayName("주문 실패 - 요청 데이터가 누락된 경우")
-    public void order_fail_whenInvalidRequest_thenThrow_BadRequestException() throws Exception {
-        // then
-        mockMvc.perform(post("/api/v1/orders").contentType(MediaType.APPLICATION_JSON).content("{}"))
-                .andExpect(result -> assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()));
+	@Test
+	@DisplayName("주문 실패 - 요청 데이터가 누락된 경우")
+	public void order_fail_whenInvalidRequest_thenThrow_BadRequestException() throws Exception {
+		// then
+		mockMvc.perform(post("/api/v1/orders").contentType(MediaType.APPLICATION_JSON).content("{}"))
+			.andExpect(
+				result -> assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()));
 
-        verify(orderService, never()).create(any(UUID.class), any(CreateOrderRequestDto.class));
-    }
+		verify(orderService, never()).create(any(UUID.class), any(CreateOrderRequestDto.class));
+	}
 
-    private String createRequestContent() throws JSONException {
-        return mockCreateRequestJson().toString();
-    }
+	private String createRequestContent() throws JSONException {
+		return mockCreateRequestJson().toString();
+	}
 
-    private JSONObject mockCreateRequestJson() throws JSONException {
-        JSONObject body = new JSONObject();
+	private JSONObject mockCreateRequestJson() throws JSONException {
+		JSONObject body = new JSONObject();
 
-        body.put("items", mockOrderItemsRequestJson());
-        body.put("totalPrice", 10);
+		body.put("items", mockOrderItemsRequestJson());
+		body.put("totalPrice", 10);
 
-        return body;
-    }
+		return body;
+	}
 
-    private JSONArray mockOrderItemsRequestJson() throws JSONException {
-        JSONArray orderItems = new JSONArray();
-        UUID productId = UUIDGenerator.generate();
-        orderItems.put(new JSONObject().put("productId", productId).put("quantity", 1));
+	private JSONArray mockOrderItemsRequestJson() throws JSONException {
+		JSONArray orderItems = new JSONArray();
+		UUID productId = UUIDGenerator.generate();
+		orderItems.put(new JSONObject().put("productId", productId).put("quantity", 1));
 
-        return orderItems;
-    }
+		return orderItems;
+	}
 
-
-    private OrderResponseDto emptyResponseDto() {
-        return new OrderResponseDto(new Order());
-    }
+	private OrderResponseDto emptyResponseDto() {
+		return OrderResponseDto.builder().build();
+	}
 }
