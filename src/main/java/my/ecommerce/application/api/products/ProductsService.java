@@ -12,23 +12,21 @@ import my.ecommerce.application.api.products.dto.popular.PopularProductResponseD
 import my.ecommerce.application.api.products.dto.popular.PopularProductsPageResponseDto;
 import my.ecommerce.application.page.CursorPageInfo;
 import my.ecommerce.domain.product.PopularProduct;
-import my.ecommerce.domain.product.PopularProductApp;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.ProductRepository;
+import my.ecommerce.domain.product.ProductReader;
 
 @Service
 public class ProductsService {
-	private final ProductRepository productRepository;
-	private final PopularProductApp popularProductApp;
+	private final ProductReader productReader;
 
 	@Autowired
-	public ProductsService(ProductRepository productRepository, PopularProductApp popularProductApp) {
-		this.productRepository = productRepository;
-		this.popularProductApp = popularProductApp;
+	public ProductsService(ProductReader productReader) {
+		this.productReader = productReader;
 	}
 
 	public ProductsPageResponseDto findAllWithPage(GetProductsPageRequestParamDto paramDto) {
-		Page<Product> page = productRepository.findAllWithPage(paramDto.toCursorQueryDto());
+		Page<Product> page = productReader.findAllWithPage(paramDto.toCursorQueryDto());
+
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
 		CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, cursor);
 
@@ -36,11 +34,15 @@ public class ProductsService {
 	}
 
 	public PopularProductsPageResponseDto findPopularProductsWithPage(GetPopularProductsPageRequestParamDto paramDto) {
-		Page<PopularProduct> page = popularProductApp.getPopularProductsWithPage(paramDto.toCursorQueryDto());
+		Page<PopularProduct> page = productReader.getPopularProductsWithPage(
+			paramDto.toCursorQueryDto(),
+			paramDto.toPopularPeriodQueryDto());
+
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
 		CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, cursor);
 
-		return new PopularProductsPageResponseDto(page.map(PopularProductResponseDto::fromPopularProduct).toList(),
+		return new PopularProductsPageResponseDto(
+			page.map(PopularProductResponseDto::fromPopularProduct).toList(),
 			pageInfo);
 	}
 }
