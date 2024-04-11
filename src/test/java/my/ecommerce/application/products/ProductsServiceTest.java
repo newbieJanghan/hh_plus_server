@@ -80,15 +80,14 @@ public class ProductsServiceTest {
 	}
 
 	@Test
-	@DisplayName("인기 상품 조회 성공")
+	@DisplayName("인기 상품 조회 성공 - 마지막 아이템의 id를 커서 값으로 반환")
 	void success_findPopularProducts() {
 		// given
-		UUID lastProductId = UUIDGenerator.generate();
-		Product product = Product.builder().id(lastProductId).build();
-		int soldAmountInPeriod = 10;
-
-		PopularProduct popularProduct = product.toPopularProduct(soldAmountInPeriod);
+		UUID UUIDCursor = UUIDGenerator.generate();
+		Product product = Product.builder().id(UUIDCursor).build();
+		PopularProduct popularProduct = product.toPopularProduct(0);
 		Page<PopularProduct> expect = new PageImpl<>(List.of(popularProduct));
+
 		when(popularProductApp.getPopularProductsWithPage(any(CursorPagedPopularProductsQueryDto.class))).thenReturn(
 			expect);
 
@@ -98,12 +97,12 @@ public class ProductsServiceTest {
 
 		// then
 		assertEquals(1, result.getData().size());
-		assertEquals(lastProductId.toString(), result.getPageInfo().getCursor());
+		assertEquals(UUIDCursor.toString(), result.getPageInfo().getCursor());
 		assertEquals(1, result.getData().size());
 	}
 
 	@Test
-	@DisplayName("인기 상품 조회 - 커서 다음의 인기 상품이 없어 빈 페이지 반환")
+	@DisplayName("인기 상품 조회 성공 - 빈 페이지 반환")
 	void success_findPopularProducts_empty() {
 		// given
 		Page<PopularProduct> expect = new PageImpl<>(List.of());
