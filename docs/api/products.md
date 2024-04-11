@@ -160,15 +160,14 @@ sequenceDiagram
     end
     box PopularProductDomain
         participant PopularProductApp
-        participant DailyProductRankRepository
+        participant ProductRepository
     end
 
     ProductsController ->> ProductsService: getDailyPopularProducts(RequestParamDto)
     ProductsService ->> PopularProductApp: getDailyPopularProductsWithPage(ParamDto)
 #
-    PopularProductApp ->> DailyProductRankRepository: findAllWithPage(date, limit)
-    DailyProductRankRepository -->> PopularProductApp: Page<DailyProductRank>
-    PopularProductApp --> PopularProductApp: new PopularProduct(DailyProductRank)
+    PopularProductApp ->> ProductRepository: findAllPopularInPeriodWithPage(from, to)
+    ProductRepository -->> PopularProductApp: Page<PopularProduct>
     PopularProductApp -->> ProductsService: Page<PopularProduct>
     ProductsService -->> ProductsController: PaginatedPopularProductsResponse
 ```
