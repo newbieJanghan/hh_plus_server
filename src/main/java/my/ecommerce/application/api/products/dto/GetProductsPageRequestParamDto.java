@@ -1,37 +1,37 @@
 package my.ecommerce.application.api.products.dto;
 
+import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import my.ecommerce.application.page.CursorPageRequest;
 import my.ecommerce.application.page.Sort;
 import my.ecommerce.domain.product.dto.CursorPagedProductsQueryDto;
-import my.ecommerce.utils.UUIDGenerator;
-import org.springframework.lang.Nullable;
-
-import java.util.UUID;
 
 @Getter
 public class GetProductsPageRequestParamDto extends CursorPageRequest {
-    @Nullable
-    private final String category;
+	@Nullable
+	private final String category;
 
-    public GetProductsPageRequestParamDto(
-            int size,
-            @Nullable Sort sort,
-            @Nullable String cursor,
+	public GetProductsPageRequestParamDto(
+		@Nullable Long size,
+		@Nullable Sort sort,
+		@Nullable String cursor,
 
-            @Nullable String category) {
-        super(size, sort, cursor);
-        this.category = category;
-    }
+		@Nullable String category) {
+		super(size, sort, cursor);
+		this.category = category;
+	}
 
-    public static GetProductsPageRequestParamDto empty() {
-        return new GetProductsPageRequestParamDto(0, null, null, null);
-    }
+	public static GetProductsPageRequestParamDto empty() {
+		return new GetProductsPageRequestParamDto(0L, null, null, null);
+	}
 
-    public CursorPagedProductsQueryDto toCursorQueryDto() {
-        UUID cursor = getCursor() == null ? null : UUIDGenerator.fromString(getCursor());
-
-        return CursorPagedProductsQueryDto.builder().limit(getSize()).sort(getSort()).cursor(cursor).build();
-    }
+	public CursorPagedProductsQueryDto toCursorQueryDto() {
+		return CursorPagedProductsQueryDto
+			.builder()
+			.limit(getSize())
+			.sort(getSort())
+			.cursor(getUUIDCursor())
+			.build();
+	}
 }

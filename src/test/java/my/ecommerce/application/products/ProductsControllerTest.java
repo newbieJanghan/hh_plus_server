@@ -1,13 +1,10 @@
 package my.ecommerce.application.products;
 
-import my.ecommerce.application.api.products.ProductsController;
-import my.ecommerce.application.api.products.ProductsService;
-import my.ecommerce.application.api.products.dto.GetProductsPageRequestParamDto;
-import my.ecommerce.application.api.products.dto.ProductResponseDto;
-import my.ecommerce.application.api.products.dto.ProductsPageResponseDto;
-import my.ecommerce.application.page.CursorPageInfo;
-import my.ecommerce.application.utils.MockAuthentication;
-import my.ecommerce.domain.product.Product;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,66 +15,68 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import my.ecommerce.application.api.products.ProductsController;
+import my.ecommerce.application.api.products.ProductsService;
+import my.ecommerce.application.api.products.dto.GetProductsPageRequestParamDto;
+import my.ecommerce.application.api.products.dto.ProductsPageResponseDto;
+import my.ecommerce.application.api.products.dto.popular.GetPopularProductsPageRequestParamDto;
+import my.ecommerce.application.api.products.dto.popular.PopularProductsPageResponseDto;
+import my.ecommerce.application.utils.MockAuthentication;
 
 @WebMvcTest(ProductsController.class)
 public class ProductsControllerTest {
 
-    @Captor
-    ArgumentCaptor<GetProductsPageRequestParamDto> paramDtoCaptor;
+	@Captor
+	ArgumentCaptor<GetProductsPageRequestParamDto> paramDtoCaptor;
 
-    private MockMvc mockMvc;
-    @MockBean
-    private ProductsService productsService;
+	private MockMvc mockMvc;
+	@MockBean
+	private ProductsService productsService;
 
+	@BeforeEach
+	void setup() {
+		mockMvc = MockMvcBuilders.standaloneSetup(new ProductsController(productsService)).build();
+		MockAuthentication.setAuthenticatedContext();
+	}
 
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new ProductsController(productsService)).build();
-        MockAuthentication.setAuthenticatedContext();
-    }
+	@Test
+	@DisplayName("상품 목록 조회 성공 - 기본 limit 값 적용")
+	public void findProducts_success_whenLimitParamDefaultValue() throws Exception {
+		// when
+		when(productsService.findAllWithPage(any(GetProductsPageRequestParamDto.class))).thenReturn(
+			ProductsPageResponseDto.empty());
+		// then
+		mockMvc.perform(get("/api/v1/products")).andExpect(status().isOk());
 
-    @Test
-    @DisplayName("상품 목록 조회 성공 - 기본 limit 값 적용")
-    public void findProducts_success_whenLimitParamDefaultValue() throws Exception {
-        // when
-        when(productsService.findAllWithPage(GetProductsPageRequestParamDto.empty())).thenReturn(emptyResponseDto());
-        // then
-        mockMvc.perform(get("/api/v1/products")).andExpect(status().isOk());
+		verify(productsService).findAllWithPage(paramDtoCaptor.capture());
+		assertEquals(10, paramDtoCaptor.getValue().getSize());
+	}
 
-        verify(productsService).findAllWithPage(paramDtoCaptor.capture());
-        assertEquals(10, paramDtoCaptor.getValue().getSize());
-    }
+	@Test
+	@DisplayName("상폼 목록 조회 성공 - 입력한 파라미터 검증")
+	public void findProducts_fail_whenQueryError() throws Exception {
+		// when
+		when(productsService.findAllWithPage(any(GetProductsPageRequestParamDto.class))).thenReturn(
+			ProductsPageResponseDto.empty());
 
-    @Test
-    @DisplayName("상폼 목록 조회 실패 - Query 오류")
-    public void findProducts_fail_whenQueryError() throws Exception {
-        // then
-        mockMvc.perform(get("/api/v1/products?limit=0"))
-                .andExpect(status().isBadRequest());
-    }
+		// then
+		mockMvc.perform(get("/api/v1/products?size=20&category=sports"))
+			.andExpect(status().isOk());
 
-    @Test
-    @DisplayName("인기 상품 목룍 조회 성공")
-    public void findPopularProductsWithPage_success() throws Exception {
-        // when
-        when(productsService.findPopularProductsWithPage()).thenReturn(emptyResponseDto());
+		verify(productsService).findAllWithPage(paramDtoCaptor.capture());
+		assertEquals(20, paramDtoCaptor.getValue().getSize());
+		assertEquals("sports", paramDtoCaptor.getValue().getCategory());
+	}
 
-        // then
-        mockMvc.perform(get("/api/v1/products/popular"))
-                .andExpect(status().isOk());
-    }
+	@Test
+	@DisplayName("인기 상품 목룍 조회 성공")
+	public void findPopularProductsWithPage_success() throws Exception {
+		// when
+		when(productsService.findPopularProductsWithPage(any(GetPopularProductsPageRequestParamDto.class))).thenReturn(
+			PopularProductsPageResponseDto.empty());
 
-
-    private ProductsPageResponseDto emptyResponseDto() {
-        ProductResponseDto productResponseDto = new ProductResponseDto(new Product());
-        CursorPageInfo cursorPageInfo = new CursorPageInfo();
-        return new ProductsPageResponseDto(List.of(productResponseDto), cursorPageInfo);
-    }
+		// then
+		mockMvc.perform(get("/api/v1/products/popular"))
+			.andExpect(status().isOk());
+	}
 }

@@ -21,4 +21,8 @@ public class Product {
         this.price = price;
         this.stock = stock;
     }
+
+    public PopularProduct toPopularProduct(int soldAmountInPeriod) {
+        return new PopularProduct(this.id, this.name, this.price, this.stock, soldAmountInPeriod);
+    }
 }

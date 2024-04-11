@@ -12,10 +12,14 @@ public class ProductResponseDto {
     private final long price;
     private final long stock;
 
-    public ProductResponseDto(Product product) {
-        id = product.getId();
-        name = product.getName();
-        price = product.getPrice();
-        stock = product.getStock();
+    public ProductResponseDto(UUID id, String name, long price, long stock) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+
+    public static ProductResponseDto fromProduct(Product product) {
+        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice(), product.getStock());
     }
 }

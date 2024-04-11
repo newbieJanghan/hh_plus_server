@@ -1,7 +1,7 @@
 package my.ecommerce.application.page;
 
 public interface PageRequest {
-    int getSize();
+	Long getSize();
 
-    Sort getSort();
+	Sort getSort();
 }
