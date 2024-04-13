@@ -12,8 +12,9 @@ import my.ecommerce.domain.product.Product;
 @Getter
 
 public class Order {
-	private final UUID id;
 	private final UUID userId;
+	@Setter
+	private UUID id;
 	@Setter
 	private long totalPrice;
 	private List<OrderItem> items;
@@ -27,7 +28,7 @@ public class Order {
 	}
 
 	public static Order newOrder(UUID userId) {
-		return new Order(UUID.randomUUID(), userId, 0, List.of());
+		return Order.builder().userId(userId).build();
 	}
 
 	public void addOrderItem(Product product, long quantity) {

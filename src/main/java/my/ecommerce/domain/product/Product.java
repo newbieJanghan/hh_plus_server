@@ -2,17 +2,17 @@ package my.ecommerce.domain.product;
 
 import java.util.UUID;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class Product {
 	private final UUID id;
-	private final String name;
-	private final long price;
-	private final long stock;
+	private String name;
+	private long price;
+	private long stock;
 
-	@Builder
 	public Product(UUID id, String name, long price, long stock) {
 		this.id = id;
 		this.name = name;

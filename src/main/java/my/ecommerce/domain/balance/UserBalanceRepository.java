@@ -1,14 +1,14 @@
 package my.ecommerce.domain.balance;
 
+import java.util.UUID;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
 public interface UserBalanceRepository {
-    @Nullable
-    UserBalance findByUserId(UUID userId);
+	@Nullable
+	UserBalance findByUserId(UUID userId);
 
-    void save(UserBalance userBalance);
+	void save(UserBalance userBalance);
 }
