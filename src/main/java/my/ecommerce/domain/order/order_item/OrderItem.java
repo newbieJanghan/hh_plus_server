@@ -7,14 +7,12 @@ import org.springframework.lang.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Delegate;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.utils.UUIDGenerator;
 
 @Getter
 public class OrderItem {
 	private final UUID id;
-	@Delegate
 	private final Product product;
 	private final long quantity;
 	@Setter
