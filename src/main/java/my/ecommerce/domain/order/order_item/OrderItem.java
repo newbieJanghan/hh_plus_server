@@ -6,24 +6,31 @@ import org.springframework.lang.Nullable;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Delegate;
 import my.ecommerce.domain.product.Product;
+import my.ecommerce.utils.UUIDGenerator;
 
 @Getter
-@NoArgsConstructor
 public class OrderItem {
-	private UUID id;
+	private final UUID id;
+	@Delegate
+	private final Product product;
+	private final long quantity;
+	@Setter
 	private UUID orderId;
-	private Product product;
-	private long quantity;
 	private OrderItemStatus status;
 
 	@Builder
-	private OrderItem(UUID id, UUID orderId, Product product, long quantity, @Nullable OrderItemStatus status) {
+	public OrderItem(UUID id, UUID orderId, Product product, long quantity, @Nullable OrderItemStatus status) {
 		this.id = id;
 		this.orderId = orderId;
 		this.product = product;
 		this.quantity = quantity;
 		this.status = status != null ? status : OrderItemStatus.ORDERED;
+	}
+
+	public static OrderItem newOrderItem(UUID orderId, Product product, long quantity) {
+		return new OrderItem(UUIDGenerator.generate(), orderId, product, quantity, OrderItemStatus.ORDERED);
 	}
 }
