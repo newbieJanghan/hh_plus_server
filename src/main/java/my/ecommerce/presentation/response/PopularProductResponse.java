@@ -3,7 +3,7 @@ package my.ecommerce.presentation.response;
 import java.util.UUID;
 
 import lombok.Getter;
-import my.ecommerce.domain.product.PopularProduct;
+import my.ecommerce.domain.product.popular.PopularProduct;
 
 @Getter
 public class PopularProductResponse extends ProductResponseDto {

@@ -3,11 +3,11 @@ package my.ecommerce.datasource.product;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.domain.product.PopularProduct;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.ProductPageRepository;
-import my.ecommerce.domain.product.dto.CursorPagedProductsQueryDto;
-import my.ecommerce.domain.product.dto.PopularProductsPeriodQueryDto;
+import my.ecommerce.domain.product.page.CursorPagedProductsQueryDto;
+import my.ecommerce.domain.product.page.ProductPageRepository;
+import my.ecommerce.domain.product.popular.PopularProduct;
+import my.ecommerce.domain.product.popular.PopularProductsPeriodQueryDto;
 
 @Repository
 public class ProductPageRepositoryImpl implements ProductPageRepository {

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import my.ecommerce.domain.product.PopularProduct;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.ProductPageService;
+import my.ecommerce.domain.product.page.ProductPageService;
+import my.ecommerce.domain.product.popular.PopularProduct;
 import my.ecommerce.presentation.page.CursorPageInfo;
 import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
 import my.ecommerce.presentation.request.page.ProductsPageRequestParams;

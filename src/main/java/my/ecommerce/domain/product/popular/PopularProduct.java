@@ -1,6 +1,7 @@
-package my.ecommerce.domain.product;
+package my.ecommerce.domain.product.popular;
 
 import lombok.Getter;
+import my.ecommerce.domain.product.Product;
 
 @Getter
 public class PopularProduct extends Product {

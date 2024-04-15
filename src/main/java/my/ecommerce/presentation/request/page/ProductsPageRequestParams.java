@@ -3,7 +3,7 @@ package my.ecommerce.presentation.request.page;
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
-import my.ecommerce.domain.product.dto.CursorPagedProductsQueryDto;
+import my.ecommerce.domain.product.page.CursorPagedProductsQueryDto;
 import my.ecommerce.presentation.page.CursorPageRequestParams;
 import my.ecommerce.presentation.page.Sort;
 

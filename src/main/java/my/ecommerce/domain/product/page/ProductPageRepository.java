@@ -1,10 +1,11 @@
-package my.ecommerce.domain.product;
+package my.ecommerce.domain.product.page;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.domain.product.dto.CursorPagedProductsQueryDto;
-import my.ecommerce.domain.product.dto.PopularProductsPeriodQueryDto;
+import my.ecommerce.domain.product.Product;
+import my.ecommerce.domain.product.popular.PopularProduct;
+import my.ecommerce.domain.product.popular.PopularProductsPeriodQueryDto;
 
 @Repository
 public interface ProductPageRepository {

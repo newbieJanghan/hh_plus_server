@@ -1,6 +1,5 @@
-package my.ecommerce.domain.product.dto;
+package my.ecommerce.domain.product.page;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.lang.Nullable;
@@ -12,23 +11,20 @@ import my.ecommerce.presentation.page.Sort;
 
 @Getter
 @NoArgsConstructor
-public class CursorPagedPopularProductsQueryDto {
+public class CursorPagedProductsQueryDto {
 	long limit;
 	Sort sort;
 
 	@Nullable
 	UUID cursor;
-
-	LocalDateTime from;
-	LocalDateTime to;
+	@Nullable
+	String category;
 
 	@Builder
-	private CursorPagedPopularProductsQueryDto(long limit, Sort sort, @Nullable UUID cursor, LocalDateTime from,
-		LocalDateTime to) {
+	private CursorPagedProductsQueryDto(long limit, Sort sort, @Nullable UUID cursor, @Nullable String category) {
 		this.limit = limit;
 		this.sort = sort;
 		this.cursor = cursor;
-		this.from = from;
-		this.to = to;
+		this.category = category;
 	}
 }

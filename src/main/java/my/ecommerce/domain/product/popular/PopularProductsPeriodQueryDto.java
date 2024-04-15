@@ -1,4 +1,4 @@
-package my.ecommerce.domain.product.dto;
+package my.ecommerce.domain.product.popular;
 
 import java.time.LocalDateTime;
 

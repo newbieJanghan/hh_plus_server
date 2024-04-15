@@ -17,8 +17,10 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 
-import my.ecommerce.domain.product.dto.CursorPagedProductsQueryDto;
-import my.ecommerce.domain.product.dto.PopularProductsPeriodQueryDto;
+import my.ecommerce.domain.product.page.CursorPagedProductsQueryDto;
+import my.ecommerce.domain.product.page.ProductPageRepository;
+import my.ecommerce.domain.product.page.ProductPageService;
+import my.ecommerce.domain.product.popular.PopularProductsPeriodQueryDto;
 import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
 import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
 import my.ecommerce.utils.UUIDGenerator;

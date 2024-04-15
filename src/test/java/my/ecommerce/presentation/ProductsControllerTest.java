@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import my.ecommerce.domain.product.ProductPageService;
+import my.ecommerce.domain.product.page.ProductPageService;
 import my.ecommerce.presentation.controller.ProductsController;
 import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
 import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
