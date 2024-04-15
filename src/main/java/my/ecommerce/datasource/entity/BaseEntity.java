@@ -9,8 +9,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Getter;
 
 @Entity
+@Getter
 public abstract class BaseEntity {
 	@Id
 	protected UUID id;
