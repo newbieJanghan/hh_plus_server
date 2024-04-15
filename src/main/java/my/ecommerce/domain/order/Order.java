@@ -1,25 +1,23 @@
 package my.ecommerce.domain.order;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.domain.product.Product;
 
 @Getter
-
 public class Order {
 	private final UUID userId;
+	private final List<OrderItem> items;
 	@Setter
 	private UUID id;
 	@Setter
 	private long totalPrice;
-	private List<OrderItem> items;
 
-	@Builder
 	public Order(UUID id, UUID userId, long totalPrice, List<OrderItem> items) {
 		this.id = id;
 		this.userId = userId;
@@ -27,13 +25,16 @@ public class Order {
 		this.items = items;
 	}
 
-	public static Order newOrder(UUID userId) {
-		return Order.builder().userId(userId).build();
+	public static Order newOrder(UUID userId, long totalPrice) {
+		return new Order(null, userId, totalPrice, new ArrayList<>());
 	}
 
-	public void addOrderItem(Product product, long quantity) {
-		OrderItem item = OrderItem.newOrderItem(this.getId(), product, quantity);
+	public void addOrderItem(Product product, long quantity, long currentPrice) {
+		OrderItem item = OrderItem.newOrderItem(product, quantity, currentPrice);
 		items.add(item);
-		totalPrice += item.getProduct().getPrice() * item.getQuantity();
+	}
+
+	public long calculateCurrentPrice() {
+		return items.stream().map(OrderItem::getCurrentPrice).reduce(Long::sum).orElse(0L);
 	}
 }

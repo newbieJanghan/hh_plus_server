@@ -55,7 +55,7 @@ public class OrdersControllerTest {
 	public void order_success() throws Exception {
 		// when
 		UUID userId = UUIDGenerator.generate();
-		when(orderApplication.order(any(CreateOrderDto.class))).thenReturn(Order.newOrder(userId));
+		when(orderApplication.run(any(CreateOrderDto.class))).thenReturn(Order.newOrder(userId, 0));
 
 		// then
 		mockMvc.perform(post("/api/v1/orders")
@@ -65,7 +65,7 @@ public class OrdersControllerTest {
 			.andExpect(jsonPath("$.userId").value(userId.toString()))
 		;
 
-		verify(orderApplication, times(1)).order(any(CreateOrderDto.class));
+		verify(orderApplication, times(1)).run(any(CreateOrderDto.class));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class OrdersControllerTest {
 			.andExpect(
 				result -> assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()));
 
-		verify(orderApplication, never()).order(any(CreateOrderDto.class));
+		verify(orderApplication, never()).run(any(CreateOrderDto.class));
 	}
 
 	private String createRequestContent() throws JSONException {

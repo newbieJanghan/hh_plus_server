@@ -27,7 +27,7 @@ public class OrdersController extends BaseAuthenticatedController {
 	@PostMapping("")
 	public OrderResponse createOrder(@RequestBody @Valid OrderCreateRequest requestDto) {
 		CreateOrderDto createOrderDto = requestDto.toDomain(getAuthenticatedUser().getId());
-		Order order = orderApplication.order(createOrderDto);
+		Order order = orderApplication.run(createOrderDto);
 		return OrderResponse.fromDomain(order);
 	}
 }

@@ -2,22 +2,29 @@ package my.ecommerce.domain.product;
 
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@RequiredArgsConstructor
 public class Product {
 	private final UUID id;
-	private String name;
+	private final String name;
+	@Setter
 	private long price;
+	@Setter
 	private long stock;
 
+	@Builder
 	public Product(UUID id, String name, long price, long stock) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
+	}
+
+	public static Product newProduct(String name) {
+		return Product.builder().name(name).build();
 	}
 
 	public PopularProduct toPopularProduct(int soldAmountInPeriod) {

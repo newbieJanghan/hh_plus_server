@@ -4,16 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.*;
 
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-
-import my.ecommerce.utils.UUIDGenerator;
 
 public class OrderServiceTest {
 
@@ -32,31 +28,17 @@ public class OrderServiceTest {
 	}
 
 	@Test
-	@DisplayName("create 실행 시 persistence layer 에 UUID 생성하여 넘김")
-	void transferOrder_toPersistenceLayer_withNewUUID() {
+	@DisplayName("create 메서드는 validation 실행 후 persistence layer 에 order 를 전달합니다.")
+	void createOrder_thenTransferOrder_toPersistenceLayer_withNullId() {
 		// given
-		// Product product = new Product(UUIDGenerator.generate());
-		// long totalPrice = 1000;
-		// OrderCreateRequest.OrderItemCreateRequest item = new OrderCreateRequest.OrderItemCreateRequest(product.getId(),
-		// 	1);
-		// OrderCreateRequest requestDto = new OrderCreateRequest(List.of(item), totalPrice);
-		//
-		// UUID userId = UUID.randomUUID();
-		// OrderItem expectedItem = OrderItem.builder().product(product).build();
-		// Order expect = Order.builder()
-		// 	.id(UUIDGenerator.generate())
-		// 	.userId(userId)
-		// 	.items(List.of(expectedItem))
-		// 	.totalPrice(totalPrice)
-		// 	.build();
-
+		Order order = Order.newOrder(null, 0);
+		when(orderRepository.save(any(Order.class))).thenReturn(order);
 		// when
-		orderService.create(Order.newOrder(UUIDGenerator.generate()));
+		orderService.create(order);
 		// then
 		verify(orderRepository).save(orderCaptor.capture());
-		Order order = orderCaptor.getValue();
-		assertNotNull(order.getId());
-		assertInstanceOf(UUID.class, order.getId());
+		Order captured = orderCaptor.getValue();
+		assertNull(captured.getId());
 	}
 
 }

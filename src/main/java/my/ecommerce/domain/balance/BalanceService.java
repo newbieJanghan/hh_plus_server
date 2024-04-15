@@ -28,4 +28,10 @@ public class BalanceService {
 	public UserBalance charge(UUID userId, long amount) {
 		return UserBalance.newBalance(userId, amount);
 	}
+
+	public void use(UUID userId, long amount) {
+		UserBalance userBalance = myBalance(userId);
+		userBalance.use(amount);
+		userBalanceRepository.save(userBalance);
+	}
 }
