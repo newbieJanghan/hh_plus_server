@@ -10,5 +10,5 @@ public interface UserBalanceRepository {
 	@Nullable
 	UserBalance findByUserId(UUID userId);
 
-	void save(UserBalance userBalance);
+	UserBalance save(UserBalance userBalance);
 }

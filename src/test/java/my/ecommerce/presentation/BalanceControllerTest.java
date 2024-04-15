@@ -24,6 +24,7 @@ import my.ecommerce.domain.balance.BalanceService;
 import my.ecommerce.domain.balance.UserBalance;
 import my.ecommerce.presentation.controller.BalanceController;
 import my.ecommerce.presentation.utils.MockAuthentication;
+import my.ecommerce.utils.UUIDGenerator;
 
 @WebMvcTest(BalanceController.class)
 public class BalanceControllerTest {
@@ -86,6 +87,6 @@ public class BalanceControllerTest {
 	}
 
 	private UserBalance emptyUserBalance() {
-		return UserBalance.newBalance(UUID.randomUUID(), 0);
+		return UserBalance.newBalance(UUIDGenerator.generate());
 	}
 }

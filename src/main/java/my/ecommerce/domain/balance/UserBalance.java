@@ -19,14 +19,11 @@ public class UserBalance {
 		this.amount = amount;
 	}
 
-	public static UserBalance newBalance(UUID userId, long amount) {
-		return new UserBalance(UUIDGenerator.generate(), userId, amount);
+	public static UserBalance newBalance(UUID userId) {
+		return new UserBalance(UUIDGenerator.generate(), userId, 0);
 	}
 
 	public void use(long amount) {
-		if (this.amount < amount) {
-			throw new IllegalArgumentException("잔액이 부족합니다.");
-		}
 		this.amount -= amount;
 	}
 

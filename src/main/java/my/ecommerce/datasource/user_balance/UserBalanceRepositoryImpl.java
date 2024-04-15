@@ -13,7 +13,8 @@ public class UserBalanceRepositoryImpl implements UserBalanceRepository {
 		return null;
 	}
 
-	public void save(UserBalance userBalance) {
+	public UserBalance save(UserBalance userBalance) {
 		// save user balance
+		return null;
 	}
 }
