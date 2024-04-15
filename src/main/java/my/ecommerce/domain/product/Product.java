@@ -13,7 +13,6 @@ public class Product {
 	private final String name;
 	@Setter
 	private long price;
-	@Setter
 	private long stock;
 
 	@Builder
@@ -33,7 +32,7 @@ public class Product {
 	}
 
 	public void sell(long quantity) {
-		setStock(stock - quantity);
+		stock -= quantity;
 	}
 
 	public PopularProduct toPopularProduct(int soldAmountInPeriod) {

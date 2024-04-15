@@ -13,36 +13,42 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import my.ecommerce.domain.balance.balance_history.UserBalanceHistory;
+import my.ecommerce.domain.balance.balance_history.UserBalanceHistoryRepository;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class BalanceServiceTest {
 	@Mock
 	private UserBalanceRepository userBalanceRepository;
+	@Mock
+	private UserBalanceHistoryRepository historyRepository;
 
 	@Captor
 	private ArgumentCaptor<UserBalance> balanceCaptor;
+	@Captor
+	private ArgumentCaptor<UserBalanceHistory> historyCaptor;
 
 	private BalanceService balanceService;
 
 	@BeforeEach
 	void setBalanceService() {
 		openMocks(this);
-		balanceService = new BalanceService(userBalanceRepository);
+		balanceService = new BalanceService(userBalanceRepository, historyRepository);
 	}
 
 	@Test
 	@DisplayName("UserBalance 조회 성공")
 	void success_myBalance() {
 		// given
-		UserBalance userBalance = prepareBalance(1000);
-		when(userBalanceRepository.findByUserId(userBalance.getUserId())).thenReturn(userBalance);
+		UserBalance balance = prepareBalance(1000);
+		mockRepositoryFindById(balance);
 
 		// when
-		UserBalance result = balanceService.myBalance(userBalance.getUserId());
+		UserBalance result = balanceService.myBalance(balance.getUserId());
 
 		// then
-		assertEquals(userBalance.getUserId(), result.getUserId());
-		assertEquals(userBalance.getAmount(), result.getAmount());
+		assertEquals(balance.getUserId(), result.getUserId());
+		assertEquals(balance.getAmount(), result.getAmount());
 	}
 
 	@Test
@@ -72,8 +78,8 @@ public class BalanceServiceTest {
 		long chargeAmount = 1000;
 		UserBalance balance = prepareBalance(currentAmount);
 
-		when(userBalanceRepository.findByUserId(balance.getUserId())).thenReturn(balance);
-		when(userBalanceRepository.save(any(UserBalance.class))).thenReturn(null);
+		mockRepositoryFindById(balance);
+		mockRepositorySaveMethods();
 
 		// when
 		balanceService.charge(balance.getUserId(), chargeAmount);
@@ -81,6 +87,11 @@ public class BalanceServiceTest {
 		// then
 		verify(userBalanceRepository).save(balanceCaptor.capture());
 		assertEquals(currentAmount + chargeAmount, balanceCaptor.getValue().getAmount());
+
+		verify(historyRepository).save(historyCaptor.capture());
+		assertEquals(UserBalanceHistory.BalanceHistoryType.CHARGE, historyCaptor.getValue().getType());
+		assertEquals(chargeAmount, historyCaptor.getValue().getAmount());
+
 	}
 
 	@Test
@@ -91,10 +102,11 @@ public class BalanceServiceTest {
 		long chargeAmount = -1000;
 		UserBalance balance = prepareBalance(currentAmount);
 
-		when(userBalanceRepository.findByUserId(balance.getUserId())).thenReturn(balance);
-		when(userBalanceRepository.save(any(UserBalance.class))).thenReturn(null);
+		mockRepositoryFindById(balance);
+		mockRepositorySaveMethods();
 
 		// when & then
+		verify(historyRepository, never()).save(any(UserBalanceHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> balanceService.charge(balance.getUserId(), chargeAmount));
 	}
 
@@ -106,8 +118,8 @@ public class BalanceServiceTest {
 		long useAmount = 1000;
 		UserBalance balance = prepareBalance(currentAmount);
 
-		when(userBalanceRepository.findByUserId(balance.getUserId())).thenReturn(balance);
-		when(userBalanceRepository.save(any(UserBalance.class))).thenReturn(null);
+		mockRepositoryFindById(balance);
+		mockRepositorySaveMethods();
 
 		// when
 		balanceService.use(balance.getUserId(), useAmount);
@@ -115,6 +127,9 @@ public class BalanceServiceTest {
 		// then
 		verify(userBalanceRepository).save(balanceCaptor.capture());
 		assertEquals(currentAmount - useAmount, balanceCaptor.getValue().getAmount());
+
+		verify(historyRepository).save(historyCaptor.capture());
+		assertEquals(UserBalanceHistory.BalanceHistoryType.USAGE, historyCaptor.getValue().getType());
 	}
 
 	@Test
@@ -125,10 +140,11 @@ public class BalanceServiceTest {
 		long useAmount = 2000;
 		UserBalance balance = prepareBalance(currentAmount);
 
-		when(userBalanceRepository.findByUserId(balance.getUserId())).thenReturn(balance);
-		when(userBalanceRepository.save(any(UserBalance.class))).thenReturn(null);
+		mockRepositoryFindById(balance);
+		mockRepositorySaveMethods();
 
 		// when & then
+		verify(historyRepository, never()).save(any(UserBalanceHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> balanceService.use(balance.getUserId(), useAmount));
 	}
 
@@ -138,5 +154,14 @@ public class BalanceServiceTest {
 
 	private UserBalance prepareNewBalance(UUID userId) {
 		return UserBalance.newBalance(userId);
+	}
+
+	private void mockRepositoryFindById(UserBalance balance) {
+		when(userBalanceRepository.findByUserId(balance.getUserId())).thenReturn(balance);
+	}
+
+	private void mockRepositorySaveMethods() {
+		when(userBalanceRepository.save(any(UserBalance.class))).thenReturn(null);
+		when(historyRepository.save(any(UserBalanceHistory.class))).thenReturn(null);
 	}
 }

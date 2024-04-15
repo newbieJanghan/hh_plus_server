@@ -5,20 +5,25 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import my.ecommerce.domain.balance.balance_history.UserBalanceHistory;
+import my.ecommerce.domain.balance.balance_history.UserBalanceHistoryRepository;
+
 @Service
 public class BalanceService {
 	private final UserBalanceRepository userBalanceRepository;
+	private final UserBalanceHistoryRepository historyRepository;
 
 	@Autowired
-	public BalanceService(UserBalanceRepository userBalanceRepository) {
+	public BalanceService(UserBalanceRepository userBalanceRepository, UserBalanceHistoryRepository historyRepository) {
 		this.userBalanceRepository = userBalanceRepository;
+		this.historyRepository = historyRepository;
 
 	}
 
 	public UserBalance myBalance(UUID userId) {
-		UserBalance userBalance = userBalanceRepository.findByUserId(userId);
-		if (userBalance != null) {
-			return userBalance;
+		UserBalance balance = userBalanceRepository.findByUserId(userId);
+		if (balance != null) {
+			return balance;
 		}
 
 		return userBalanceRepository.save(UserBalance.newBalance(userId));
@@ -27,19 +32,29 @@ public class BalanceService {
 	public UserBalance charge(UUID userId, long amount) {
 		validateCharge(amount);
 
-		UserBalance userBalance = myBalance(userId);
-		userBalance.charge(amount);
+		UserBalance balance = myBalance(userId);
+		balance.charge(amount);
 
-		return userBalanceRepository.save(userBalance);
+		UserBalance persisted = userBalanceRepository.save(balance);
+
+		UserBalanceHistory chargeHistory = UserBalanceHistory.newChargeHistory(balance.getId(), amount);
+		historyRepository.save(chargeHistory);
+
+		return persisted;
 	}
 
 	public UserBalance use(UUID userId, long amount) {
-		UserBalance userBalance = myBalance(userId);
+		UserBalance balance = myBalance(userId);
 
-		validateUsage(userBalance, amount);
-		userBalance.use(amount);
+		validateUsage(balance, amount);
+		balance.use(amount);
 
-		return userBalanceRepository.save(userBalance);
+		UserBalance persisted = userBalanceRepository.save(balance);
+
+		UserBalanceHistory usageHistory = UserBalanceHistory.newUsageHistory(balance.getId(), amount);
+		historyRepository.save(usageHistory);
+
+		return persisted;
 	}
 
 	private void validateCharge(long amount) {

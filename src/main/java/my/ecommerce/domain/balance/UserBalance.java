@@ -4,12 +4,14 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import my.ecommerce.utils.UUIDGenerator;
 
 @Getter
 public class UserBalance {
-	private final UUID id;
 	private final UUID userId;
+	@Setter
+	private UUID id;
 	private long amount;
 
 	@Builder
