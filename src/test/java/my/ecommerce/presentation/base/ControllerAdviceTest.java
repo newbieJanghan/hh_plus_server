@@ -1,4 +1,4 @@
-package my.ecommerce.presentation;
+package my.ecommerce.presentation.base;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jakarta.persistence.EntityNotFoundException;
+import my.ecommerce.presentation.ApiControllerAdvice;
 import my.ecommerce.presentation.controller.ApiTestController;
 import my.ecommerce.presentation.controller.TestService;
 import my.ecommerce.presentation.utils.MockAuthentication;

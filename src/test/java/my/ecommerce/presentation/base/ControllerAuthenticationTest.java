@@ -1,4 +1,4 @@
-package my.ecommerce.presentation;
+package my.ecommerce.presentation.base;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

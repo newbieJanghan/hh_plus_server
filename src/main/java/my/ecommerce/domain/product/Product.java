@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import my.ecommerce.domain.product.popular.PopularProduct;
 
 @Getter
 public class Product {
@@ -25,6 +26,14 @@ public class Product {
 
 	public static Product newProduct(String name) {
 		return Product.builder().name(name).build();
+	}
+
+	public boolean isAvailable(long quantity) {
+		return stock >= quantity;
+	}
+
+	public void sell(long quantity) {
+		setStock(stock - quantity);
 	}
 
 	public PopularProduct toPopularProduct(int soldAmountInPeriod) {
