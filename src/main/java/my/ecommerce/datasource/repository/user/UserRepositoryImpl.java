@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.user;
+package my.ecommerce.datasource.repository.user;
 
 import java.util.UUID;
 

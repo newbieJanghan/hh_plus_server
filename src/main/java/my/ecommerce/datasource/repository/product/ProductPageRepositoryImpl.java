@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.product;
+package my.ecommerce.datasource.repository.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;

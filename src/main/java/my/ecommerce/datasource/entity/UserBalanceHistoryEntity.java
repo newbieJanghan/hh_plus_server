@@ -1,5 +1,7 @@
 package my.ecommerce.datasource.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,13 +30,15 @@ public class UserBalanceHistoryEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private TransactionType type;
 
-	public UserBalanceHistoryEntity(UserBalanceEntity userBalance, long amount, TransactionType type) {
+	@Builder
+	public UserBalanceHistoryEntity(UUID id, UserBalanceEntity userBalance, long amount, TransactionType type) {
+		super(id);
 		this.userBalance = userBalance;
 		this.amount = amount;
 		this.type = type;
 	}
 
-	private enum TransactionType {
+	public enum TransactionType {
 		DEPOSIT,
 		WITHDRAW
 	}

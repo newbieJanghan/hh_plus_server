@@ -1,13 +1,12 @@
-package my.ecommerce.datasource.user_balance;
+package my.ecommerce.datasource.repository.user_balance;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import my.ecommerce.datasource.entity.UserBalanceEntity;
 
-@Repository
 public interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, UUID> {
-	UserBalanceEntity findByUserId(UUID userId);
+	Optional<UserBalanceEntity> findByUserId(UUID userId);
 }

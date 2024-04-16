@@ -1,8 +1,9 @@
 package my.ecommerce.domain.balance.balance_history;
 
-import org.springframework.stereotype.Repository;
+import java.util.UUID;
 
-@Repository
 public interface UserBalanceHistoryRepository {
 	UserBalanceHistory save(UserBalanceHistory history);
+
+	void destroy(UUID id);
 }

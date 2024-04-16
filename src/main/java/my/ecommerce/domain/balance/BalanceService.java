@@ -37,7 +37,7 @@ public class BalanceService {
 
 		UserBalance persisted = userBalanceRepository.save(balance);
 
-		UserBalanceHistory chargeHistory = UserBalanceHistory.newChargeHistory(balance.getId(), amount);
+		UserBalanceHistory chargeHistory = UserBalanceHistory.newChargeHistory(balance, amount);
 		historyRepository.save(chargeHistory);
 
 		return persisted;
@@ -51,7 +51,7 @@ public class BalanceService {
 
 		UserBalance persisted = userBalanceRepository.save(balance);
 
-		UserBalanceHistory usageHistory = UserBalanceHistory.newUsageHistory(balance.getId(), amount);
+		UserBalanceHistory usageHistory = UserBalanceHistory.newUsageHistory(balance, amount);
 		historyRepository.save(usageHistory);
 
 		return persisted;

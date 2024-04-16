@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.order;
+package my.ecommerce.datasource.repository.order;
 
 import org.springframework.stereotype.Repository;
 

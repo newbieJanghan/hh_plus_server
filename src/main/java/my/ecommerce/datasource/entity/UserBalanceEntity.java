@@ -22,10 +22,11 @@ public class UserBalanceEntity extends BaseEntity {
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
 	private long amount;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userBalance")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userBalance", orphanRemoval = true)
 	private List<UserBalanceHistoryEntity> histories;
 
-	public UserBalanceEntity(UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
+	public UserBalanceEntity(UUID id, UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
+		super(id);
 		this.userId = userId;
 		this.amount = amount;
 		this.histories = histories;
