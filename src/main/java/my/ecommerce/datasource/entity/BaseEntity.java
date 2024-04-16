@@ -7,11 +7,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
+@MappedSuperclass
+@NoArgsConstructor
 @Getter
 public abstract class BaseEntity {
 	@Id
@@ -24,4 +26,8 @@ public abstract class BaseEntity {
 	@UpdateTimestamp
 	@Column(nullable = false, name = "updated_at")
 	protected LocalDateTime updatedAt;
+
+	public BaseEntity(UUID id) {
+		this.id = id;
+	}
 }
