@@ -1,7 +1,5 @@
 package my.ecommerce.datasource.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,8 +27,7 @@ public class UserBalanceHistoryEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private TransactionType type;
 
-	public UserBalanceHistoryEntity(UUID id, UserBalanceEntity userBalance, long amount, TransactionType type) {
-		super(id);
+	public UserBalanceHistoryEntity(UserBalanceEntity userBalance, long amount, TransactionType type) {
 		this.userBalance = userBalance;
 		this.amount = amount;
 		this.type = type;

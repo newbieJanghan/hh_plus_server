@@ -1,7 +1,5 @@
 package my.ecommerce.datasource.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,9 +34,8 @@ public class OrderItemEntity extends BaseEntity {
 	@Column(nullable = false)
 	private long paid_price;
 
-	public OrderItemEntity(UUID id, OrderEntity order, ProductEntity product, OrderItemStatus status, long quantity,
+	public OrderItemEntity(OrderEntity order, ProductEntity product, OrderItemStatus status, long quantity,
 		long paid_price) {
-		super(id);
 		this.order = order;
 		this.product = product;
 		this.status = status;

@@ -1,7 +1,5 @@
 package my.ecommerce.datasource.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -22,8 +20,7 @@ public class ProductEntity extends BaseEntity {
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
 	private long stock;
 
-	public ProductEntity(UUID id, String name, long price, long stock) {
-		super(id);
+	public ProductEntity(String name, long price, long stock) {
 		this.name = name;
 		this.price = price;
 		this.stock = stock;

@@ -10,10 +10,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import my.ecommerce.utils.UUIDGenerator;
 
 @MappedSuperclass
-@NoArgsConstructor
 @Getter
 public abstract class BaseEntity {
 	@Id
@@ -27,7 +26,11 @@ public abstract class BaseEntity {
 	@Column(nullable = false, name = "updated_at")
 	protected LocalDateTime updatedAt;
 
-	public BaseEntity(UUID id) {
-		this.id = id;
+	public BaseEntity() {
+		this.id = generatePK();
+	}
+
+	private UUID generatePK() {
+		return UUIDGenerator.generate();
 	}
 }

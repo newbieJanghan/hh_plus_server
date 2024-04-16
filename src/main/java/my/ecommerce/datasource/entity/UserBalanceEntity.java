@@ -25,8 +25,8 @@ public class UserBalanceEntity extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userBalance")
 	private List<UserBalanceHistoryEntity> histories;
 
-	public UserBalanceEntity(UUID id, UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
-		super(id);
+	public UserBalanceEntity(UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
+
 		this.userId = userId;
 		this.amount = amount;
 		this.histories = histories;

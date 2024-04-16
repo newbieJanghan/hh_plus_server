@@ -26,8 +26,7 @@ public class OrderEntity extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
 	private List<OrderItemEntity> items = new ArrayList<>();
 
-	public OrderEntity(UUID id, UUID userId, long totalPrice) {
-		super(id);
+	public OrderEntity(UUID userId, long totalPrice) {
 		this.userId = userId;
 		this.totalPrice = totalPrice;
 	}
