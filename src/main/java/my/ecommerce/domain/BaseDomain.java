@@ -11,7 +11,8 @@ public abstract class BaseDomain {
 	@Getter
 	protected UUID id;
 
-	public boolean isPersisted() {
-		return id != null;
+	public void persist(UUID id) {
+		this.id = id;
 	}
+
 }
