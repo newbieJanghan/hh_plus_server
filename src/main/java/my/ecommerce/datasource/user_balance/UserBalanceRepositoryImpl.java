@@ -2,6 +2,7 @@ package my.ecommerce.datasource.user_balance;
 
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import my.ecommerce.datasource.entity.UserBalanceEntity;
@@ -12,8 +13,13 @@ import my.ecommerce.domain.balance.UserBalanceRepository;
 public class UserBalanceRepositoryImpl implements UserBalanceRepository {
 	private JpaUserBalanceRepository jpaRepository;
 
+	@Autowired
+	public UserBalanceRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
+		this.jpaRepository = jpaRepository;
+	}
+
 	public UserBalance findByUserId(UUID userId) {
-		UserBalanceEntity entity = jpaRepository.findByUserId(userId).orElse(null);
+		UserBalanceEntity entity = jpaRepository.findByUserId(userId);
 		if (entity == null) {
 			return null;
 		}
@@ -22,8 +28,18 @@ public class UserBalanceRepositoryImpl implements UserBalanceRepository {
 	}
 
 	public UserBalance save(UserBalance userBalance) {
-		// save user balance
-		return null;
+		UserBalanceEntity entity = fromDomain(userBalance);
+		jpaRepository.save(entity);
+
+		return toDomain(entity);
+	}
+
+	public void destroy(UUID id) {
+		jpaRepository.deleteById(id);
+	}
+
+	private UserBalanceEntity fromDomain(UserBalance domain) {
+		return new UserBalanceEntity(domain.getUserId(), domain.getAmount(), null);
 	}
 
 	private UserBalance toDomain(UserBalanceEntity entity) {

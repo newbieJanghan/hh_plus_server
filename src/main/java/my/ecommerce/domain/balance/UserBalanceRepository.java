@@ -11,4 +11,6 @@ public interface UserBalanceRepository {
 	UserBalance findByUserId(UUID userId);
 
 	UserBalance save(UserBalance userBalance);
+
+	void destroy(UUID id);
 }
