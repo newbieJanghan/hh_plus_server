@@ -26,7 +26,6 @@ public class UserBalanceEntity extends BaseEntity {
 	private List<UserBalanceHistoryEntity> histories;
 
 	public UserBalanceEntity(UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
-
 		this.userId = userId;
 		this.amount = amount;
 		this.histories = histories;

@@ -4,15 +4,13 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import my.ecommerce.domain.BaseDomain;
 
 @Getter
-public class UserBalanceHistory {
+public class UserBalanceHistory extends BaseDomain {
 	private final UUID balanceId;
 	private final BalanceHistoryType type;
 	private final long amount;
-	@Setter
-	private UUID id;
 
 	@Builder
 	public UserBalanceHistory(UUID id, UUID balanceId, BalanceHistoryType type, long amount) {

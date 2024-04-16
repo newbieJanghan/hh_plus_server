@@ -4,14 +4,11 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import my.ecommerce.utils.UUIDGenerator;
+import my.ecommerce.domain.BaseDomain;
 
 @Getter
-public class UserBalance {
+public class UserBalance extends BaseDomain {
 	private final UUID userId;
-	@Setter
-	private UUID id;
 	private long amount;
 
 	@Builder
@@ -22,7 +19,7 @@ public class UserBalance {
 	}
 
 	public static UserBalance newBalance(UUID userId) {
-		return new UserBalance(UUIDGenerator.generate(), userId, 0);
+		return new UserBalance(null, userId, 0);
 	}
 
 	public void use(long amount) {

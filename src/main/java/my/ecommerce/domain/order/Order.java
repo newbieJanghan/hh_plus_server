@@ -6,15 +6,14 @@ import java.util.UUID;
 
 import lombok.Getter;
 import lombok.Setter;
+import my.ecommerce.domain.BaseDomain;
 import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.domain.product.Product;
 
 @Getter
-public class Order {
+public class Order extends BaseDomain {
 	private final UUID userId;
 	private final List<OrderItem> items;
-	@Setter
-	private UUID id;
 	@Setter
 	private long totalPrice;
 

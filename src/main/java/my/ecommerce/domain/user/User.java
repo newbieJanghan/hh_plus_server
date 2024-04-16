@@ -1,18 +1,15 @@
 package my.ecommerce.domain.user;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
-@Getter
-@NoArgsConstructor
-public class User {
-    private UUID id;
+import lombok.Builder;
+import lombok.Getter;
+import my.ecommerce.domain.BaseDomain;
 
-    @Builder
-    private User(UUID id) {
-        this.id = id;
-    }
+@Getter
+public class User extends BaseDomain {
+	@Builder
+	private User(UUID id) {
+		this.id = id;
+	}
 }
