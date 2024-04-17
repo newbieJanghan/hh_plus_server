@@ -1,4 +1,4 @@
-package my.ecommerce.domain.product;
+package my.ecommerce.domain.product.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -17,19 +17,16 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 
-import my.ecommerce.domain.product.page.CursorPagedProductsQueryDto;
-import my.ecommerce.domain.product.page.ProductPageRepository;
-import my.ecommerce.domain.product.page.ProductPageService;
-import my.ecommerce.domain.product.popular.PopularProductsPeriodQueryDto;
-import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
-import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
+import my.ecommerce.domain.product.popular.PeriodQuery;
+import my.ecommerce.presentation.request.page.PopularProductsPageRequest;
+import my.ecommerce.presentation.request.page.ProductsPageRequest;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class ProductPageServiceTest {
 	@Captor
-	private ArgumentCaptor<CursorPagedProductsQueryDto> cursorQueryCaptor;
+	private ArgumentCaptor<ProductPageCursorQuery> cursorQueryCaptor;
 	@Captor
-	private ArgumentCaptor<PopularProductsPeriodQueryDto> periodQueryCaptor;
+	private ArgumentCaptor<PeriodQuery> periodQueryCaptor;
 
 	@Mock
 	private ProductPageRepository productPageRepository;
@@ -49,15 +46,15 @@ public class ProductPageServiceTest {
 		prepareRepositoryFindAllProduct();
 
 		// when
-		ProductsPageRequestParams requestParams = new ProductsPageRequestParams(10L, null,
+		ProductsPageRequest requestParams = new ProductsPageRequest(10, null,
 			UUIDGenerator.generate().toString(), null);
 		productsService.findAllWithPage(requestParams);
 
 		// then
 		verify(productPageRepository).findAllWithPage(cursorQueryCaptor.capture());
-		CursorPagedProductsQueryDto queryDto = cursorQueryCaptor.getValue();
+		ProductPageCursorQuery queryDto = cursorQueryCaptor.getValue();
 
-		assertInstanceOf(CursorPagedProductsQueryDto.class, queryDto);
+		assertInstanceOf(ProductPageCursorQuery.class, queryDto);
 		assertInstanceOf(UUID.class, queryDto.getCursor());
 	}
 
@@ -68,14 +65,14 @@ public class ProductPageServiceTest {
 		prepareRepositoryFindAllPopularProduct();
 
 		// when
-		PopularProductsPageRequestParams requestParams = new PopularProductsPageRequestParams(10L, null,
+		PopularProductsPageRequest requestParams = new PopularProductsPageRequest(10, null,
 			UUIDGenerator.generate().toString(), null, null, null);
 		productsService.findAllPopularWithPage(requestParams);
 
 		// then
 		verify(productPageRepository).findAllPopularWithPage(cursorQueryCaptor.capture(),
 			periodQueryCaptor.capture());
-		PopularProductsPeriodQueryDto queryDto = periodQueryCaptor.getValue();
+		PeriodQuery queryDto = periodQueryCaptor.getValue();
 
 		LocalDateTime from = queryDto.getFrom();
 		LocalDateTime to = queryDto.getTo();
@@ -90,13 +87,13 @@ public class ProductPageServiceTest {
 	}
 
 	private void prepareRepositoryFindAllProduct() {
-		when(productPageRepository.findAllWithPage(any(CursorPagedProductsQueryDto.class))).thenReturn(
+		when(productPageRepository.findAllWithPage(any(ProductPageCursorQuery.class))).thenReturn(
 			new PageImpl<>(List.of()));
 	}
 
 	private void prepareRepositoryFindAllPopularProduct() {
-		when(productPageRepository.findAllPopularWithPage(any(CursorPagedProductsQueryDto.class),
-			any(PopularProductsPeriodQueryDto.class)))
+		when(productPageRepository.findAllPopularWithPage(any(ProductPageCursorQuery.class),
+			any(PeriodQuery.class)))
 			.thenReturn(new PageImpl<>(List.of()));
 	}
 }

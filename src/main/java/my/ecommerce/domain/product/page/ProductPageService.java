@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.popular.PopularProduct;
-import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
-import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
+import my.ecommerce.presentation.request.page.PopularProductsPageRequest;
+import my.ecommerce.presentation.request.page.ProductsPageRequest;
 
 @Service
 public class ProductPageService {
@@ -18,11 +18,11 @@ public class ProductPageService {
 		this.productPageRepository = productPageRepository;
 	}
 
-	public Page<Product> findAllWithPage(ProductsPageRequestParams paramDto) {
+	public Page<Product> findAllWithPage(ProductsPageRequest paramDto) {
 		return productPageRepository.findAllWithPage(paramDto.toCursorQueryDto());
 	}
 
-	public Page<PopularProduct> findAllPopularWithPage(PopularProductsPageRequestParams paramDto) {
+	public Page<PopularProduct> findAllPopularWithPage(PopularProductsPageRequest paramDto) {
 		return productPageRepository.findAllPopularWithPage(
 			paramDto.toCursorQueryDto(),
 			paramDto.toPopularPeriodQueryDto());

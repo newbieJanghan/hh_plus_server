@@ -11,8 +11,8 @@ import my.ecommerce.presentation.page.Sort;
 
 @Getter
 @NoArgsConstructor
-public class CursorPagedProductsQueryDto {
-	long limit;
+public class ProductPageCursorQuery {
+	int limit;
 	Sort sort;
 
 	@Nullable
@@ -21,7 +21,7 @@ public class CursorPagedProductsQueryDto {
 	String category;
 
 	@Builder
-	private CursorPagedProductsQueryDto(long limit, Sort sort, @Nullable UUID cursor, @Nullable String category) {
+	private ProductPageCursorQuery(int limit, Sort sort, @Nullable UUID cursor, @Nullable String category) {
 		this.limit = limit;
 		this.sort = sort;
 		this.cursor = cursor;

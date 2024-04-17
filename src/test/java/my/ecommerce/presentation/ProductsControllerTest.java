@@ -20,15 +20,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import my.ecommerce.domain.product.page.ProductPageService;
 import my.ecommerce.presentation.controller.ProductsController;
-import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
-import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
+import my.ecommerce.presentation.request.page.PopularProductsPageRequest;
+import my.ecommerce.presentation.request.page.ProductsPageRequest;
 import my.ecommerce.presentation.utils.MockAuthentication;
 
 @WebMvcTest(ProductsController.class)
 public class ProductsControllerTest {
 
 	@Captor
-	ArgumentCaptor<ProductsPageRequestParams> paramDtoCaptor;
+	ArgumentCaptor<ProductsPageRequest> paramDtoCaptor;
 
 	private MockMvc mockMvc;
 	@MockBean
@@ -44,7 +44,7 @@ public class ProductsControllerTest {
 	@DisplayName("상품 목록 조회 성공 - 기본 limit 값 적용")
 	public void findProducts_success_whenLimitParamDefaultValue() throws Exception {
 		// when
-		when(productsService.findAllWithPage(any(ProductsPageRequestParams.class))).thenReturn(
+		when(productsService.findAllWithPage(any(ProductsPageRequest.class))).thenReturn(
 			new PageImpl<>(List.of()));
 		// then
 		mockMvc.perform(get("/api/v1/products")).andExpect(status().isOk());
@@ -57,7 +57,7 @@ public class ProductsControllerTest {
 	@DisplayName("상폼 목록 조회 성공 - 입력한 파라미터 검증")
 	public void findProducts_fail_whenQueryError() throws Exception {
 		// when
-		when(productsService.findAllWithPage(any(ProductsPageRequestParams.class))).thenReturn(
+		when(productsService.findAllWithPage(any(ProductsPageRequest.class))).thenReturn(
 			new PageImpl<>(List.of()));
 
 		// then
@@ -73,7 +73,7 @@ public class ProductsControllerTest {
 	@DisplayName("인기 상품 목룍 조회 성공")
 	public void findAllPopularWithPage_success() throws Exception {
 		// when
-		when(productsService.findAllPopularWithPage(any(PopularProductsPageRequestParams.class))).thenReturn(
+		when(productsService.findAllPopularWithPage(any(PopularProductsPageRequest.class))).thenReturn(
 			new PageImpl<>(List.of()));
 
 		// then

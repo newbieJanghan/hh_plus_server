@@ -8,16 +8,16 @@ import lombok.Getter;
 import my.ecommerce.utils.UUIDGenerator;
 
 @Getter
-public abstract class CursorPageRequestParams implements PageRequestParams {
-	protected final Long size;
+public abstract class CursorPageRequest implements PageRequest {
+	protected final int size;
 	@Nullable
 	protected final Sort sort;
 
 	@Nullable
 	private final String cursor;
 
-	public CursorPageRequestParams(@Nullable Long size, @Nullable Sort sort, @Nullable String cursor) {
-		this.size = Math.max(size != null ? size : 10, 10);
+	public CursorPageRequest(int size, @Nullable Sort sort, @Nullable String cursor) {
+		this.size = Math.max(size, 10);
 		this.sort = sort;
 		this.cursor = cursor;
 	}

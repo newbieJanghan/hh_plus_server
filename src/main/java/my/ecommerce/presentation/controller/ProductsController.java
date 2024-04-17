@@ -12,8 +12,8 @@ import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.page.ProductPageService;
 import my.ecommerce.domain.product.popular.PopularProduct;
 import my.ecommerce.presentation.page.CursorPageInfo;
-import my.ecommerce.presentation.request.page.PopularProductsPageRequestParams;
-import my.ecommerce.presentation.request.page.ProductsPageRequestParams;
+import my.ecommerce.presentation.request.page.PopularProductsPageRequest;
+import my.ecommerce.presentation.request.page.ProductsPageRequest;
 import my.ecommerce.presentation.response.PopularProductResponse;
 import my.ecommerce.presentation.response.ProductResponseDto;
 import my.ecommerce.presentation.response.page.PopularProductsPageResponse;
@@ -30,7 +30,7 @@ public class ProductsController {
 	}
 
 	@GetMapping("")
-	public ProductsPageResponse getProducts(@Valid @ModelAttribute ProductsPageRequestParams paramDto) {
+	public ProductsPageResponse getProducts(@Valid @ModelAttribute ProductsPageRequest paramDto) {
 		Page<Product> page = productsService.findAllWithPage(paramDto);
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
 		CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, cursor);
@@ -40,7 +40,7 @@ public class ProductsController {
 
 	@GetMapping("/popular")
 	public PopularProductsPageResponse getPopularProducts(@Valid @ModelAttribute
-	PopularProductsPageRequestParams paramDto) {
+	PopularProductsPageRequest paramDto) {
 		Page<PopularProduct> page = productsService.findAllPopularWithPage(paramDto);
 
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
