@@ -1,27 +1,36 @@
-package my.ecommerce.datasource.repository.user_balance;
+package my.ecommerce.datasource.user_balance;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.datasource.entity.UserBalanceEntity;
-import my.ecommerce.datasource.repository.AbstractCRUDRepository;
 import my.ecommerce.domain.balance.UserBalance;
 import my.ecommerce.domain.balance.UserBalanceRepository;
 
 @Repository
-public class UserBalanceRepositoryImpl extends AbstractCRUDRepository<UserBalance, UserBalanceEntity>
-	implements UserBalanceRepository {
-	protected JpaUserBalanceRepository jpaRepository;
+public class UserBalanceRepositoryImpl implements UserBalanceRepository {
+	private JpaUserBalanceRepository jpaRepository;
+	private UserBalanceConverter domainConverter = new UserBalanceConverter();
 
 	@Autowired
 	public UserBalanceRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
-		super(jpaRepository, new UserBalanceConverter());
 		this.jpaRepository = jpaRepository;
+	}
+
+	public UserBalance save(UserBalance domain) {
+		UserBalanceEntity entity = domainConverter.toEntity(domain);
+		jpaRepository.save(entity);
+
+		domain.persist(entity.getId());
+		return domain;
 	}
 
 	public UserBalance findByUserId(UUID userId) {
 		return jpaRepository.findByUserId(userId).map(domainConverter::toDomain).orElse(null);
+	}
+
+	public void destroy(UUID id) {
+		jpaRepository.deleteById(id);
 	}
 }

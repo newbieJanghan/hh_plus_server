@@ -11,34 +11,52 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
-public class OrderServiceTest {
+import my.ecommerce.domain.Prepare;
+import my.ecommerce.domain.order.order_item.OrderItem;
+import my.ecommerce.domain.order.order_item.OrderItemRepository;
+import my.ecommerce.domain.product.Product;
 
+public class OrderServiceTest {
 	@Captor
 	ArgumentCaptor<Order> orderCaptor;
+	@Captor
+	ArgumentCaptor<OrderItem> orderItemCaptor;
 
 	@Mock
 	private OrderRepository orderRepository;
+	@Mock
+	private OrderItemRepository orderItemRepository;
 
 	private OrderService orderService;
 
 	@BeforeEach
 	void setUp() {
 		openMocks(this);
-		orderService = new OrderService(orderRepository);
+		orderService = new OrderService(orderRepository, orderItemRepository);
 	}
 
 	@Test
-	@DisplayName("create 메서드는 validation 실행 후 persistence layer 에 order 를 전달합니다.")
+	@DisplayName("create 메서드는 Order 도메인 객체의 orderItem 과 order 를 영속성 레이어로 전달합니다.")
 	void createOrder_thenTransferOrder_toPersistenceLayer_withNullId() {
 		// given
-		Order order = Order.newOrder(null, 0);
+		int itemsCount = 2;
+		Order order = Prepare.order(itemsCount);
 		when(orderRepository.save(any(Order.class))).thenReturn(order);
+		when(orderItemRepository.save(any(OrderItem.class))).thenReturn(order.getItems().getFirst());
+
 		// when
 		orderService.create(order);
+
 		// then
 		verify(orderRepository).save(orderCaptor.capture());
-		Order captured = orderCaptor.getValue();
-		assertNull(captured.getId());
-	}
+		verify(orderItemRepository, times(itemsCount)).save(orderItemCaptor.capture());
 
+		Order capturedOrder = orderCaptor.getValue();
+		assertNull(capturedOrder.getId());
+		assertEquals(capturedOrder.getItems().size(), itemsCount);
+
+		OrderItem capturedOrderItem = orderItemCaptor.getValue();
+		assertEquals(capturedOrderItem.getOrder(), capturedOrder);
+		assertInstanceOf(Product.class, capturedOrderItem.getProduct());
+	}
 }

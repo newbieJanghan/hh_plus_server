@@ -4,14 +4,12 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import my.ecommerce.domain.BaseDomain;
 import my.ecommerce.domain.product.popular.PopularProduct;
 
 @Getter
-public class Product {
-	private final UUID id;
+public class Product extends BaseDomain {
 	private final String name;
-	@Setter
 	private long price;
 	private long stock;
 
@@ -23,8 +21,12 @@ public class Product {
 		this.stock = stock;
 	}
 
-	public static Product newProduct(String name) {
-		return Product.builder().name(name).build();
+	public static Product newProduct(String name, long price, long stock) {
+		return Product.builder()
+			.name(name)
+			.price(price)
+			.stock(stock)
+			.build();
 	}
 
 	public boolean isAvailable(long quantity) {

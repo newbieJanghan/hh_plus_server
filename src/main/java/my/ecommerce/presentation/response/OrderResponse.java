@@ -59,7 +59,7 @@ public class OrderResponse {
 		public static OrderItemResponse fromOrderItem(OrderItem orderItem) {
 			return new OrderItemResponse(
 				orderItem.getId(),
-				orderItem.getOrderId(),
+				orderItem.getOrder().getId(),
 				ProductResponseDto.fromProduct(orderItem.getProduct()),
 				orderItem.getQuantity(),
 				orderItem.getStatus());

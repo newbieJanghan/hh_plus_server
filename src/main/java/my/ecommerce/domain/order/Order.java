@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import my.ecommerce.domain.BaseDomain;
@@ -17,6 +18,7 @@ public class Order extends BaseDomain {
 	@Setter
 	private long totalPrice;
 
+	@Builder
 	public Order(UUID id, UUID userId, long totalPrice, List<OrderItem> items) {
 		this.id = id;
 		this.userId = userId;
@@ -29,11 +31,11 @@ public class Order extends BaseDomain {
 	}
 
 	public void addOrderItem(Product product, long quantity, long currentPrice) {
-		OrderItem item = OrderItem.newOrderItem(product, quantity, currentPrice);
+		OrderItem item = OrderItem.newOrderItem(this, product, quantity, currentPrice);
 		items.add(item);
 	}
 
-	public long calculateCurrentPrice() {
-		return items.stream().map(OrderItem::getCurrentPrice).reduce(Long::sum).orElse(0L);
+	public void calculateCurrentPrice() {
+		items.forEach(item -> totalPrice += item.getCurrentPrice());
 	}
 }

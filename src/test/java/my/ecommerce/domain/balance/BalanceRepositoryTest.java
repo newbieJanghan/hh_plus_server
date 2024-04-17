@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import my.ecommerce.domain.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
 @SpringBootTest
@@ -19,7 +20,7 @@ public class BalanceRepositoryTest {
 	@Test
 	@DisplayName("UserBalance 도메인을 저장한 후 영속성 저장된 UserBalance 를 반환 성공")
 	public void success_saveAndReturnPersistedUserBalance() {
-		UserBalance userBalance = prepareUserBalance();
+		UserBalance userBalance = Prepare.userBalance();
 
 		// when
 		UserBalance result = userBalanceRepository.save(userBalance);
@@ -39,7 +40,7 @@ public class BalanceRepositoryTest {
 	@DisplayName("userId 로 UserBalance 를 조회 성공")
 	public void success_findByUserId() {
 		// given
-		UserBalance persistence = userBalanceRepository.save(prepareUserBalance());
+		UserBalance persistence = userBalanceRepository.save(Prepare.userBalance());
 
 		// when
 		UserBalance result = userBalanceRepository.findByUserId(persistence.getUserId());
@@ -65,10 +66,6 @@ public class BalanceRepositoryTest {
 
 		// then
 		assertNull(result);
-	}
-
-	private UserBalance prepareUserBalance() {
-		return UserBalance.newBalance(UUIDGenerator.generate());
 	}
 
 }

@@ -1,17 +1,14 @@
-package my.ecommerce.datasource.repository.user_balance_history;
+package my.ecommerce.datasource.user_balance_history;
 
-import my.ecommerce.datasource.entity.UserBalanceHistoryEntity;
-import my.ecommerce.datasource.repository.DomainConverter;
-import my.ecommerce.datasource.repository.user_balance.UserBalanceConverter;
+import my.ecommerce.datasource.user_balance.UserBalanceEntity;
+import my.ecommerce.domain.balance.UserBalance;
 import my.ecommerce.domain.balance.balance_history.UserBalanceHistory;
 
-public class UserBalanceHistoryConverter extends DomainConverter<UserBalanceHistory, UserBalanceHistoryEntity> {
-	private UserBalanceConverter userBalanceConverter = new UserBalanceConverter();
-
-	public UserBalanceHistoryEntity toEntity(UserBalanceHistory domain) {
+public class UserBalanceHistoryConverter {
+	public UserBalanceHistoryEntity toEntity(UserBalanceHistory domain, UserBalanceEntity userBalance) {
 		return UserBalanceHistoryEntity.builder()
 			.id(domain.getId())
-			.userBalance(userBalanceConverter.toEntity(domain.getBalance()))
+			.userBalance(userBalance)
 			.amount(domain.getAmount())
 			.type(toEntityTransactionType(domain.getType()))
 			.build();
@@ -20,7 +17,15 @@ public class UserBalanceHistoryConverter extends DomainConverter<UserBalanceHist
 	public UserBalanceHistory toDomain(UserBalanceHistoryEntity entity) {
 		return UserBalanceHistory.builder()
 			.id(entity.getId())
-			// .balance(userBalanceConverter.toDomain(entity.getUserBalance()))
+			.amount(entity.getAmount())
+			.type(toDomainTransactionType(entity.getType()))
+			.build();
+	}
+
+	public UserBalanceHistory toDomain(UserBalanceHistoryEntity entity, UserBalance userBalance) {
+		return UserBalanceHistory.builder()
+			.id(entity.getId())
+			.balance(userBalance)
 			.amount(entity.getAmount())
 			.type(toDomainTransactionType(entity.getType()))
 			.build();

@@ -1,4 +1,6 @@
-package my.ecommerce.datasource.entity;
+package my.ecommerce.datasource.order_item;
+
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +10,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.datasource.common.BaseEntity;
+import my.ecommerce.datasource.order.OrderEntity;
+import my.ecommerce.datasource.product.ProductEntity;
 
 @Entity
 @Table(name = "order_item")
@@ -31,19 +37,21 @@ public class OrderItemEntity extends BaseEntity {
 	@Column(nullable = false)
 	private long quantity;
 
-	@Column(nullable = false)
-	private long paid_price;
+	@Column(name = "current_price", nullable = false)
+	private long currentPrice;
 
-	public OrderItemEntity(OrderEntity order, ProductEntity product, OrderItemStatus status, long quantity,
-		long paid_price) {
+	@Builder
+	public OrderItemEntity(UUID id, OrderEntity order, ProductEntity product, long quantity,
+		long currentPrice, OrderItemStatus status) {
+		super(id);
 		this.order = order;
 		this.product = product;
-		this.status = status;
 		this.quantity = quantity;
-		this.paid_price = paid_price;
+		this.currentPrice = currentPrice;
+		this.status = status;
 	}
 
-	private enum OrderItemStatus {
+	public enum OrderItemStatus {
 		ORDERED,
 		SHIPPED,
 		DELIVERED,

@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.entity;
+package my.ecommerce.datasource.user_balance_history;
 
 import java.util.UUID;
 
@@ -13,6 +13,8 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.datasource.common.BaseEntity;
+import my.ecommerce.datasource.user_balance.UserBalanceEntity;
 
 @Entity
 @Table(name = "user_balance_history")

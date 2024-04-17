@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.entity;
+package my.ecommerce.datasource.common;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

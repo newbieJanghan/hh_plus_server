@@ -9,4 +9,6 @@ public interface ProductRepository {
 	Product findOneById(UUID id);
 
 	Product save(Product product);
+
+	void destroy(UUID id);
 }

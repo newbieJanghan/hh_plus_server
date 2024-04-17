@@ -2,9 +2,11 @@ package my.ecommerce.domain.order.order_item;
 
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import my.ecommerce.domain.BaseDomain;
+import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.product.Product;
 
 @Getter
@@ -14,18 +16,21 @@ public class OrderItem extends BaseDomain {
 	private final long currentPrice;
 
 	@Setter
-	private UUID orderId;
+	private Order order;
 	@Setter
 	private OrderItemStatus status;
 
-	public OrderItem(Product product, long quantity, long currentPrice) {
+	@Builder
+	public OrderItem(UUID id, Order order, Product product, long quantity, long currentPrice, OrderItemStatus status) {
+		this.id = id;
+		this.order = order;
 		this.product = product;
 		this.quantity = quantity;
 		this.currentPrice = currentPrice;
-		this.status = OrderItemStatus.ORDERED;
+		this.status = status;
 	}
 
-	public static OrderItem newOrderItem(Product product, long quantity, long currentPrice) {
-		return new OrderItem(product, quantity, currentPrice);
+	public static OrderItem newOrderItem(Order order, Product product, long quantity, long currentPrice) {
+		return new OrderItem(null, order, product, quantity, currentPrice, OrderItemStatus.ORDERED);
 	}
 }

@@ -1,4 +1,4 @@
-package my.ecommerce.datasource.entity;
+package my.ecommerce.datasource.user_balance;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,8 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.datasource.common.BaseEntity;
+import my.ecommerce.datasource.user_balance_history.UserBalanceHistoryEntity;
 
 @Entity
 @Table(name = "user_balance")
@@ -25,6 +28,7 @@ public class UserBalanceEntity extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userBalance", orphanRemoval = true)
 	private List<UserBalanceHistoryEntity> histories;
 
+	@Builder
 	public UserBalanceEntity(UUID id, UUID userId, long amount, List<UserBalanceHistoryEntity> histories) {
 		super(id);
 		this.userId = userId;
