@@ -1,12 +1,13 @@
 package my.ecommerce.domain.user;
 
-import jakarta.annotation.Nullable;
+import java.util.UUID;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import jakarta.annotation.Nullable;
 
 @Repository
 public interface UserRepository {
-    @Nullable
-    User findOneById(UUID id);
+	@Nullable
+	User findById(UUID id);
 }

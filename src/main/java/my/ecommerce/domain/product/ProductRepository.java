@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository {
-	Product findOneById(UUID id);
+	Product findById(UUID id);
 
 	Product save(Product product);
 

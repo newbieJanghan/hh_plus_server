@@ -149,7 +149,7 @@ sequenceDiagram
     loop for each CreateOrderItemRequestDto
         create actor OrderItem
         OrderApp -->> OrderItem: new OrderItem()
-        Note over ProductRepository: findOneById(productId)
+        Note over ProductRepository: findById(productId)
         create actor Product
         ProductRepository -->> Product: find
         Note over Product: validateStock(quantity)

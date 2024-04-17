@@ -18,8 +18,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 		this.jpaRepository = jpaProductRepository;
 	}
 
-	public Product findOneById(UUID id) {
-		return null;
+	public Product findById(UUID id) {
+		return jpaRepository.findById(id).map(domainConverter::toDomain).orElse(null);
 	}
 
 	public Product save(Product domain) {

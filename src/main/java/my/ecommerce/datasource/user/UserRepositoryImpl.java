@@ -9,7 +9,7 @@ import my.ecommerce.domain.user.UserRepository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-	public User findOneById(UUID id) {
+	public User findById(UUID id) {
 		return User.builder().id(id).build();
 	}
 }

@@ -35,7 +35,7 @@ public class ProductServiceTest {
 
 		// Given
 		Product product = prepareProduct(stock);
-		when(productRepository.findOneById(product.getId())).thenReturn(product);
+		when(productRepository.findById(product.getId())).thenReturn(product);
 
 		// When & Then
 		assertDoesNotThrow(() -> productService.getAvailableProduct(product.getId(), orderQuantity));
@@ -49,7 +49,7 @@ public class ProductServiceTest {
 
 		// Given
 		Product product = prepareProduct(stock);
-		when(productRepository.findOneById(product.getId())).thenReturn(product);
+		when(productRepository.findById(product.getId())).thenReturn(product);
 
 		// When & Then
 		assertThrows(InsufficientStockException.class,

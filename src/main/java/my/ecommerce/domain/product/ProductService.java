@@ -17,7 +17,7 @@ public class ProductService {
 	}
 
 	public Product getAvailableProduct(UUID id, Long quantity) {
-		Product product = productRepository.findOneById(id);
+		Product product = productRepository.findById(id);
 		checkStock(product, quantity);
 
 		return product;
