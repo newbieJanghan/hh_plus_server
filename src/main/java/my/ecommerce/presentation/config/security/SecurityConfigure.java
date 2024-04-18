@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.security;
+package my.ecommerce.presentation.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

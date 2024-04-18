@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.documentation;
+package my.ecommerce.presentation.config.documentation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

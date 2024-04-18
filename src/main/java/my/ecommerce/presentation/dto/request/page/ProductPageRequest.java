@@ -1,11 +1,11 @@
-package my.ecommerce.presentation.request.page;
+package my.ecommerce.presentation.dto.request.page;
 
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import my.ecommerce.domain.product.page.ProductPageCursorQuery;
-import my.ecommerce.presentation.page.CursorPageRequest;
-import my.ecommerce.presentation.page.Sort;
+import my.ecommerce.presentation.dto.page.CursorPageRequest;
+import my.ecommerce.presentation.dto.page.Sort;
 
 @Getter
 public class ProductPageRequest extends CursorPageRequest {

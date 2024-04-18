@@ -13,9 +13,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import my.ecommerce.presentation.config.security.AuthenticationFilter;
 import my.ecommerce.presentation.controller.ApiTestController;
 import my.ecommerce.presentation.controller.TestService;
-import my.ecommerce.presentation.security.AuthenticationFilter;
 import my.ecommerce.utils.UUIDGenerator;
 
 @WebMvcTest(ApiTestController.class)

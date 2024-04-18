@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.ecommerce.presentation.page.Sort;
+import my.ecommerce.presentation.dto.page.Sort;
 
 @Getter
 @NoArgsConstructor

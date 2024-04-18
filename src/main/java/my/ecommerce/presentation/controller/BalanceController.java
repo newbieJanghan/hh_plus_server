@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import my.ecommerce.domain.balance.BalanceService;
 import my.ecommerce.domain.balance.UserBalance;
 import my.ecommerce.presentation.controller.abstracts.BaseAuthenticatedController;
-import my.ecommerce.presentation.request.BalanceChargeRequest;
-import my.ecommerce.presentation.response.BalanceResponse;
+import my.ecommerce.presentation.dto.request.BalanceChargeRequest;
+import my.ecommerce.presentation.dto.response.BalanceResponse;
 
 @RestController
 @RequestMapping("/api/v1/balance")

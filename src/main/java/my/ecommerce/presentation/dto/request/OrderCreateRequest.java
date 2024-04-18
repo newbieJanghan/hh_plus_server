@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.request;
+package my.ecommerce.presentation.dto.request;
 
 import java.util.List;
 import java.util.UUID;

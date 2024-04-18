@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import my.ecommerce.domain.balance.BalanceService;
 import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.presentation.config.interceptor.LoggerInterceptor;
 import my.ecommerce.presentation.controller.BalanceController;
 import my.ecommerce.presentation.utils.MockAuthentication;
 import my.ecommerce.utils.UUIDGenerator;
@@ -38,7 +39,8 @@ public class BalanceControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(balanceService)).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(balanceService)).addInterceptors(
+			new LoggerInterceptor()).build();
 		MockAuthentication.setAuthenticatedContext();
 	}
 

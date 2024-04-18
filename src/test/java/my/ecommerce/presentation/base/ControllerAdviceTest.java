@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jakarta.persistence.EntityNotFoundException;
 import my.ecommerce.presentation.ApiControllerAdvice;
+import my.ecommerce.presentation.config.interceptor.LoggerInterceptor;
 import my.ecommerce.presentation.controller.ApiTestController;
 import my.ecommerce.presentation.controller.TestService;
 import my.ecommerce.presentation.utils.MockAuthentication;
@@ -29,6 +30,7 @@ public class ControllerAdviceTest {
 	void setMockMvc() {
 		mockMvc = MockMvcBuilders.standaloneSetup(new ApiTestController(testService))
 			.setControllerAdvice(ApiControllerAdvice.class)
+			.addInterceptors(new LoggerInterceptor())
 			.alwaysDo(result -> System.out.println("status: " + result.getResponse().getStatus()))
 			.alwaysDo(result -> System.out.println("content: " + result.getResponse().getContentAsString()))
 			.build();

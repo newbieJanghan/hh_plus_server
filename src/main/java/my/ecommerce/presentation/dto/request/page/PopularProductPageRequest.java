@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.request.page;
+package my.ecommerce.presentation.dto.request.page;
 
 import java.time.LocalDateTime;
 
@@ -6,7 +6,7 @@ import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import my.ecommerce.domain.product.popular.PeriodQuery;
-import my.ecommerce.presentation.page.Sort;
+import my.ecommerce.presentation.dto.page.Sort;
 import my.ecommerce.utils.Today;
 
 @Getter

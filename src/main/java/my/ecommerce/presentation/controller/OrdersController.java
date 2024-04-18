@@ -11,8 +11,8 @@ import my.ecommerce.application.OrderApplication;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.dto.CreateOrderDto;
 import my.ecommerce.presentation.controller.abstracts.BaseAuthenticatedController;
-import my.ecommerce.presentation.request.OrderCreateRequest;
-import my.ecommerce.presentation.response.OrderResponse;
+import my.ecommerce.presentation.dto.request.OrderCreateRequest;
+import my.ecommerce.presentation.dto.response.OrderResponse;
 
 @RestController
 @RequestMapping("/api/v1/orders")

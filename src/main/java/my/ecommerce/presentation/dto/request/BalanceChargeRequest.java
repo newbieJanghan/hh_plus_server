@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.request;
+package my.ecommerce.presentation.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

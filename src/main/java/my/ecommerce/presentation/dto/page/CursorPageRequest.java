@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.page;
+package my.ecommerce.presentation.dto.page;
 
 import java.util.UUID;
 

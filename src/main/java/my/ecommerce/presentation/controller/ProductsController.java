@@ -12,13 +12,13 @@ import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.popular.PopularProduct;
 import my.ecommerce.domain.product.popular.PopularProductService;
-import my.ecommerce.presentation.page.CursorPageInfo;
-import my.ecommerce.presentation.request.page.PopularProductPageRequest;
-import my.ecommerce.presentation.request.page.ProductPageRequest;
-import my.ecommerce.presentation.response.PopularProductResponse;
-import my.ecommerce.presentation.response.ProductResponse;
-import my.ecommerce.presentation.response.page.PopularProductsPageResponse;
-import my.ecommerce.presentation.response.page.ProductsPageResponse;
+import my.ecommerce.presentation.dto.page.CursorPageInfo;
+import my.ecommerce.presentation.dto.request.page.PopularProductPageRequest;
+import my.ecommerce.presentation.dto.request.page.ProductPageRequest;
+import my.ecommerce.presentation.dto.response.PopularProductResponse;
+import my.ecommerce.presentation.dto.response.ProductResponse;
+import my.ecommerce.presentation.dto.response.page.PopularProductsPageResponse;
+import my.ecommerce.presentation.dto.response.page.ProductsPageResponse;
 
 @RestController
 @RequestMapping("/api/v1/products")

@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.security;
+package my.ecommerce.presentation.config.security;
 
 import java.io.IOException;
 import java.util.UUID;

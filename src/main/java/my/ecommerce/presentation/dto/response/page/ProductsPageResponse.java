@@ -1,11 +1,11 @@
-package my.ecommerce.presentation.response.page;
+package my.ecommerce.presentation.dto.response.page;
 
 import java.util.List;
 
 import lombok.Getter;
-import my.ecommerce.presentation.page.CursorPageInfo;
-import my.ecommerce.presentation.page.PageResponse;
-import my.ecommerce.presentation.response.ProductResponse;
+import my.ecommerce.presentation.dto.page.CursorPageInfo;
+import my.ecommerce.presentation.dto.page.PageResponse;
+import my.ecommerce.presentation.dto.response.ProductResponse;
 
 @Getter
 public class ProductsPageResponse extends PageResponse<ProductResponse, CursorPageInfo> {

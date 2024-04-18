@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.popular.PopularProductService;
 import my.ecommerce.presentation.controller.ProductsController;
-import my.ecommerce.presentation.request.page.PopularProductPageRequest;
-import my.ecommerce.presentation.request.page.ProductPageRequest;
+import my.ecommerce.presentation.dto.request.page.PopularProductPageRequest;
+import my.ecommerce.presentation.dto.request.page.ProductPageRequest;
 import my.ecommerce.presentation.utils.MockAuthentication;
 
 @WebMvcTest(ProductsController.class)

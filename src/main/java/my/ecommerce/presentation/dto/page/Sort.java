@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.page;
+package my.ecommerce.presentation.dto.page;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package my.ecommerce.presentation.page;
+package my.ecommerce.presentation.dto.page;
 
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
