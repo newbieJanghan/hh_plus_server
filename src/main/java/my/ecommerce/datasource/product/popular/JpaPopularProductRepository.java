@@ -17,7 +17,6 @@ public interface JpaPopularProductRepository extends JpaRepository<ProductEntity
 				"FROM ProductEntity p JOIN OrderItemEntity oi ON oi.product.id = p.id " +
 				"WHERE p.createdAt > :from AND p.createdAt < :to " +
 				"GROUP BY p.id ",
-		// "ORDER BY 'soldAmoutInPeriod' DESC ",
 		countQuery = "SELECT COUNT(p) FROM ProductEntity p"
 	)
 	Page<PopularProductCustom> findAllWithPage(LocalDateTime from, LocalDateTime to, PageRequest pageRequest);
