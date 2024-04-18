@@ -12,21 +12,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class LoggerInterceptor implements HandlerInterceptor {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoggerInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
 		Exception {
-		LOGGER.info("Request URL: {}", request.getRequestURL());
-		LOGGER.info("Request Method: {}", request.getMethod());
-		LOGGER.info("Request Parameters: {}", request.getParameterMap());
+		logger.info("Request URL: {}", request.getRequestURL());
+		logger.info("Request Method: {}", request.getMethod());
+		logger.info("Request Parameters: {}", request.getParameterMap());
 		return true;
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 		ModelAndView modelAndView) throws Exception {
-		LOGGER.info("Response Status: {}", response.getStatus());
+		logger.info("Response Status: {}", response.getStatus());
 	}
 
 	public void addInterceptors(InterceptorRegistry registry) {
