@@ -6,7 +6,7 @@ import lombok.Getter;
 import my.ecommerce.domain.product.popular.PopularProduct;
 
 @Getter
-public class PopularProductResponse extends ProductResponseDto {
+public class PopularProductResponse extends ProductResponse {
 	private final long soldAmountInPeriod;
 
 	public PopularProductResponse(UUID id, String name, long price, long stock, long soldAmountInPeriod) {

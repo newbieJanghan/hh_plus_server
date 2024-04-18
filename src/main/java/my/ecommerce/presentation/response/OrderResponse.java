@@ -42,11 +42,11 @@ public class OrderResponse {
 	public static class OrderItemResponse {
 		private final UUID id;
 		private final UUID orderId;
-		private final ProductResponseDto product;
+		private final ProductResponse product;
 		private final long quantity;
 		private final OrderItemStatus status;
 
-		public OrderItemResponse(UUID id, UUID orderId, ProductResponseDto product, long quantity,
+		public OrderItemResponse(UUID id, UUID orderId, ProductResponse product, long quantity,
 			OrderItemStatus status) {
 			this.id = id;
 			this.orderId = orderId;
@@ -60,7 +60,7 @@ public class OrderResponse {
 			return new OrderItemResponse(
 				orderItem.getId(),
 				orderItem.getOrder().getId(),
-				ProductResponseDto.fromProduct(orderItem.getProduct()),
+				ProductResponse.fromProduct(orderItem.getProduct()),
 				orderItem.getQuantity(),
 				orderItem.getStatus());
 

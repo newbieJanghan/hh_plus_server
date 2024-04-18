@@ -8,11 +8,11 @@ import my.ecommerce.presentation.page.CursorPageRequest;
 import my.ecommerce.presentation.page.Sort;
 
 @Getter
-public class ProductsPageRequest extends CursorPageRequest {
+public class ProductPageRequest extends CursorPageRequest {
 	@Nullable
 	private final String category;
 
-	public ProductsPageRequest(
+	public ProductPageRequest(
 		int size,
 		@Nullable Sort sort,
 		@Nullable String cursor,
@@ -20,10 +20,6 @@ public class ProductsPageRequest extends CursorPageRequest {
 		@Nullable String category) {
 		super(size, sort, cursor);
 		this.category = category;
-	}
-
-	public static ProductsPageRequest empty() {
-		return new ProductsPageRequest(0, null, null, null);
 	}
 
 	public ProductPageCursorQuery toCursorQueryDto() {

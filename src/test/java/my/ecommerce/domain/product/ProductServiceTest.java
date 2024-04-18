@@ -4,21 +4,31 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.*;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
 
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
+import my.ecommerce.domain.product.page.ProductPageCursorQuery;
+import my.ecommerce.presentation.request.page.ProductPageRequest;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class ProductServiceTest {
 	@Captor
 	ArgumentCaptor<Product> productCaptor;
+	@Captor
+	private ArgumentCaptor<ProductPageCursorQuery> cursorQueryCaptor;
+
 	@Mock
 	private ProductRepository productRepository;
+
 	private ProductService productService;
 
 	@BeforeEach
@@ -85,6 +95,26 @@ public class ProductServiceTest {
 
 		// When & Then
 		assertThrows(InsufficientStockException.class, () -> productService.sell(product, orderQuantity));
+	}
+
+	@Test
+	@DisplayName("상품 목록 조회 성공 - CursorPageQuery Dto로 맵핑되어 String 커서가 UUID 로 변환되어야 함")
+	void success_mappingRequestParam_toCursorQueryDto() {
+		// given
+		when(productRepository.findAllWithPage(any(ProductPageCursorQuery.class))).thenReturn(
+			new PageImpl<>(List.of()));
+
+		// when
+		ProductPageRequest requestParams = new ProductPageRequest(10, null,
+			UUIDGenerator.generate().toString(), null);
+		productService.findAllWithPage(requestParams);
+
+		// then
+		verify(productRepository).findAllWithPage(cursorQueryCaptor.capture());
+		ProductPageCursorQuery queryDto = cursorQueryCaptor.getValue();
+
+		assertInstanceOf(ProductPageCursorQuery.class, queryDto);
+		assertInstanceOf(UUID.class, queryDto.getCursor());
 	}
 
 	private Product prepareProduct(long stock) {

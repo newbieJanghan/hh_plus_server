@@ -5,7 +5,6 @@ import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import my.ecommerce.domain.BaseDomain;
-import my.ecommerce.domain.product.popular.PopularProduct;
 
 @Getter
 public class Product extends BaseDomain {
@@ -35,9 +34,5 @@ public class Product extends BaseDomain {
 
 	public void sell(long quantity) {
 		stock -= quantity;
-	}
-
-	public PopularProduct toPopularProduct(int soldAmountInPeriod) {
-		return new PopularProduct(this, soldAmountInPeriod);
 	}
 }

@@ -19,21 +19,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 	}
 
 	public Order save(Order domain) {
-		System.out.println("domain");
-		System.out.println("id: " + domain.getId());
-		System.out.println("userId: " + domain.getUserId());
-		System.out.println("items: " + domain.getItems());
 		OrderEntity entity = domainConverter.toEntity(domain);
-		System.out.println("entity before save");
-		System.out.println("id: " + entity.getId());
-		System.out.println("userId: " + entity.getUserId());
-		System.out.println("items: " + entity.getItems());
 		jpaRepository.save(entity);
-		System.out.println("after save");
-		System.out.println("id: " + entity.getId());
-		System.out.println("userId: " + entity.getUserId());
-		System.out.println("createdAt: " + entity.getCreatedAt());
-		System.out.println("updatedAt: " + entity.getUpdatedAt());
 
 		domain.persist(entity.getId());
 		return domain;

@@ -10,22 +10,18 @@ import my.ecommerce.presentation.page.Sort;
 import my.ecommerce.utils.Today;
 
 @Getter
-public class PopularProductsPageRequest extends ProductsPageRequest {
+public class PopularProductPageRequest extends ProductPageRequest {
 	@Nullable
 	private final LocalDateTime from;
 	@Nullable
 	private final LocalDateTime to;
 
-	public PopularProductsPageRequest(
+	public PopularProductPageRequest(
 		int size, Sort sort, String cursor, String category,
 		@Nullable LocalDateTime from, @Nullable LocalDateTime to) {
 		super(size, sort, cursor, category);
 		this.from = from;
 		this.to = to;
-	}
-
-	public static PopularProductsPageRequest empty() {
-		return new PopularProductsPageRequest(10, null, null, null, null, null);
 	}
 
 	public PeriodQuery toPopularPeriodQueryDto() {
