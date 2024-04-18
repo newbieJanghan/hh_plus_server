@@ -12,8 +12,4 @@ public class PopularProductsPageResponse extends PageResponse<PopularProductResp
 	public PopularProductsPageResponse(List<PopularProductResponse> data, CursorPageInfo pageInfo) {
 		super(data, pageInfo);
 	}
-
-	public static PopularProductsPageResponse empty() {
-		return new PopularProductsPageResponse(List.of(), CursorPageInfo.empty());
-	}
 }

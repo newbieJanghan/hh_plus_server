@@ -28,7 +28,7 @@ public class OrderResponse {
 	public static OrderResponse fromDomain(Order order) {
 		List<OrderItemResponse> itemsResponseDto = order.getItems()
 			.stream()
-			.map(OrderItemResponse::fromOrderItem)
+			.map(OrderItemResponse::fromDomain)
 			.toList();
 		return OrderResponse.builder()
 			.id(order.getId())
@@ -56,7 +56,7 @@ public class OrderResponse {
 
 		}
 
-		public static OrderItemResponse fromOrderItem(OrderItem orderItem) {
+		public static OrderItemResponse fromDomain(OrderItem orderItem) {
 			return new OrderItemResponse(
 				orderItem.getId(),
 				orderItem.getOrder().getId(),

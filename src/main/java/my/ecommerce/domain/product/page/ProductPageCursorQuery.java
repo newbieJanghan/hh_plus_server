@@ -21,7 +21,7 @@ public class ProductPageCursorQuery {
 	String category;
 
 	@Builder
-	private ProductPageCursorQuery(int limit, Sort sort, @Nullable UUID cursor, @Nullable String category) {
+	public ProductPageCursorQuery(int limit, Sort sort, @Nullable UUID cursor, @Nullable String category) {
 		this.limit = limit;
 		this.sort = sort;
 		this.cursor = cursor;

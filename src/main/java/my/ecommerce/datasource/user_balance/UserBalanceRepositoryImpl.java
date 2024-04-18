@@ -10,8 +10,8 @@ import my.ecommerce.domain.balance.UserBalanceRepository;
 
 @Repository
 public class UserBalanceRepositoryImpl implements UserBalanceRepository {
-	private JpaUserBalanceRepository jpaRepository;
-	private UserBalanceConverter domainConverter = new UserBalanceConverter();
+	private final JpaUserBalanceRepository jpaRepository;
+	private final UserBalanceConverter domainConverter = new UserBalanceConverter();
 
 	@Autowired
 	public UserBalanceRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
