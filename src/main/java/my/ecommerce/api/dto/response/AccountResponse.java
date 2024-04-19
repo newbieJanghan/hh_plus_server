@@ -7,20 +7,20 @@ import lombok.Getter;
 import my.ecommerce.domain.account.Account;
 
 @Getter
-public class BalanceResponse {
+public class AccountResponse {
 	private final UUID id;
 	private final UUID userId;
 	private final long amount;
 
 	@Builder
-	public BalanceResponse(UUID id, UUID userId, long amount) {
+	public AccountResponse(UUID id, UUID userId, long amount) {
 		this.id = id;
 		this.userId = userId;
 		this.amount = amount;
 	}
 
-	public static BalanceResponse fromDomain(Account account) {
-		return BalanceResponse.builder()
+	public static AccountResponse fromDomain(Account account) {
+		return AccountResponse.builder()
 			.id(account.getId())
 			.userId(account.getUserId())
 			.amount(account.getAmount())

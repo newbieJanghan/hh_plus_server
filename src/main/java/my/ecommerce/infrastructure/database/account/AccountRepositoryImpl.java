@@ -10,16 +10,16 @@ import my.ecommerce.domain.account.AccountRepository;
 
 @Repository
 public class AccountRepositoryImpl implements AccountRepository {
-	private final JpaUserBalanceRepository jpaRepository;
-	private final UserBalanceConverter domainConverter = new UserBalanceConverter();
+	private final JpaAccountRepository jpaRepository;
+	private final AccountConverter domainConverter = new AccountConverter();
 
 	@Autowired
-	public AccountRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
+	public AccountRepositoryImpl(JpaAccountRepository jpaRepository) {
 		this.jpaRepository = jpaRepository;
 	}
 
 	public Account save(Account domain) {
-		UserBalanceEntity entity = domainConverter.toEntity(domain);
+		AccountEntity entity = domainConverter.toEntity(domain);
 		jpaRepository.save(entity);
 
 		domain.persist(entity.getId());

@@ -13,17 +13,17 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.infrastructure.database.account.AccountEntity;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
-import my.ecommerce.infrastructure.database.account.UserBalanceEntity;
 
 @Entity
-@Table(name = "user_balance_history")
+@Table(name = "account_history")
 @Getter
 @NoArgsConstructor
-public class UserBalanceHistoryEntity extends BaseEntity {
+public class AccountHistoryEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_balance_id", nullable = false)
-	private UserBalanceEntity userBalance;
+	@JoinColumn(name = "account_id", nullable = false)
+	private AccountEntity userAccount;
 
 	@Column(nullable = false)
 	private long amount;
@@ -33,9 +33,9 @@ public class UserBalanceHistoryEntity extends BaseEntity {
 	private TransactionType type;
 
 	@Builder
-	public UserBalanceHistoryEntity(UUID id, UserBalanceEntity userBalance, long amount, TransactionType type) {
+	public AccountHistoryEntity(UUID id, AccountEntity userAccount, long amount, TransactionType type) {
 		super(id);
-		this.userBalance = userBalance;
+		this.userAccount = userAccount;
 		this.amount = amount;
 		this.type = type;
 	}

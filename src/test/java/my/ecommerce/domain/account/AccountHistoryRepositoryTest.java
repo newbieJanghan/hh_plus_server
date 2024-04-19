@@ -14,29 +14,29 @@ import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
 import my.ecommerce.utils.UUIDGenerator;
 
 @SpringBootTest
-public class BalanceHistoryRepositoryTest {
+public class AccountHistoryRepositoryTest {
 	@Autowired
-	private AccountHistoryRepository balanceHistoryRepository;
+	private AccountHistoryRepository accountHistoryRepository;
 
 	@Autowired
-	private AccountRepository balanceRepository;
+	private AccountRepository accountRepository;
 
 	@Test
 	@DisplayName("save()는 영속성 저장 후 도메인 객체를 반환")
 	public void save() {
 		// given
-		Account balance = balanceRepository.save(Account.newAccount(UUIDGenerator.generate()));
+		Account account = accountRepository.save(Account.newAccount(UUIDGenerator.generate()));
 
 		// when
-		AccountHistory history = AccountHistory.newChargeHistory(balance, 1000);
-		AccountHistory persisted = balanceHistoryRepository.save(history);
+		AccountHistory history = AccountHistory.newChargeHistory(account, 1000);
+		AccountHistory persisted = accountHistoryRepository.save(history);
 
 		// then
 		assertInstanceOf(AccountHistory.class, persisted);
 		assertInstanceOf(UUID.class, persisted.getId());
 
 		// cleanup
-		balanceHistoryRepository.destroy(persisted.getId());
-		balanceRepository.destroy(balance.getId());
+		accountHistoryRepository.destroy(persisted.getId());
+		accountRepository.destroy(account.getId());
 	}
 }

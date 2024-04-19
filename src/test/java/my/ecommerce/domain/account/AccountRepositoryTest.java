@@ -13,14 +13,14 @@ import my.ecommerce.domain.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
 @SpringBootTest
-public class BalanceRepositoryTest {
+public class AccountRepositoryTest {
 	@Autowired
 	private AccountRepository accountRepository;
 
 	@Test
-	@DisplayName("UserBalance 도메인을 저장한 후 영속성 저장된 UserBalance 를 반환 성공")
-	public void success_saveAndReturnPersistedUserBalance() {
-		Account account = Prepare.userBalance();
+	@DisplayName("Account 도메인을 저장한 후 영속성 저장된 Account 를 반환 성공")
+	public void success_saveAndReturnPersistedAccount() {
+		Account account = Prepare.userAccount();
 
 		// when
 		Account result = accountRepository.save(account);
@@ -37,10 +37,10 @@ public class BalanceRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("userId 로 UserBalance 를 조회 성공")
+	@DisplayName("userId 로 Account 를 조회 성공")
 	public void success_findByUserId() {
 		// given
-		Account persistence = accountRepository.save(Prepare.userBalance());
+		Account persistence = accountRepository.save(Prepare.userAccount());
 
 		// when
 		Account result = accountRepository.findByUserId(persistence.getUserId());
@@ -56,7 +56,7 @@ public class BalanceRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("userId 로 UserBalance 를 조회 시 로우가 없는 경우 null 반환")
+	@DisplayName("userId 로 Account 를 조회 시 로우가 없는 경우 null 반환")
 	public void success_findByUserId_withNoRow() {
 		// given
 		UUID userId = UUIDGenerator.generate();

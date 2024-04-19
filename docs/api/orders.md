@@ -89,11 +89,11 @@
             "message": "product stock is insufficient"
         }
         ```
-    - 422 Insufficient Balance: 잔액이 부족한 경우
+    - 422 Insufficient Account: 잔액이 부족한 경우
         ```json
         {
             "code": "INSUFFICIENT_BALANCE",
-            "message": "balance is insufficient"
+            "message": "account is insufficient"
         }
         ```
 
@@ -164,7 +164,7 @@ sequenceDiagram
 
 ```
 
-- Balance Domain 으로부터 잔액 검증
+- Account Domain 으로부터 잔액 검증
 
 ```mermaid
 ---
@@ -174,15 +174,15 @@ sequenceDiagram
     actor Order
     note over Order: calculateTotalPrice()
 #
-    note over UserBalanceRepository: findOneByUserId(userId)
-    create actor UserBalance
-    UserBalanceRepository -->> UserBalance: find
+    note over AccountRepository: findOneByUserId(userId)
+    create actor Account
+    AccountRepository -->> Account: find
 #
-    Order -->> UserBalance: totalPrice
-    note over UserBalance: checkUseAvailable(totalPrice)
-    note over UserBalance: use(totalPrice)
-    UserBalance -->> UserBalanceRepository: persisted
-    note over UserBalanceRepository: save(UserBalance)
+    Order -->> Account: totalPrice
+    note over Account: checkUseAvailable(totalPrice)
+    note over Account: use(totalPrice)
+    Account -->> AccountRepository: persisted
+    note over AccountRepository: save(Account)
 ```
 
 - Persistence
@@ -192,10 +192,10 @@ sequenceDiagram
 title: OrderApp save sequence
 ---
 sequenceDiagram
-    participant UserBalanceRepository
-    actor UserBalance
-    UserBalance ->> UserBalanceRepository: persisted
-    note over UserBalanceRepository: save(UserBalance)
+    participant AccountRepository
+    actor Account
+    Account ->> AccountRepository: persisted
+    note over AccountRepository: save(Account)
     participant OrderRepository
     actor Order
     Order ->> OrderRepository: persisted

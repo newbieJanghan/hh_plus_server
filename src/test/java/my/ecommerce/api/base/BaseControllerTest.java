@@ -45,13 +45,13 @@ public class BaseControllerTest {
 	public void getAuthenticatedUser() throws Exception {
 		// given
 		UUID userId = UUIDGenerator.generate();
-		when(accountService.myBalance(userId)).thenReturn(Account.newAccount(userId));
+		when(accountService.myAccount(userId)).thenReturn(Account.newAccount(userId));
 
 		// when
 		mockMvc.perform(get("/api/v1/account").header("Authorization", userId));
 
 		// then
-		verify(accountService).myBalance(userIdCaptor.capture());
+		verify(accountService).myAccount(userIdCaptor.capture());
 		assertEquals(userId, userIdCaptor.getValue());
 
 	}

@@ -4,6 +4,6 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaUserBalanceHistoryRepository extends JpaRepository<UserBalanceHistoryEntity, UUID> {
+public interface JpaAccountHistoryRepository extends JpaRepository<AccountHistoryEntity, UUID> {
 
 }

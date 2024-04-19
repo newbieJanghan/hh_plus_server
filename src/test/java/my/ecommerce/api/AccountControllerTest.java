@@ -46,13 +46,13 @@ public class AccountControllerTest {
 
 	@Test
 	@DisplayName("잔액 조회 성공")
-	public void myBalance_success() throws Exception {
-		when(accountService.myBalance(any(UUID.class))).thenReturn(emptyUserBalance());
+	public void myAccount_success() throws Exception {
+		when(accountService.myAccount(any(UUID.class))).thenReturn(emptyAccount());
 
 		mockMvc.perform(get("/api/v1/account"))
 			.andExpect(status().isOk());
 
-		verify(accountService, times(1)).myBalance(any(UUID.class));
+		verify(accountService, times(1)).myAccount(any(UUID.class));
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class AccountControllerTest {
 	public void charge_success() throws Exception {
 		long amount = 1000;
 
-		when(accountService.charge(any(UUID.class), anyLong())).thenReturn(emptyUserBalance());
+		when(accountService.charge(any(UUID.class), anyLong())).thenReturn(emptyAccount());
 
 		JSONObject body = new JSONObject();
 		body.put("amount", amount);
@@ -88,7 +88,7 @@ public class AccountControllerTest {
 			.andExpect(status().isBadRequest());
 	}
 
-	private Account emptyUserBalance() {
+	private Account emptyAccount() {
 		return Account.newAccount(UUIDGenerator.generate());
 	}
 }

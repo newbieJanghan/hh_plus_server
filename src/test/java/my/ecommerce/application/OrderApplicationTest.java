@@ -63,7 +63,7 @@ public class OrderApplicationTest {
 		CreateOrderItemDto orderItemDto = orderDto.getItems().get(0);
 
 		mockProductServiceGetProduct(orderItemDto, product);
-		mockBalanceService();
+		mockAccountService();
 		mockProductServiceSellProduct(product, orderItemDto);
 		mockOrderService(orderDto);
 
@@ -116,7 +116,7 @@ public class OrderApplicationTest {
 		doNothing().when(productService).sell(product, orderItemDto.getQuantity());
 	}
 
-	private void mockBalanceService() {
+	private void mockAccountService() {
 		doNothing().when(accountService).use(any(UUID.class), anyLong());
 	}
 

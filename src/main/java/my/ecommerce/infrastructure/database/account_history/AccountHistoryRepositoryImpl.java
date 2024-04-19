@@ -5,25 +5,25 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.infrastructure.database.account.UserBalanceConverter;
-import my.ecommerce.infrastructure.database.account.UserBalanceEntity;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
+import my.ecommerce.infrastructure.database.account.AccountConverter;
+import my.ecommerce.infrastructure.database.account.AccountEntity;
 
 @Repository
 public class AccountHistoryRepositoryImpl implements AccountHistoryRepository {
-	private final JpaUserBalanceHistoryRepository jpaRepository;
-	private final UserBalanceHistoryConverter historyConverter = new UserBalanceHistoryConverter();
-	private final UserBalanceConverter userBalanceConverter = new UserBalanceConverter();
+	private final JpaAccountHistoryRepository jpaRepository;
+	private final AccountHistoryConverter historyConverter = new AccountHistoryConverter();
+	private final AccountConverter accountConverter = new AccountConverter();
 
 	@Autowired
-	public AccountHistoryRepositoryImpl(JpaUserBalanceHistoryRepository jpaRepository) {
+	public AccountHistoryRepositoryImpl(JpaAccountHistoryRepository jpaRepository) {
 		this.jpaRepository = jpaRepository;
 	}
 
 	public AccountHistory save(AccountHistory history) {
-		UserBalanceEntity balanceEntity = userBalanceConverter.toEntity(history.getBalance());
-		UserBalanceHistoryEntity entity = historyConverter.toEntity(history, balanceEntity);
+		AccountEntity accountEntity = accountConverter.toEntity(history.getAccount());
+		AccountHistoryEntity entity = historyConverter.toEntity(history, accountEntity);
 		jpaRepository.save(entity);
 
 		history.persist(entity.getId());

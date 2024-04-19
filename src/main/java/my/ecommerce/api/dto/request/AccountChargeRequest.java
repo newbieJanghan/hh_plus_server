@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BalanceChargeRequest {
+public class AccountChargeRequest {
 	@NotNull
 	@Min(1)
 	public long amount;

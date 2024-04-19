@@ -5,6 +5,6 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, UUID> {
-	Optional<UserBalanceEntity> findByUserId(UUID userId);
+public interface JpaAccountRepository extends JpaRepository<AccountEntity, UUID> {
+	Optional<AccountEntity> findByUserId(UUID userId);
 }

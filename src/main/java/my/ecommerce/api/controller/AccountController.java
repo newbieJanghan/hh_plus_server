@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import my.ecommerce.api.controller.abstracts.BaseAuthenticatedController;
-import my.ecommerce.api.dto.request.BalanceChargeRequest;
-import my.ecommerce.api.dto.response.BalanceResponse;
+import my.ecommerce.api.dto.request.AccountChargeRequest;
+import my.ecommerce.api.dto.response.AccountResponse;
 import my.ecommerce.domain.account.Account;
 import my.ecommerce.domain.account.AccountService;
 
@@ -29,16 +29,16 @@ public class AccountController extends BaseAuthenticatedController {
 
 	@GetMapping("")
 	@ResponseStatus(HttpStatus.OK)
-	public BalanceResponse myBalance() {
-		Account account = accountService.myBalance(getAuthenticatedUser().getId());
-		return BalanceResponse.fromDomain(account);
+	public AccountResponse myAccount() {
+		Account account = accountService.myAccount(getAuthenticatedUser().getId());
+		return AccountResponse.fromDomain(account);
 	}
 
 	@PatchMapping("/charge")
 	@ResponseStatus(HttpStatus.OK)
-	public BalanceResponse charge(@RequestBody @Validated BalanceChargeRequest balanceChargeRequest) {
+	public AccountResponse charge(@RequestBody @Validated AccountChargeRequest accountChargeRequest) {
 		Account account = accountService.charge(getAuthenticatedUser().getId(),
-			balanceChargeRequest.getAmount());
-		return BalanceResponse.fromDomain(account);
+			accountChargeRequest.getAmount());
+		return AccountResponse.fromDomain(account);
 	}
 }

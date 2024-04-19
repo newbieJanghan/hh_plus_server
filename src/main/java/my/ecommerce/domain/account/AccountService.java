@@ -20,10 +20,10 @@ public class AccountService {
 
 	}
 
-	public Account myBalance(UUID userId) {
-		Account balance = accountRepository.findByUserId(userId);
-		if (balance != null) {
-			return balance;
+	public Account myAccount(UUID userId) {
+		Account account = accountRepository.findByUserId(userId);
+		if (account != null) {
+			return account;
 		}
 
 		return accountRepository.save(Account.newAccount(userId));
@@ -32,26 +32,26 @@ public class AccountService {
 	public Account charge(UUID userId, long amount) {
 		validateCharge(amount);
 
-		Account balance = myBalance(userId);
-		balance.charge(amount);
+		Account account = myAccount(userId);
+		account.charge(amount);
 
-		Account persisted = accountRepository.save(balance);
+		Account persisted = accountRepository.save(account);
 
-		AccountHistory chargeHistory = AccountHistory.newChargeHistory(balance, amount);
+		AccountHistory chargeHistory = AccountHistory.newChargeHistory(account, amount);
 		historyRepository.save(chargeHistory);
 
 		return persisted;
 	}
 
 	public Account use(UUID userId, long amount) {
-		Account balance = myBalance(userId);
+		Account account = myAccount(userId);
 
-		validateUsage(balance, amount);
-		balance.use(amount);
+		validateUsage(account, amount);
+		account.use(amount);
 
-		Account persisted = accountRepository.save(balance);
+		Account persisted = accountRepository.save(account);
 
-		AccountHistory usageHistory = AccountHistory.newUsageHistory(balance, amount);
+		AccountHistory usageHistory = AccountHistory.newUsageHistory(account, amount);
 		historyRepository.save(usageHistory);
 
 		return persisted;
@@ -63,8 +63,8 @@ public class AccountService {
 		}
 	}
 
-	private void validateUsage(Account balance, long amount) {
-		if (balance.getAmount() < amount) {
+	private void validateUsage(Account account, long amount) {
+		if (account.getAmount() < amount) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
 		}
 	}

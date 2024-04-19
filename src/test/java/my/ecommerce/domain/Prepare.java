@@ -27,7 +27,7 @@ public class Prepare {
 		return Product.newProduct("Test", price, stock);
 	}
 
-	public static Account userBalance() {
+	public static Account userAccount() {
 		return Account.newAccount(UUIDGenerator.generate());
 	}
 }

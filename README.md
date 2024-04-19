@@ -48,7 +48,7 @@ gantt
 Bearer token 대신 userId 값으로 사용자를 식별한다.
 이후 jwt 로 대체한다.
 
-## [잔액 API](./docs/api/balance.md)
+## [잔액 API](./docs/api/account.md)
 
 - 잔액 조회
 - 잔액 충전
@@ -76,7 +76,7 @@ erDiagram
     }
     USER_BALANCE_HISTORY {
         uuid id PK
-        uuid user_balance_id FK
+        uuid account_id FK
         long amount
         string type
     }

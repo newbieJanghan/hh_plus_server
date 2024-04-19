@@ -16,7 +16,7 @@
         {
             "id": "uuid",
             "userId": "uuid",
-            "balance": 0
+            "account": 0
         }
         ```
     - 401 Unauthorized: 유저 토큰이 유효하지 않은 경우
@@ -54,10 +54,10 @@ sequenceDiagram
             server ->> db: USER_BALANCE 생성
         end
     else USER_BALANCE 있음
-        db -->> server: UserBalance
+        db -->> server: Account
     end
 
-    server -->> client: 200 OK, UserBalanceResponse
+    server -->> client: 200 OK, AccountResponse
 
 ```
 
@@ -66,33 +66,33 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     box Application
-        participant BalanceController
-        participant BalanceService
+        participant AccountController
+        participant AccountService
     end
     box Domain
-        participant UserBalanceRepository
+        participant AccountRepository
         participant UserRepository
     end
 #
-    BalanceController ->> BalanceService: myBalance(userId)
-    BalanceService ->> UserBalanceRepository: findOneByUserId(userId)
-    alt UserBalance NotFound
-        UserBalanceRepository -->> BalanceService: null
-        BalanceService ->> UserRepository: findOneByUserId(userId)
+    AccountController ->> AccountService: myAccount(userId)
+    AccountService ->> AccountRepository: findOneByUserId(userId)
+    alt Account NotFound
+        AccountRepository -->> AccountService: null
+        AccountService ->> UserRepository: findOneByUserId(userId)
         alt User NotFound
-            UserRepository -->> BalanceService: null
-            BalanceService -->> BalanceController: 404 Not Found User
+            UserRepository -->> AccountService: null
+            AccountService -->> AccountController: 404 Not Found User
         else User Found
-            UserRepository -->> BalanceService: User
-            Note over BalanceService: UserBalance.initialize()
-            BalanceService ->> UserBalanceRepository: save(UserBalance)
+            UserRepository -->> AccountService: User
+            Note over AccountService: Account.initialize()
+            AccountService ->> AccountRepository: save(Account)
         end
-    else UserBalance Found
-        UserBalanceRepository -->> BalanceService: UserBalance
+    else Account Found
+        AccountRepository -->> AccountService: Account
     end
 
 #
-    BalanceService -->> BalanceController: UserBalanceResponse
+    AccountService -->> AccountController: AccountResponse
 ```
 
 ## 잔액 충전
@@ -117,7 +117,7 @@ sequenceDiagram
         {
             "id": "uuid",
             "userId": "uuid",
-            "balance": 0
+            "account": 0
         }
         ```
     - 400 Bad Request: 충전 금액이 적절하지 않은 경우
@@ -162,11 +162,11 @@ sequenceDiagram
             server ->> db: 충전할 금액으로 새로운 USER_BALANCE 생성
         end
     else USER_BALANCE 있음
-        db -->> server: UserBalance
+        db -->> server: Account
         server -->> db: 충전할 금액으로 USER_BALANCE 업데이트
     end
     server ->> db: USER_BALANCE_HISTORY 생성
-    server -->> client: 200 OK, UserBalanceResponse
+    server -->> client: 200 OK, AccountResponse
 ```
 
 #### Server
@@ -174,38 +174,38 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     box Application
-        participant BalanceController
-        participant BalanceService
+        participant AccountController
+        participant AccountService
     end
 
     box Domain
-        participant UserBalanceApp
-        participant UserBalanceRepository
+        participant AccountApp
+        participant AccountRepository
         participant UserRepository
-        participant UserBalanceHistoryRepository
+        participant AccountHistoryRepository
     end
 
-    BalanceController ->> BalanceService: charge(userId, amount)
-    BalanceService ->> UserBalanceApp: chargeToUser(userId, amount)
+    AccountController ->> AccountService: charge(userId, amount)
+    AccountService ->> AccountApp: chargeToUser(userId, amount)
 #
-    UserBalanceApp ->> UserBalanceRepository: findOneByUserId(userId)
-    alt UserBalance NotFound
-        UserBalanceRepository -->> UserBalanceApp: null
-        UserBalanceApp ->> UserRepository: findOneByUserId(userId)
+    AccountApp ->> AccountRepository: findOneByUserId(userId)
+    alt Account NotFound
+        AccountRepository -->> AccountApp: null
+        AccountApp ->> UserRepository: findOneByUserId(userId)
         alt User NotFound
-            UserRepository -->> UserBalanceApp: null
-            UserBalanceApp -->> BalanceController: User Not Found Exception
+            UserRepository -->> AccountApp: null
+            AccountApp -->> AccountController: User Not Found Exception
         else User Found
-            UserRepository -->> UserBalanceApp: User
-            Note over UserBalanceApp: UserBalance.initialize().amount(amount)
-            UserBalanceApp ->> UserBalanceRepository: save(UserBalance)
+            UserRepository -->> AccountApp: User
+            Note over AccountApp: Account.initialize().amount(amount)
+            AccountApp ->> AccountRepository: save(Account)
         end
-    else UserBalance Found
-        UserBalanceRepository -->> UserBalanceApp: UserBalance
-        Note over UserBalanceApp: UserBalance.charge(amount)
-        UserBalanceApp ->> UserBalanceRepository: save(UserBalance)
+    else Account Found
+        AccountRepository -->> AccountApp: Account
+        Note over AccountApp: Account.charge(amount)
+        AccountApp ->> AccountRepository: save(Account)
     end
-    UserBalanceApp ->> UserBalanceHistoryRepository: save(UserBalanceHistory)
-    UserBalanceApp -->> BalanceService: UserBalance
-    BalanceService -->> BalanceController: UserBalanceResponse
+    AccountApp ->> AccountHistoryRepository: save(AccountHistory)
+    AccountApp -->> AccountService: Account
+    AccountService -->> AccountController: AccountResponse
 ```

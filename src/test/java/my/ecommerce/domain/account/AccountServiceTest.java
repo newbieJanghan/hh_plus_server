@@ -24,45 +24,45 @@ public class AccountServiceTest {
 	private AccountHistoryRepository historyRepository;
 
 	@Captor
-	private ArgumentCaptor<Account> balanceCaptor;
+	private ArgumentCaptor<Account> accountCaptor;
 	@Captor
 	private ArgumentCaptor<AccountHistory> historyCaptor;
 
 	private AccountService accountService;
 
 	@BeforeEach
-	void setBalanceService() {
+	void setAccountService() {
 		openMocks(this);
 		accountService = new AccountService(accountRepository, historyRepository);
 	}
 
 	@Test
-	@DisplayName("UserBalance 조회 성공")
-	void success_myBalance() {
+	@DisplayName("Account 조회 성공")
+	void success_myAccount() {
 		// given
-		Account balance = prepareBalance(1000);
-		mockRepositoryFindById(balance);
+		Account account = prepareAccount(1000);
+		mockRepositoryFindById(account);
 
 		// when
-		Account result = accountService.myBalance(balance.getUserId());
+		Account result = accountService.myAccount(account.getUserId());
 
 		// then
-		assertEquals(balance.getUserId(), result.getUserId());
-		assertEquals(balance.getAmount(), result.getAmount());
+		assertEquals(account.getUserId(), result.getUserId());
+		assertEquals(account.getAmount(), result.getAmount());
 	}
 
 	@Test
-	@DisplayName("UserBalance 조회 성공 - 새로운 UserBalance 생성")
-	void success_withNewBalance() {
+	@DisplayName("Account 조회 성공 - 새로운 Account 생성")
+	void success_withNewAccount() {
 		// given
 		UUID userId = UUIDGenerator.generate();
-		Account newAccount = prepareNewBalance(userId);
+		Account newAccount = prepareNewAccount(userId);
 
 		when(accountRepository.findByUserId(userId)).thenReturn(null);
 		when(accountRepository.save(any(Account.class))).thenReturn(newAccount);
 
 		// when
-		Account result = accountService.myBalance(userId);
+		Account result = accountService.myAccount(userId);
 
 		// then
 		assertInstanceOf(UUID.class, result.getId());
@@ -76,20 +76,20 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = 1000;
-		Account balance = prepareBalance(currentAmount);
+		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(balance);
+		mockRepositoryFindById(account);
 		mockRepositorySaveMethods();
 
 		// when
-		accountService.charge(balance.getUserId(), chargeAmount);
+		accountService.charge(account.getUserId(), chargeAmount);
 
 		// then
-		verify(accountRepository).save(balanceCaptor.capture());
-		assertEquals(currentAmount + chargeAmount, balanceCaptor.getValue().getAmount());
+		verify(accountRepository).save(accountCaptor.capture());
+		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getAmount());
 
 		verify(historyRepository).save(historyCaptor.capture());
-		assertEquals(AccountHistory.BalanceHistoryType.CHARGE, historyCaptor.getValue().getType());
+		assertEquals(AccountHistory.AccountHistoryType.CHARGE, historyCaptor.getValue().getType());
 		assertEquals(chargeAmount, historyCaptor.getValue().getAmount());
 
 	}
@@ -100,14 +100,14 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = -1000;
-		Account balance = prepareBalance(currentAmount);
+		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(balance);
+		mockRepositoryFindById(account);
 		mockRepositorySaveMethods();
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
-		assertThrows(IllegalArgumentException.class, () -> accountService.charge(balance.getUserId(), chargeAmount));
+		assertThrows(IllegalArgumentException.class, () -> accountService.charge(account.getUserId(), chargeAmount));
 	}
 
 	@Test
@@ -116,20 +116,20 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 1000;
-		Account balance = prepareBalance(currentAmount);
+		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(balance);
+		mockRepositoryFindById(account);
 		mockRepositorySaveMethods();
 
 		// when
-		accountService.use(balance.getUserId(), useAmount);
+		accountService.use(account.getUserId(), useAmount);
 
 		// then
-		verify(accountRepository).save(balanceCaptor.capture());
-		assertEquals(currentAmount - useAmount, balanceCaptor.getValue().getAmount());
+		verify(accountRepository).save(accountCaptor.capture());
+		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getAmount());
 
 		verify(historyRepository).save(historyCaptor.capture());
-		assertEquals(AccountHistory.BalanceHistoryType.USAGE, historyCaptor.getValue().getType());
+		assertEquals(AccountHistory.AccountHistoryType.USAGE, historyCaptor.getValue().getType());
 	}
 
 	@Test
@@ -138,26 +138,26 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 2000;
-		Account balance = prepareBalance(currentAmount);
+		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(balance);
+		mockRepositoryFindById(account);
 		mockRepositorySaveMethods();
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
-		assertThrows(IllegalArgumentException.class, () -> accountService.use(balance.getUserId(), useAmount));
+		assertThrows(IllegalArgumentException.class, () -> accountService.use(account.getUserId(), useAmount));
 	}
 
-	private Account prepareBalance(long amount) {
+	private Account prepareAccount(long amount) {
 		return Account.builder().userId(UUIDGenerator.generate()).amount(amount).build();
 	}
 
-	private Account prepareNewBalance(UUID userId) {
+	private Account prepareNewAccount(UUID userId) {
 		return Account.newAccount(userId);
 	}
 
-	private void mockRepositoryFindById(Account balance) {
-		when(accountRepository.findByUserId(balance.getUserId())).thenReturn(balance);
+	private void mockRepositoryFindById(Account account) {
+		when(accountRepository.findByUserId(account.getUserId())).thenReturn(account);
 	}
 
 	private void mockRepositorySaveMethods() {
