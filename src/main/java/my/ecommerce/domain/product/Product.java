@@ -9,23 +9,17 @@ import my.ecommerce.domain.BaseDomain;
 @Getter
 public class Product extends BaseDomain {
 	private final String name;
-	private long price;
+	private final long price;
+	private final int soldAmountInPeriod;
 	private long stock;
 
 	@Builder
-	public Product(UUID id, String name, long price, long stock) {
+	public Product(UUID id, String name, long price, long stock, int soldAmountInPeriod) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
-	}
-
-	public static Product newProduct(String name, long price, long stock) {
-		return Product.builder()
-			.name(name)
-			.price(price)
-			.stock(stock)
-			.build();
+		this.soldAmountInPeriod = soldAmountInPeriod;
 	}
 
 	public boolean isAvailable(long quantity) {

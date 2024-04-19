@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
-import my.ecommerce.domain.product.popular.PeriodQuery;
+import my.ecommerce.domain.product.dto.PeriodQuery;
 import my.ecommerce.api.dto.page.Sort;
 import my.ecommerce.utils.Today;
 
@@ -24,7 +24,7 @@ public class PopularProductPageRequest extends ProductPageRequest {
 		this.to = to;
 	}
 
-	public PeriodQuery toPopularPeriodQueryDto() {
+	public PeriodQuery toPeriodQuery() {
 		LocalDateTime from = this.from != null ? this.from : Today.beginningOfDay();
 		LocalDateTime to = this.to != null ? this.to :
 			LocalDateTime.of(from.getYear(), from.getMonth(), from.getDayOfMonth(), 23, 59, 59);

@@ -11,7 +11,7 @@ public class Prepare {
 		Order order = Order.newOrder(UUIDGenerator.generate(), 0);
 
 		for (int i = 1; i <= itemsCount; i++) {
-			Product product = Product.newProduct(String.valueOf(i), 1000, 10);
+			Product product = Prepare.product(i * 1000L, i * 1000L);
 			order.addOrderItem(product, i, i * 1000L);
 		}
 
@@ -24,7 +24,7 @@ public class Prepare {
 	}
 
 	public static Product product(long price, long stock) {
-		return Product.newProduct("Test", price, stock);
+		return Product.builder().name("test").price(price).stock(stock).build();
 	}
 
 	public static Account userAccount() {

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import my.ecommerce.api.dto.request.page.PopularProductPageRequest;
+import my.ecommerce.domain.product.dto.PeriodQuery;
+import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
 import my.ecommerce.api.dto.request.page.ProductPageRequest;
 
@@ -18,15 +21,19 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
-	public Page<Product> findAllWithPage(ProductPageRequest request) {
-		return productRepository.findAllWithPage(request.toCursorQueryDto());
+	public Page<Product> getProductPage(ProductPageCursorQuery query) {
+		return productRepository.findAllWithPage(query);
 	}
 
-	public Product getAvailableProduct(UUID id, Long quantity) {
-		Product product = productRepository.findById(id);
-		checkStock(product, quantity);
+	// public Product getAvailableProduct(UUID id, Long quantity) {
+	// 	Product product = productRepository.findById(id);
+	// 	checkStock(product, quantity);
+	//
+	// 	return product;
+	// }
 
-		return product;
+	public Page<Product> getPopularProductPage(ProductPageCursorQuery query, PeriodQuery period) {
+		return productRepository.findAllPopularWithPage(query, period);
 	}
 
 	public Product sell(Product product, Long quantity) {

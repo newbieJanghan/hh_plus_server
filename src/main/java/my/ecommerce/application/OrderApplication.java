@@ -7,7 +7,6 @@ import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderService;
 import my.ecommerce.domain.order.dto.CreateOrderDto;
-import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductService;
 
 @Component
@@ -25,10 +24,6 @@ public class OrderApplication {
 
 	public Order run(CreateOrderDto createOrderDto) {
 		Order order = Order.newOrder(createOrderDto.getUserId(), createOrderDto.getTotalPrice());
-		createOrderDto.getItems().forEach(item -> {
-			Product product = productService.getAvailableProduct(item.getProductId(), item.getQuantity());
-			order.addOrderItem(product, item.getQuantity(), item.getCurrentPrice());
-		});
 
 		accountService.use(order.getUserId(), order.getTotalPrice());
 

@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.ProductService;
-import my.ecommerce.domain.product.popular.PopularProduct;
-import my.ecommerce.domain.product.popular.PopularProductService;
 import my.ecommerce.api.dto.page.CursorPageInfo;
 import my.ecommerce.api.dto.request.page.PopularProductPageRequest;
 import my.ecommerce.api.dto.request.page.ProductPageRequest;
@@ -19,22 +15,22 @@ import my.ecommerce.api.dto.response.PopularProductResponse;
 import my.ecommerce.api.dto.response.ProductResponse;
 import my.ecommerce.api.dto.response.page.PopularProductsPageResponse;
 import my.ecommerce.api.dto.response.page.ProductsPageResponse;
+import my.ecommerce.domain.product.Product;
+import my.ecommerce.domain.product.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductsController {
-	private final ProductService productsService;
-	private final PopularProductService popularProductService;
+	private final ProductService productService;
 
 	@Autowired
-	public ProductsController(ProductService productsService, PopularProductService popularProductService) {
-		this.productsService = productsService;
-		this.popularProductService = popularProductService;
+	public ProductsController(ProductService productService) {
+		this.productService = productService;
 	}
 
 	@GetMapping("")
-	public ProductsPageResponse getProducts(@Valid @ModelAttribute ProductPageRequest paramDto) {
-		Page<Product> page = productsService.findAllWithPage(paramDto);
+	public ProductsPageResponse getProducts(@Valid @ModelAttribute ProductPageRequest request) {
+		Page<Product> page = productService.getProductPage(request.toCursorQueryDto());
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
 		CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, cursor);
 
@@ -43,8 +39,8 @@ public class ProductsController {
 
 	@GetMapping("/popular")
 	public PopularProductsPageResponse getPopularProducts(@Valid @ModelAttribute
-	PopularProductPageRequest paramDto) {
-		Page<PopularProduct> page = popularProductService.findPopularWithPage(paramDto);
+	PopularProductPageRequest request) {
+		Page<Product> page = productService.getPopularProductPage(request.toCursorQueryDto(), request.toPeriodQuery());
 
 		String cursor = page.getContent().isEmpty() ? null : page.getContent().getLast().getId().toString();
 		CursorPageInfo pageInfo = CursorPageInfo.fromPage(page, cursor);

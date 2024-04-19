@@ -3,7 +3,7 @@ package my.ecommerce.api.dto.response;
 import java.util.UUID;
 
 import lombok.Getter;
-import my.ecommerce.domain.product.popular.PopularProduct;
+import my.ecommerce.domain.product.Product;
 
 @Getter
 public class PopularProductResponse extends ProductResponse {
@@ -14,7 +14,7 @@ public class PopularProductResponse extends ProductResponse {
 		this.soldAmountInPeriod = soldAmountInPeriod;
 	}
 
-	public static PopularProductResponse fromPopularProduct(PopularProduct popularProduct) {
+	public static PopularProductResponse fromPopularProduct(Product popularProduct) {
 		return new PopularProductResponse(popularProduct.getId(), popularProduct.getName(),
 			popularProduct.getPrice(), popularProduct.getStock(), popularProduct.getSoldAmountInPeriod());
 	}

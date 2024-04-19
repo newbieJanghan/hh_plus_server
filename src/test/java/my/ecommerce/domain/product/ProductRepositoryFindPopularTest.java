@@ -1,4 +1,4 @@
-package my.ecommerce.domain.product.popular;
+package my.ecommerce.domain.product;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,21 +14,18 @@ import org.springframework.data.domain.Page;
 import my.ecommerce.domain.Prepare;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderService;
-import my.ecommerce.domain.product.Product;
-import my.ecommerce.domain.product.ProductRepository;
-import my.ecommerce.domain.product.page.ProductPageCursorQuery;
+import my.ecommerce.domain.product.dto.PeriodQuery;
+import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.utils.Today;
 import my.ecommerce.utils.UUIDGenerator;
 
 @SpringBootTest
-public class PopularProductRepositoryTest {
+public class ProductRepositoryFindPopularTest {
 	@Autowired
-	private PopularProductRepository popularProductRepository;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private OrderService orderService;
-	@Autowired
-	private ProductRepository productRepository;
 
 	@Test
 	@DisplayName("인기 상품 조회 성공 - PopularProduct 리스트 limit 5까지 반환")
@@ -45,12 +42,11 @@ public class PopularProductRepositoryTest {
 			.build();
 
 		// then
-		Page<PopularProduct> result = popularProductRepository.findPopularWithPage(query, period);
-		List<PopularProduct> list = result.getContent();
-		PopularProduct max = list.stream().max(Comparator.comparingInt(PopularProduct::getSoldAmountInPeriod)).get();
+		Page<Product> result = productRepository.findAllPopularWithPage(query, period);
+		List<Product> list = result.getContent();
+		Product max = list.stream().max(Comparator.comparingInt(Product::getSoldAmountInPeriod)).get();
 
 		assertEquals(list.size(), 5);
-		assertInstanceOf(PopularProduct.class, list.getFirst());
 		assertEquals(list.getFirst(), max);
 	}
 

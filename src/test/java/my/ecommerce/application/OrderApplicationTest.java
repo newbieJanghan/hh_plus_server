@@ -62,18 +62,12 @@ public class OrderApplicationTest {
 		CreateOrderDto orderDto = prepareCreateOrderDto(product);
 		CreateOrderItemDto orderItemDto = orderDto.getItems().get(0);
 
-		mockProductServiceGetProduct(orderItemDto, product);
 		mockAccountService();
 		mockProductServiceSellProduct(product, orderItemDto);
 		mockOrderService(orderDto);
 
 		// When
 		orderApplication.run(orderDto);
-
-		// Then
-		verify(productService).getAvailableProduct(productIdCaptor.capture(), quantityCaptor.capture());
-		assertEquals(product.getId(), productIdCaptor.getValue());
-		assertEquals(orderItemDto.getQuantity(), quantityCaptor.getValue());
 
 		verify(accountService).use(userIdCaptor.capture(), totalPriceCaptor.capture());
 		assertEquals(orderDto.getUserId(), userIdCaptor.getValue());
@@ -105,11 +99,6 @@ public class OrderApplicationTest {
 			.items(itemsDto)
 			.totalPrice(1000)
 			.build();
-	}
-
-	private void mockProductServiceGetProduct(CreateOrderItemDto orderItemDto, Product product) {
-		when(productService.getAvailableProduct(orderItemDto.getProductId(), orderItemDto.getQuantity())).thenReturn(
-			product);
 	}
 
 	private void mockProductServiceSellProduct(Product product, CreateOrderItemDto orderItemDto) {

@@ -20,4 +20,14 @@ public class ProductConverter {
 			.stock(entity.getStock())
 			.build();
 	}
+
+	public Product toDomain(JpaProductRepository.PopularProductCustom custom) {
+		return Product.builder()
+			.id(custom.getProduct().getId())
+			.name(custom.getProduct().getName())
+			.price(custom.getProduct().getPrice())
+			.stock(custom.getProduct().getStock())
+			.soldAmountInPeriod((int)custom.getSoldAmountInPeriod())
+			.build();
+	}
 }

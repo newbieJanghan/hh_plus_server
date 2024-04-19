@@ -13,7 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
-import my.ecommerce.domain.product.page.ProductPageCursorQuery;
+import my.ecommerce.domain.product.dto.PeriodQuery;
+import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
@@ -35,7 +36,17 @@ public class ProductRepositoryImpl implements ProductRepository {
 			return jpaRepository.findAll(pageRequest).map(domainConverter::toDomain);
 		}
 
-		return jpaRepository.findAllNextPage(query.getCursor(), pageRequest).map(domainConverter::toDomain);
+		return jpaRepository.findAllWithPage(query.getCursor(), pageRequest).map(domainConverter::toDomain);
+	}
+
+	public Page<Product> findAllPopularWithPage(ProductPageCursorQuery query, PeriodQuery period) {
+		PageRequest pageRequest = makePopularPageRequest();
+		if (query.getCursor() == null) {
+			return jpaRepository.findAll(pageRequest).map(domainConverter::toDomain);
+		}
+
+		return jpaRepository.findAllPopularWithPage(period.getFrom(), period.getTo(), pageRequest)
+			.map(domainConverter::toDomain);
 	}
 
 	public List<Product> findAll() {
@@ -57,5 +68,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 	private PageRequest makePageRequest(ProductPageCursorQuery query) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
 		return PageRequest.of(0, query.getLimit(), sort);
+	}
+
+	private PageRequest makePopularPageRequest() {
+		Sort sort = Sort.by(Sort.Direction.DESC, "soldAmountInPeriod");
+		return PageRequest.of(0, 5, sort);
 	}
 }
