@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import my.ecommerce.presentation.dto.request.page.PopularProductPageRequest;
+import my.ecommerce.api.dto.request.page.PopularProductPageRequest;
 
 @Service
 public class PopularProductService {

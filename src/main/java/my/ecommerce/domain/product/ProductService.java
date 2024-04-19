@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
-import my.ecommerce.presentation.dto.request.page.ProductPageRequest;
+import my.ecommerce.api.dto.request.page.ProductPageRequest;
 
 @Service
 public class ProductService {

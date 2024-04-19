@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 
 import my.ecommerce.domain.product.page.ProductPageCursorQuery;
-import my.ecommerce.presentation.dto.request.page.PopularProductPageRequest;
+import my.ecommerce.api.dto.request.page.PopularProductPageRequest;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class PopularProductServiceTest {

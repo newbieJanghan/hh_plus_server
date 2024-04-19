@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 
 import my.ecommerce.domain.Prepare;
 import my.ecommerce.domain.product.page.ProductPageCursorQuery;
-import my.ecommerce.presentation.dto.page.Sort;
+import my.ecommerce.api.dto.page.Sort;
 import my.ecommerce.utils.UUIDGenerator;
 
 @SpringBootTest

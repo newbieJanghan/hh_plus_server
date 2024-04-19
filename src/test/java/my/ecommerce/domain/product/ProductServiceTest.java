@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
 import my.ecommerce.domain.product.page.ProductPageCursorQuery;
-import my.ecommerce.presentation.dto.request.page.ProductPageRequest;
+import my.ecommerce.api.dto.request.page.ProductPageRequest;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class ProductServiceTest {
