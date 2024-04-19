@@ -1,4 +1,4 @@
-package my.ecommerce.domain.balance;
+package my.ecommerce.domain.account;
 
 import java.util.UUID;
 
@@ -7,19 +7,19 @@ import lombok.Getter;
 import my.ecommerce.domain.BaseDomain;
 
 @Getter
-public class UserBalance extends BaseDomain {
+public class Account extends BaseDomain {
 	private final UUID userId;
 	private long amount;
 
 	@Builder
-	public UserBalance(UUID id, UUID userId, long amount) {
+	public Account(UUID id, UUID userId, long amount) {
 		this.id = id;
 		this.userId = userId;
 		this.amount = amount;
 	}
 
-	public static UserBalance newBalance(UUID userId) {
-		return new UserBalance(null, userId, 0);
+	public static Account newAccount(UUID userId) {
+		return new Account(null, userId, 0);
 	}
 
 	public void use(long amount) {

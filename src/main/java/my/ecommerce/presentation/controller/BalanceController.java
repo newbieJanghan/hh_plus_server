@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import my.ecommerce.domain.balance.BalanceService;
-import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.presentation.controller.abstracts.BaseAuthenticatedController;
 import my.ecommerce.presentation.dto.request.BalanceChargeRequest;
 import my.ecommerce.presentation.dto.response.BalanceResponse;
@@ -20,25 +20,25 @@ import my.ecommerce.presentation.dto.response.BalanceResponse;
 @RequestMapping("/api/v1/balance")
 public class BalanceController extends BaseAuthenticatedController {
 
-	private final BalanceService balanceService;
+	private final AccountService accountService;
 
 	@Autowired
-	public BalanceController(BalanceService balanceService) {
-		this.balanceService = balanceService;
+	public BalanceController(AccountService accountService) {
+		this.accountService = accountService;
 	}
 
 	@GetMapping("")
 	@ResponseStatus(HttpStatus.OK)
 	public BalanceResponse myBalance() {
-		UserBalance userBalance = balanceService.myBalance(getAuthenticatedUser().getId());
-		return BalanceResponse.fromDomain(userBalance);
+		Account account = accountService.myBalance(getAuthenticatedUser().getId());
+		return BalanceResponse.fromDomain(account);
 	}
 
 	@PatchMapping("/charge")
 	@ResponseStatus(HttpStatus.OK)
 	public BalanceResponse charge(@RequestBody @Validated BalanceChargeRequest balanceChargeRequest) {
-		UserBalance userBalance = balanceService.charge(getAuthenticatedUser().getId(),
+		Account account = accountService.charge(getAuthenticatedUser().getId(),
 			balanceChargeRequest.getAmount());
-		return BalanceResponse.fromDomain(userBalance);
+		return BalanceResponse.fromDomain(account);
 	}
 }

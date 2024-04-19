@@ -1,4 +1,4 @@
-package my.ecommerce.domain.balance;
+package my.ecommerce.domain.account;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,35 +15,35 @@ import my.ecommerce.utils.UUIDGenerator;
 @SpringBootTest
 public class BalanceRepositoryTest {
 	@Autowired
-	private UserBalanceRepository userBalanceRepository;
+	private AccountRepository accountRepository;
 
 	@Test
 	@DisplayName("UserBalance 도메인을 저장한 후 영속성 저장된 UserBalance 를 반환 성공")
 	public void success_saveAndReturnPersistedUserBalance() {
-		UserBalance userBalance = Prepare.userBalance();
+		Account account = Prepare.userBalance();
 
 		// when
-		UserBalance result = userBalanceRepository.save(userBalance);
+		Account result = accountRepository.save(account);
 
 		// then
-		assertInstanceOf(UserBalance.class, result);
+		assertInstanceOf(Account.class, result);
 		assertInstanceOf(UUID.class, result.getId());
 		assertNotNull(result.getId());
-		assertEquals(userBalance.getUserId(), result.getUserId());
-		assertEquals(userBalance.getAmount(), result.getAmount());
+		assertEquals(account.getUserId(), result.getUserId());
+		assertEquals(account.getAmount(), result.getAmount());
 
 		// cleanup
-		userBalanceRepository.destroy(result.getId());
+		accountRepository.destroy(result.getId());
 	}
 
 	@Test
 	@DisplayName("userId 로 UserBalance 를 조회 성공")
 	public void success_findByUserId() {
 		// given
-		UserBalance persistence = userBalanceRepository.save(Prepare.userBalance());
+		Account persistence = accountRepository.save(Prepare.userBalance());
 
 		// when
-		UserBalance result = userBalanceRepository.findByUserId(persistence.getUserId());
+		Account result = accountRepository.findByUserId(persistence.getUserId());
 
 		// then
 		assertNotNull(result);
@@ -52,7 +52,7 @@ public class BalanceRepositoryTest {
 		assertEquals(persistence.getAmount(), result.getAmount());
 
 		// cleanup
-		userBalanceRepository.destroy(persistence.getId());
+		accountRepository.destroy(persistence.getId());
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class BalanceRepositoryTest {
 		UUID userId = UUIDGenerator.generate();
 
 		// when
-		UserBalance result = userBalanceRepository.findByUserId(userId);
+		Account result = accountRepository.findByUserId(userId);
 
 		// then
 		assertNull(result);

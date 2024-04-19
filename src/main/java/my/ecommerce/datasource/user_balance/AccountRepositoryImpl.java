@@ -5,20 +5,20 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.domain.balance.UserBalance;
-import my.ecommerce.domain.balance.UserBalanceRepository;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountRepository;
 
 @Repository
-public class UserBalanceRepositoryImpl implements UserBalanceRepository {
+public class AccountRepositoryImpl implements AccountRepository {
 	private final JpaUserBalanceRepository jpaRepository;
 	private final UserBalanceConverter domainConverter = new UserBalanceConverter();
 
 	@Autowired
-	public UserBalanceRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
+	public AccountRepositoryImpl(JpaUserBalanceRepository jpaRepository) {
 		this.jpaRepository = jpaRepository;
 	}
 
-	public UserBalance save(UserBalance domain) {
+	public Account save(Account domain) {
 		UserBalanceEntity entity = domainConverter.toEntity(domain);
 		jpaRepository.save(entity);
 
@@ -26,7 +26,7 @@ public class UserBalanceRepositoryImpl implements UserBalanceRepository {
 		return domain;
 	}
 
-	public UserBalance findByUserId(UUID userId) {
+	public Account findByUserId(UUID userId) {
 		return jpaRepository.findByUserId(userId).map(domainConverter::toDomain).orElse(null);
 	}
 

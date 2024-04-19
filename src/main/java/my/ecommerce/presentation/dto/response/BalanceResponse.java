@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
-import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.domain.account.Account;
 
 @Getter
 public class BalanceResponse {
@@ -19,11 +19,11 @@ public class BalanceResponse {
 		this.amount = amount;
 	}
 
-	public static BalanceResponse fromDomain(UserBalance userBalance) {
+	public static BalanceResponse fromDomain(Account account) {
 		return BalanceResponse.builder()
-			.id(userBalance.getId())
-			.userId(userBalance.getUserId())
-			.amount(userBalance.getAmount())
+			.id(account.getId())
+			.userId(account.getUserId())
+			.amount(account.getAmount())
 			.build();
 	}
 

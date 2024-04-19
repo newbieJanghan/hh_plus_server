@@ -14,7 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
-import my.ecommerce.domain.balance.BalanceService;
+import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderService;
 import my.ecommerce.domain.order.dto.CreateOrderDto;
@@ -44,14 +44,14 @@ public class OrderApplicationTest {
 	@Mock
 	ProductService productService;
 	@Mock
-	BalanceService balanceService;
+	AccountService accountService;
 
 	private OrderApplication orderApplication;
 
 	@BeforeEach()
 	void setOrderApplication() {
 		openMocks(this);
-		this.orderApplication = new OrderApplication(orderService, productService, balanceService);
+		this.orderApplication = new OrderApplication(orderService, productService, accountService);
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class OrderApplicationTest {
 		assertEquals(product.getId(), productIdCaptor.getValue());
 		assertEquals(orderItemDto.getQuantity(), quantityCaptor.getValue());
 
-		verify(balanceService).use(userIdCaptor.capture(), totalPriceCaptor.capture());
+		verify(accountService).use(userIdCaptor.capture(), totalPriceCaptor.capture());
 		assertEquals(orderDto.getUserId(), userIdCaptor.getValue());
 		assertEquals(orderDto.getTotalPrice(), totalPriceCaptor.getValue());
 
@@ -117,7 +117,7 @@ public class OrderApplicationTest {
 	}
 
 	private void mockBalanceService() {
-		doNothing().when(balanceService).use(any(UUID.class), anyLong());
+		doNothing().when(accountService).use(any(UUID.class), anyLong());
 	}
 
 	private void mockOrderService(CreateOrderDto orderDto) {

@@ -1,9 +1,9 @@
 package my.ecommerce.datasource.user_balance;
 
-import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.domain.account.Account;
 
 public class UserBalanceConverter {
-	public UserBalanceEntity toEntity(UserBalance domain) {
+	public UserBalanceEntity toEntity(Account domain) {
 		return UserBalanceEntity.builder()
 			.id(domain.getId())
 			.userId(domain.getUserId())
@@ -11,8 +11,8 @@ public class UserBalanceConverter {
 			.build();
 	}
 
-	public UserBalance toDomain(UserBalanceEntity entity) {
-		return UserBalance.builder()
+	public Account toDomain(UserBalanceEntity entity) {
+		return Account.builder()
 			.id(entity.getId())
 			.userId(entity.getUserId())
 			.amount(entity.getAmount())

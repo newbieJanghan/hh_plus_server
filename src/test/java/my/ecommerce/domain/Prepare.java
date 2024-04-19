@@ -1,6 +1,6 @@
 package my.ecommerce.domain;
 
-import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.domain.account.Account;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.domain.product.Product;
@@ -27,7 +27,7 @@ public class Prepare {
 		return Product.newProduct("Test", price, stock);
 	}
 
-	public static UserBalance userBalance() {
-		return UserBalance.newBalance(UUIDGenerator.generate());
+	public static Account userBalance() {
+		return Account.newAccount(UUIDGenerator.generate());
 	}
 }

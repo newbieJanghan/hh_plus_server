@@ -39,7 +39,7 @@ public class OrderItemEntity extends BaseEntity {
 
 	@Column(name = "current_price", nullable = false)
 	private long currentPrice;
-
+ 
 	@Builder
 	public OrderItemEntity(UUID id, OrderEntity order, ProductEntity product, long quantity,
 		long currentPrice, OrderItemStatus status) {

@@ -1,11 +1,11 @@
 package my.ecommerce.datasource.user_balance_history;
 
 import my.ecommerce.datasource.user_balance.UserBalanceEntity;
-import my.ecommerce.domain.balance.UserBalance;
-import my.ecommerce.domain.balance.balance_history.UserBalanceHistory;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.account_history.AccountHistory;
 
 public class UserBalanceHistoryConverter {
-	public UserBalanceHistoryEntity toEntity(UserBalanceHistory domain, UserBalanceEntity userBalance) {
+	public UserBalanceHistoryEntity toEntity(AccountHistory domain, UserBalanceEntity userBalance) {
 		return UserBalanceHistoryEntity.builder()
 			.id(domain.getId())
 			.userBalance(userBalance)
@@ -14,34 +14,34 @@ public class UserBalanceHistoryConverter {
 			.build();
 	}
 
-	public UserBalanceHistory toDomain(UserBalanceHistoryEntity entity) {
-		return UserBalanceHistory.builder()
+	public AccountHistory toDomain(UserBalanceHistoryEntity entity) {
+		return AccountHistory.builder()
 			.id(entity.getId())
 			.amount(entity.getAmount())
 			.type(toDomainTransactionType(entity.getType()))
 			.build();
 	}
 
-	public UserBalanceHistory toDomain(UserBalanceHistoryEntity entity, UserBalance userBalance) {
-		return UserBalanceHistory.builder()
+	public AccountHistory toDomain(UserBalanceHistoryEntity entity, Account account) {
+		return AccountHistory.builder()
 			.id(entity.getId())
-			.balance(userBalance)
+			.balance(account)
 			.amount(entity.getAmount())
 			.type(toDomainTransactionType(entity.getType()))
 			.build();
 	}
 
 	private UserBalanceHistoryEntity.TransactionType toEntityTransactionType(
-		UserBalanceHistory.BalanceHistoryType type) {
-		return type == UserBalanceHistory.BalanceHistoryType.CHARGE
+		AccountHistory.BalanceHistoryType type) {
+		return type == AccountHistory.BalanceHistoryType.CHARGE
 			? UserBalanceHistoryEntity.TransactionType.DEPOSIT
 			: UserBalanceHistoryEntity.TransactionType.WITHDRAW;
 	}
 
-	private UserBalanceHistory.BalanceHistoryType toDomainTransactionType(
+	private AccountHistory.BalanceHistoryType toDomainTransactionType(
 		UserBalanceHistoryEntity.TransactionType type) {
 		return type == UserBalanceHistoryEntity.TransactionType.DEPOSIT
-			? UserBalanceHistory.BalanceHistoryType.CHARGE
-			: UserBalanceHistory.BalanceHistoryType.USAGE;
+			? AccountHistory.BalanceHistoryType.CHARGE
+			: AccountHistory.BalanceHistoryType.USAGE;
 	}
 }

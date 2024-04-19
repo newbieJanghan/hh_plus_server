@@ -20,8 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import my.ecommerce.domain.balance.BalanceService;
-import my.ecommerce.domain.balance.UserBalance;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.presentation.config.interceptor.LoggerInterceptor;
 import my.ecommerce.presentation.controller.BalanceController;
 import my.ecommerce.presentation.utils.MockAuthentication;
@@ -35,11 +35,11 @@ public class BalanceControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private BalanceService balanceService;
+	private AccountService accountService;
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(balanceService)).addInterceptors(
+		mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(accountService)).addInterceptors(
 			new LoggerInterceptor()).build();
 		MockAuthentication.setAuthenticatedContext();
 	}
@@ -47,12 +47,12 @@ public class BalanceControllerTest {
 	@Test
 	@DisplayName("잔액 조회 성공")
 	public void myBalance_success() throws Exception {
-		when(balanceService.myBalance(any(UUID.class))).thenReturn(emptyUserBalance());
+		when(accountService.myBalance(any(UUID.class))).thenReturn(emptyUserBalance());
 
 		mockMvc.perform(get("/api/v1/balance"))
 			.andExpect(status().isOk());
 
-		verify(balanceService, times(1)).myBalance(any(UUID.class));
+		verify(accountService, times(1)).myBalance(any(UUID.class));
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class BalanceControllerTest {
 	public void charge_success() throws Exception {
 		long amount = 1000;
 
-		when(balanceService.charge(any(UUID.class), anyLong())).thenReturn(emptyUserBalance());
+		when(accountService.charge(any(UUID.class), anyLong())).thenReturn(emptyUserBalance());
 
 		JSONObject body = new JSONObject();
 		body.put("amount", amount);
@@ -70,7 +70,7 @@ public class BalanceControllerTest {
 				.content(body.toString()))
 			.andExpect(status().isOk());
 
-		verify(balanceService).charge(any(UUID.class), amountCaptor.capture());
+		verify(accountService).charge(any(UUID.class), amountCaptor.capture());
 		assertEquals(amount, amountCaptor.getValue());
 	}
 
@@ -88,7 +88,7 @@ public class BalanceControllerTest {
 			.andExpect(status().isBadRequest());
 	}
 
-	private UserBalance emptyUserBalance() {
-		return UserBalance.newBalance(UUIDGenerator.generate());
+	private Account emptyUserBalance() {
+		return Account.newAccount(UUIDGenerator.generate());
 	}
 }
