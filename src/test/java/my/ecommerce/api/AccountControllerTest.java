@@ -20,15 +20,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import my.ecommerce.api.config.interceptor.LoggerInterceptor;
+import my.ecommerce.api.controller.AccountController;
+import my.ecommerce.api.utils.MockAuthentication;
 import my.ecommerce.domain.account.Account;
 import my.ecommerce.domain.account.AccountService;
-import my.ecommerce.api.config.interceptor.LoggerInterceptor;
-import my.ecommerce.api.controller.BalanceController;
-import my.ecommerce.api.utils.MockAuthentication;
 import my.ecommerce.utils.UUIDGenerator;
 
-@WebMvcTest(BalanceController.class)
-public class BalanceControllerTest {
+@WebMvcTest(AccountController.class)
+public class AccountControllerTest {
 	@Captor
 	ArgumentCaptor<Long> amountCaptor;
 
@@ -39,7 +39,7 @@ public class BalanceControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(new BalanceController(accountService)).addInterceptors(
+		mockMvc = MockMvcBuilders.standaloneSetup(new AccountController(accountService)).addInterceptors(
 			new LoggerInterceptor()).build();
 		MockAuthentication.setAuthenticatedContext();
 	}
@@ -49,7 +49,7 @@ public class BalanceControllerTest {
 	public void myBalance_success() throws Exception {
 		when(accountService.myBalance(any(UUID.class))).thenReturn(emptyUserBalance());
 
-		mockMvc.perform(get("/api/v1/balance"))
+		mockMvc.perform(get("/api/v1/account"))
 			.andExpect(status().isOk());
 
 		verify(accountService, times(1)).myBalance(any(UUID.class));
@@ -65,7 +65,7 @@ public class BalanceControllerTest {
 		JSONObject body = new JSONObject();
 		body.put("amount", amount);
 
-		mockMvc.perform(patch("/api/v1/balance/charge")
+		mockMvc.perform(patch("/api/v1/account/charge")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body.toString()))
 			.andExpect(status().isOk());
@@ -82,7 +82,7 @@ public class BalanceControllerTest {
 		JSONObject body = new JSONObject();
 		body.put("amount", amount);
 
-		mockMvc.perform(patch("/api/v1/balance/charge")
+		mockMvc.perform(patch("/api/v1/account/charge")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body.toString()))
 			.andExpect(status().isBadRequest());

@@ -6,7 +6,7 @@
 
 - Request
     - Method: GET
-    - URL: /api/v1/balance
+    - URL: /api/v1/account
     - Header:
         - Content-Type: application/json
         - Authorization: Bearer {token}
@@ -41,7 +41,7 @@ sequenceDiagram
     participant client
     participant server
     participant db
-    client ->> server: GET /api/v1/balance
+    client ->> server: GET /api/v1/account
     server ->> db: USER_BALANCE에 userId로 조회
     alt USER_BALANCE 없음
         db -->> server: null
@@ -101,7 +101,7 @@ sequenceDiagram
 
 - Request
     - Method: POST
-    - URL: /api/v1/balance/charge
+    - URL: /api/v1/account/charge
     - Header:
         - Content-Type: application/json
         - Authorization: Bearer {token}
@@ -149,7 +149,7 @@ sequenceDiagram
     participant client
     participant server
     participant db
-    client ->> server: POST /api/v1/balance/charge
+    client ->> server: POST /api/v1/account/charge
     server ->> db: USER_BALANCE 에 userId로 조회
     alt USER_BALANCE 없음
         db -->> server: null

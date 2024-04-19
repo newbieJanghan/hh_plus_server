@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import my.ecommerce.domain.account.Account;
-import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.api.controller.abstracts.BaseAuthenticatedController;
 import my.ecommerce.api.dto.request.BalanceChargeRequest;
 import my.ecommerce.api.dto.response.BalanceResponse;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountService;
 
 @RestController
-@RequestMapping("/api/v1/balance")
-public class BalanceController extends BaseAuthenticatedController {
+@RequestMapping("/api/v1/account")
+public class AccountController extends BaseAuthenticatedController {
 
 	private final AccountService accountService;
 
 	@Autowired
-	public BalanceController(AccountService accountService) {
+	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
 	}
 
