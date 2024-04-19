@@ -3,9 +3,9 @@ package my.ecommerce.api.dto.request.page;
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
-import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.api.dto.page.CursorPageRequest;
 import my.ecommerce.api.dto.page.Sort;
+import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 
 @Getter
 public class ProductPageRequest extends CursorPageRequest {
@@ -25,9 +25,10 @@ public class ProductPageRequest extends CursorPageRequest {
 	public ProductPageCursorQuery toCursorQueryDto() {
 		return ProductPageCursorQuery
 			.builder()
-			.limit(getSize())
-			.sort(getSort())
+			.limit(size)
+			.sort(sort)
 			.cursor(getUUIDCursor())
+			.category(category)
 			.build();
 	}
 }
