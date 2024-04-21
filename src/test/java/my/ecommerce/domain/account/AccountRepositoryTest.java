@@ -20,7 +20,7 @@ public class AccountRepositoryTest {
 	@Test
 	@DisplayName("Account 도메인을 저장한 후 영속성 저장된 Account 를 반환 성공")
 	public void success_saveAndReturnPersistedAccount() {
-		Account account = Prepare.userAccount();
+		Account account = Prepare.account();
 
 		// when
 		Account result = accountRepository.save(account);
@@ -40,7 +40,7 @@ public class AccountRepositoryTest {
 	@DisplayName("userId 로 Account 를 조회 성공")
 	public void success_findByUserId() {
 		// given
-		Account persistence = accountRepository.save(Prepare.userAccount());
+		Account persistence = accountRepository.save(Prepare.account());
 
 		// when
 		Account result = accountRepository.findByUserId(persistence.getUserId());

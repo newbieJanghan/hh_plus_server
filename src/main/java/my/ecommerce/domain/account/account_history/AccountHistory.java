@@ -10,11 +10,11 @@ import my.ecommerce.domain.account.Account;
 @Getter
 public class AccountHistory extends BaseDomain {
 	private final Account account;
-	private final AccountHistoryType type;
+	private final TransactionType type;
 	private final long amount;
 
 	@Builder
-	public AccountHistory(UUID id, Account account, AccountHistoryType type, long amount) {
+	public AccountHistory(UUID id, Account account, TransactionType type, long amount) {
 		this.id = id;
 		this.account = account;
 		this.type = type;
@@ -24,7 +24,7 @@ public class AccountHistory extends BaseDomain {
 	public static AccountHistory newChargeHistory(Account account, long amount) {
 		return AccountHistory.builder()
 			.account(account)
-			.type(AccountHistoryType.CHARGE)
+			.type(TransactionType.CHARGE)
 			.amount(amount)
 			.build();
 	}
@@ -32,12 +32,12 @@ public class AccountHistory extends BaseDomain {
 	public static AccountHistory newUsageHistory(Account account, long amount) {
 		return AccountHistory.builder()
 			.account(account)
-			.type(AccountHistoryType.USAGE)
+			.type(TransactionType.USAGE)
 			.amount(amount)
 			.build();
 	}
 
-	public enum AccountHistoryType {
+	public enum TransactionType {
 		CHARGE, USAGE
 	}
 }

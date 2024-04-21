@@ -89,7 +89,7 @@ public class AccountServiceTest {
 		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getAmount());
 
 		verify(historyRepository).save(historyCaptor.capture());
-		assertEquals(AccountHistory.AccountHistoryType.CHARGE, historyCaptor.getValue().getType());
+		assertEquals(AccountHistory.TransactionType.CHARGE, historyCaptor.getValue().getType());
 		assertEquals(chargeAmount, historyCaptor.getValue().getAmount());
 
 	}
@@ -129,7 +129,7 @@ public class AccountServiceTest {
 		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getAmount());
 
 		verify(historyRepository).save(historyCaptor.capture());
-		assertEquals(AccountHistory.AccountHistoryType.USAGE, historyCaptor.getValue().getType());
+		assertEquals(AccountHistory.TransactionType.USAGE, historyCaptor.getValue().getType());
 	}
 
 	@Test

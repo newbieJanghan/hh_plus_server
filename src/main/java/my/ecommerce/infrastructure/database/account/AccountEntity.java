@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.domain.account.Account;
 import my.ecommerce.infrastructure.database.account_history.AccountHistoryEntity;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
 
@@ -25,7 +26,7 @@ public class AccountEntity extends BaseEntity {
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
 	private long amount;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userAccount", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
 	private List<AccountHistoryEntity> histories;
 
 	@Builder
@@ -34,5 +35,21 @@ public class AccountEntity extends BaseEntity {
 		this.userId = userId;
 		this.amount = amount;
 		this.histories = histories;
+	}
+
+	public static AccountEntity fromDomain(Account domain) {
+		return AccountEntity.builder()
+			.id(domain.getId())
+			.userId(domain.getUserId())
+			.amount(domain.getAmount())
+			.build();
+	}
+
+	public Account toDomain() {
+		return Account.builder()
+			.id(getId())
+			.userId(userId)
+			.amount(amount)
+			.build();
 	}
 }

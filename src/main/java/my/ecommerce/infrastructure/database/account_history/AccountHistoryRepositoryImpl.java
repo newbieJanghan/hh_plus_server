@@ -7,27 +7,21 @@ import org.springframework.stereotype.Repository;
 
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
-import my.ecommerce.infrastructure.database.account.AccountConverter;
-import my.ecommerce.infrastructure.database.account.AccountEntity;
 
 @Repository
 public class AccountHistoryRepositoryImpl implements AccountHistoryRepository {
 	private final JpaAccountHistoryRepository jpaRepository;
-	private final AccountHistoryConverter historyConverter = new AccountHistoryConverter();
-	private final AccountConverter accountConverter = new AccountConverter();
 
 	@Autowired
 	public AccountHistoryRepositoryImpl(JpaAccountHistoryRepository jpaRepository) {
 		this.jpaRepository = jpaRepository;
 	}
 
-	public AccountHistory save(AccountHistory history) {
-		AccountEntity accountEntity = accountConverter.toEntity(history.getAccount());
-		AccountHistoryEntity entity = historyConverter.toEntity(history, accountEntity);
+	public AccountHistory save(AccountHistory domain) {
+		AccountHistoryEntity entity = AccountHistoryEntity.fromDomain(domain);
 		jpaRepository.save(entity);
 
-		history.persist(entity.getId());
-		return history;
+		return entity.toDomain();
 	}
 
 	public void destroy(UUID id) {

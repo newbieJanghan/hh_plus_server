@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.infrastructure.database.account.AccountEntity;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
 
@@ -23,7 +24,7 @@ import my.ecommerce.infrastructure.database.common.BaseEntity;
 public class AccountHistoryEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "account_id", nullable = false)
-	private AccountEntity userAccount;
+	private AccountEntity account;
 
 	@Column(nullable = false)
 	private long amount;
@@ -33,11 +34,43 @@ public class AccountHistoryEntity extends BaseEntity {
 	private TransactionType type;
 
 	@Builder
-	public AccountHistoryEntity(UUID id, AccountEntity userAccount, long amount, TransactionType type) {
+	public AccountHistoryEntity(UUID id, AccountEntity account, long amount, TransactionType type) {
 		super(id);
-		this.userAccount = userAccount;
+		this.account = account;
 		this.amount = amount;
 		this.type = type;
+	}
+
+	public static AccountHistoryEntity fromDomain(AccountHistory domain) {
+		return AccountHistoryEntity.builder()
+			.id(domain.getId())
+			.account(AccountEntity.fromDomain(domain.getAccount()))
+			.amount(domain.getAmount())
+			.type(fromDomainType(domain.getType()))
+			.build();
+	}
+
+	public static TransactionType fromDomainType(AccountHistory.TransactionType type) {
+		return switch (type) {
+			case CHARGE -> TransactionType.DEPOSIT;
+			case USAGE -> TransactionType.WITHDRAW;
+		};
+	}
+
+	public AccountHistory toDomain() {
+		return AccountHistory.builder()
+			.id(getId())
+			.account(account.toDomain())
+			.amount(amount)
+			.type(toDomainType())
+			.build();
+	}
+
+	private AccountHistory.TransactionType toDomainType() {
+		return switch (type) {
+			case DEPOSIT -> AccountHistory.TransactionType.CHARGE;
+			case WITHDRAW -> AccountHistory.TransactionType.USAGE;
+		};
 	}
 
 	public enum TransactionType {

@@ -11,7 +11,6 @@ import my.ecommerce.domain.account.AccountRepository;
 @Repository
 public class AccountRepositoryImpl implements AccountRepository {
 	private final JpaAccountRepository jpaRepository;
-	private final AccountConverter domainConverter = new AccountConverter();
 
 	@Autowired
 	public AccountRepositoryImpl(JpaAccountRepository jpaRepository) {
@@ -19,15 +18,13 @@ public class AccountRepositoryImpl implements AccountRepository {
 	}
 
 	public Account save(Account domain) {
-		AccountEntity entity = domainConverter.toEntity(domain);
+		AccountEntity entity = AccountEntity.fromDomain(domain);
 		jpaRepository.save(entity);
-
-		domain.persist(entity.getId());
-		return domain;
+		return entity.toDomain();
 	}
 
 	public Account findByUserId(UUID userId) {
-		return jpaRepository.findByUserId(userId).map(domainConverter::toDomain).orElse(null);
+		return jpaRepository.findByUserId(userId).map(AccountEntity::toDomain).orElse(null);
 	}
 
 	public void destroy(UUID id) {

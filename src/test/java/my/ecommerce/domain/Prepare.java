@@ -27,7 +27,7 @@ public class Prepare {
 		return Product.builder().name("test").price(price).stock(stock).build();
 	}
 
-	public static Account userAccount() {
+	public static Account account() {
 		return Account.newAccount(UUIDGenerator.generate());
 	}
 }
