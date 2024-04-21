@@ -17,10 +17,11 @@ import org.mockito.Mock;
 import my.ecommerce.domain.Prepare;
 import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.order.Order;
+import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderService;
-import my.ecommerce.domain.order.dto.OrderCreate;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductService;
+import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.usecase.order.OrderCommand;
 import my.ecommerce.usecase.order.OrderUseCase;
 import my.ecommerce.utils.UUIDGenerator;
@@ -30,9 +31,7 @@ public class OrderUseCaseTest {
 	@Captor
 	ArgumentCaptor<UUID> userIdCaptor;
 	@Captor
-	ArgumentCaptor<UUID> productIdCaptor;
-	@Captor
-	ArgumentCaptor<Long> sellCountCaptor;
+	ArgumentCaptor<ProductSell> productSellCaptor;
 	@Captor
 	ArgumentCaptor<OrderCreate> orderCreateCaptor;
 	@Captor
@@ -69,9 +68,9 @@ public class OrderUseCaseTest {
 		// When
 		orderUseCase.run(command);
 
-		verify(productService).sell(productIdCaptor.capture(), sellCountCaptor.capture());
-		assertEquals(product.getId(), productIdCaptor.getValue());
-		assertEquals(command.items().getFirst().quantity(), sellCountCaptor.getValue());
+		verify(productService).sell(productSellCaptor.capture());
+		assertEquals(product.getId(), productSellCaptor.getValue().id());
+		assertEquals(command.items().getFirst().quantity(), productSellCaptor.getValue().quantity());
 
 		verify(orderService).create(orderCreateCaptor.capture());
 		OrderCreate orderCreate = orderCreateCaptor.getValue();
@@ -90,7 +89,7 @@ public class OrderUseCaseTest {
 	}
 
 	private void mockProductServiceSellProduct(OrderCommand.OrderItemCommand item) {
-		doNothing().when(productService).sell(item.productId(), item.quantity());
+		doNothing().when(productService).sell(any(ProductSell.class));
 	}
 
 	private void mockAccountService() {

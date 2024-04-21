@@ -15,8 +15,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 
 import my.ecommerce.domain.Prepare;
-import my.ecommerce.domain.order.dto.OrderCreate;
-import my.ecommerce.domain.order.dto.OrderItemCreate;
 import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.utils.UUIDGenerator;
 
@@ -47,9 +45,9 @@ public class OrderServiceTest {
 		long quantityPerItem = 1;
 
 		// given OrderCreate
-		List<OrderItemCreate> orderItemCreateList = new ArrayList<>();
+		List<OrderCreate.OrderItemCreate> orderItemCreateList = new ArrayList<>();
 		for (int i = 0; i < itemsCount; i++) {
-			orderItemCreateList.add(OrderItemCreate.builder()
+			orderItemCreateList.add(OrderCreate.OrderItemCreate.builder()
 				.product(Prepare.product(pricePerItem, stockPerItem))
 				.quantity(quantityPerItem)
 				.currentPrice(pricePerItem)

@@ -11,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
 import my.ecommerce.utils.UUIDGenerator;
 
@@ -40,7 +41,7 @@ public class ProductServiceTest {
 		when(productRepository.save(product)).thenReturn(product);
 
 		// When
-		productService.sell(product.getId(), orderQuantity);
+		productService.sell(new ProductSell(product.getId(), orderQuantity));
 
 		// Then
 		verify(productRepository).save(productCaptor.capture());
@@ -57,7 +58,8 @@ public class ProductServiceTest {
 		Product product = prepareProduct(stock);
 
 		// When & Then
-		assertThrows(InsufficientStockException.class, () -> productService.sell(product.getId(), orderQuantity));
+		assertThrows(InsufficientStockException.class,
+			() -> productService.sell(new ProductSell(product.getId(), orderQuantity)));
 	}
 
 	private Product prepareProduct(long stock) {
