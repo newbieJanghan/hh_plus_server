@@ -8,8 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import my.ecommerce.domain.order.dto.CreateOrderDto;
-import my.ecommerce.domain.order.dto.CreateOrderItemDto;
+import my.ecommerce.usecase.order.OrderCommand;
 
 @Getter
 public class OrderCreateRequest {
@@ -17,21 +16,12 @@ public class OrderCreateRequest {
 	@NotEmpty
 	private List<OrderItemCreateRequest> items;
 
-	@NotNull
-	@Min(0)
-	private long totalPrice;
-
-	public OrderCreateRequest(List<OrderItemCreateRequest> items, long totalPrice) {
+	public OrderCreateRequest(List<OrderItemCreateRequest> items) {
 		this.items = items;
-		this.totalPrice = totalPrice;
 	}
 
-	public CreateOrderDto toDomain(UUID userId) {
-		return CreateOrderDto.builder()
-			.userId(userId)
-			.items(items.stream().map(OrderItemCreateRequest::toDomain).toList())
-			.totalPrice(totalPrice)
-			.build();
+	public OrderCommand toCommand(UUID userId) {
+		return new OrderCommand(userId, items.stream().map(OrderItemCreateRequest::toCommand).toList());
 	}
 
 	@Getter
@@ -43,16 +33,18 @@ public class OrderCreateRequest {
 		@Min(1)
 		private long quantity;
 
-		public OrderItemCreateRequest(UUID productId, long quantity) {
+		@NotNull
+		@Min(1)
+		private long currentPrice;
+
+		public OrderItemCreateRequest(UUID productId, long quantity, long currentPrice) {
 			this.productId = productId;
 			this.quantity = quantity;
+			this.currentPrice = currentPrice;
 		}
 
-		public CreateOrderItemDto toDomain() {
-			return CreateOrderItemDto.builder()
-				.productId(productId)
-				.quantity(quantity)
-				.build();
+		public OrderCommand.OrderItemCommand toCommand() {
+			return new OrderCommand.OrderItemCommand(productId, quantity, currentPrice);
 		}
 	}
 }

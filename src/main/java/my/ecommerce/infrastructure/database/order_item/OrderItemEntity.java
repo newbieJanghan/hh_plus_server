@@ -1,5 +1,6 @@
 package my.ecommerce.infrastructure.database.order_item;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
 import my.ecommerce.infrastructure.database.order.OrderEntity;
 import my.ecommerce.infrastructure.database.product.ProductEntity;
@@ -22,7 +24,7 @@ import my.ecommerce.infrastructure.database.product.ProductEntity;
 @NoArgsConstructor
 @Getter
 public class OrderItemEntity extends BaseEntity {
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "order_id", nullable = false)
 	private OrderEntity order;
 
@@ -49,6 +51,30 @@ public class OrderItemEntity extends BaseEntity {
 		this.quantity = quantity;
 		this.currentPrice = currentPrice;
 		this.status = status;
+	}
+
+	public static OrderItemEntity fromDomain(OrderItem domain, OrderEntity order) {
+		return OrderItemEntity.builder()
+			.id(domain.getId())
+			.order(order)
+			.product(ProductEntity.fromDomain(domain.getProduct()))
+			.status(OrderItemStatus.valueOf(domain.getStatus().name()))
+			.quantity(domain.getQuantity())
+			.currentPrice(domain.getCurrentPrice())
+			.build();
+	}
+
+	public static List<OrderItemEntity> fromDomain(List<OrderItem> list, OrderEntity order) {
+		return list.stream().map(item -> fromDomain(item, order)).toList();
+	}
+
+	public OrderItem toDomain() {
+		return OrderItem.builder()
+			.id(getId())
+			.status(OrderItem.OrderItemStatus.valueOf(status.name()))
+			.quantity(quantity)
+			.currentPrice(currentPrice)
+			.build();
 	}
 
 	public enum OrderItemStatus {

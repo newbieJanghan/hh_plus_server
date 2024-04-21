@@ -1,7 +1,10 @@
 package my.ecommerce.infrastructure.database.product;
 
+import org.springframework.stereotype.Component;
+
 import my.ecommerce.domain.product.Product;
 
+@Component
 public class ProductConverter {
 	public ProductEntity toEntity(Product domain) {
 		return ProductEntity.builder()

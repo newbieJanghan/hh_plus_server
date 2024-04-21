@@ -14,9 +14,7 @@ public class OrderItem extends BaseDomain {
 	private final Product product;
 	private final long quantity;
 	private final long currentPrice;
-
-	@Setter
-	private Order order;
+	private final Order order;
 	@Setter
 	private OrderItemStatus status;
 
@@ -32,5 +30,13 @@ public class OrderItem extends BaseDomain {
 
 	public static OrderItem newOrderItem(Order order, Product product, long quantity, long currentPrice) {
 		return new OrderItem(null, order, product, quantity, currentPrice, OrderItemStatus.ORDERED);
+	}
+
+	public enum OrderItemStatus {
+		ORDERED,
+		SHIPPED,
+		DELIVERED,
+		CANCELLED,
+		RETURNED
 	}
 }

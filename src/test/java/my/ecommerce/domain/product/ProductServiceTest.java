@@ -40,7 +40,7 @@ public class ProductServiceTest {
 		when(productRepository.save(product)).thenReturn(product);
 
 		// When
-		productService.sell(product, orderQuantity);
+		productService.sell(product.getId(), orderQuantity);
 
 		// Then
 		verify(productRepository).save(productCaptor.capture());
@@ -57,7 +57,7 @@ public class ProductServiceTest {
 		Product product = prepareProduct(stock);
 
 		// When & Then
-		assertThrows(InsufficientStockException.class, () -> productService.sell(product, orderQuantity));
+		assertThrows(InsufficientStockException.class, () -> productService.sell(product.getId(), orderQuantity));
 	}
 
 	private Product prepareProduct(long stock) {

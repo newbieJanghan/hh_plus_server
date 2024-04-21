@@ -35,12 +35,10 @@ public class AccountService {
 		Account account = myAccount(userId);
 		account.charge(amount);
 
-		Account persisted = accountRepository.save(account);
-
 		AccountHistory chargeHistory = AccountHistory.newChargeHistory(account, amount);
 		historyRepository.save(chargeHistory);
 
-		return persisted;
+		return accountRepository.save(account);
 	}
 
 	public Account use(UUID userId, long amount) {
@@ -49,12 +47,10 @@ public class AccountService {
 		validateUsage(account, amount);
 		account.use(amount);
 
-		Account persisted = accountRepository.save(account);
-
 		AccountHistory usageHistory = AccountHistory.newUsageHistory(account, amount);
 		historyRepository.save(usageHistory);
 
-		return persisted;
+		return accountRepository.save(account);
 	}
 
 	private void validateCharge(long amount) {

@@ -8,7 +8,7 @@ import my.ecommerce.utils.UUIDGenerator;
 
 public class Prepare {
 	public static Order order(int itemsCount) {
-		Order order = Order.newOrder(UUIDGenerator.generate(), 0);
+		Order order = Order.newOrder(UUIDGenerator.generate());
 
 		for (int i = 1; i <= itemsCount; i++) {
 			Product product = Prepare.product(i * 1000L, i * 1000L);

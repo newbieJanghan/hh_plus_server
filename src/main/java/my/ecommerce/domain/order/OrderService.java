@@ -3,32 +3,26 @@ package my.ecommerce.domain.order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import my.ecommerce.domain.order.order_item.OrderItem;
-import my.ecommerce.domain.order.order_item.OrderItemRepository;
+import my.ecommerce.domain.order.dto.OrderCreate;
 
 @Service
 public class OrderService {
 	private final OrderRepository orderRepository;
-	private final OrderItemRepository orderItemRepository;
 
 	@Autowired
-	public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+	public OrderService(OrderRepository orderRepository) {
 		this.orderRepository = orderRepository;
-		this.orderItemRepository = orderItemRepository;
 	}
 
-	public Order create(Order order) {
+	public Order create(OrderCreate orderCreate) {
+		Order order = Order.newOrder(orderCreate.userId());
+
+		orderCreate.items().forEach(item -> order.addOrderItem(item.product(), item.quantity(), item.currentPrice()));
+		order.calculateCurrentPrice();
+
 		validate(order);
-		Order persistedOrder = orderRepository.save(order);
-		order.persist(persistedOrder.getId());
 
-		order.getItems().forEach(item -> {
-			item.setOrder(persistedOrder);
-			OrderItem persisted = orderItemRepository.save(item);
-			item.persist(persisted.getId());
-		});
-
-		return order;
+		return orderRepository.save(order);
 	}
 
 	private void validate(Order order) {

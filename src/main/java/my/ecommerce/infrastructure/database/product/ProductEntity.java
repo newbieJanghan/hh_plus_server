@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import my.ecommerce.domain.product.Product;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
 
 @Entity
@@ -30,5 +31,23 @@ public class ProductEntity extends BaseEntity {
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
+	}
+
+	public static ProductEntity fromDomain(Product domain) {
+		return ProductEntity.builder()
+			.id(domain.getId())
+			.name(domain.getName())
+			.price(domain.getPrice())
+			.stock(domain.getStock())
+			.build();
+	}
+
+	public Product toDomain() {
+		return Product.builder()
+			.id(getId())
+			.name(name)
+			.price(price)
+			.stock(stock)
+			.build();
 	}
 }

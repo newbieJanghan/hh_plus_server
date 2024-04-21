@@ -7,27 +7,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import my.ecommerce.application.OrderApplication;
-import my.ecommerce.domain.order.Order;
-import my.ecommerce.domain.order.dto.CreateOrderDto;
 import my.ecommerce.api.controller.abstracts.BaseAuthenticatedController;
 import my.ecommerce.api.dto.request.OrderCreateRequest;
 import my.ecommerce.api.dto.response.OrderResponse;
+import my.ecommerce.domain.order.Order;
+import my.ecommerce.usecase.order.OrderUseCase;
 
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrdersController extends BaseAuthenticatedController {
-	private final OrderApplication orderApplication;
+	private final OrderUseCase orderUseCase;
 
 	@Autowired
-	public OrdersController(OrderApplication orderApplication) {
-		this.orderApplication = orderApplication;
+	public OrdersController(OrderUseCase orderUseCase) {
+		this.orderUseCase = orderUseCase;
 	}
 
 	@PostMapping("")
 	public OrderResponse createOrder(@RequestBody @Valid OrderCreateRequest requestDto) {
-		CreateOrderDto createOrderDto = requestDto.toDomain(getAuthenticatedUser().getId());
-		Order order = orderApplication.run(createOrderDto);
+		Order order = orderUseCase.run(requestDto.toCommand(getAuthenticatedUser().getId()));
 		return OrderResponse.fromDomain(order);
 	}
 }

@@ -12,8 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
 import my.ecommerce.domain.Prepare;
-import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderService;
+import my.ecommerce.domain.order.dto.OrderCreate;
+import my.ecommerce.domain.order.dto.OrderItemCreate;
 import my.ecommerce.domain.product.dto.PeriodQuery;
 import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.utils.Today;
@@ -51,14 +52,20 @@ public class ProductRepositoryFindPopularTest {
 	}
 
 	private void setOrderedProducts() {
-		Order order = Order.newOrder(UUIDGenerator.generate(), 10000);
+		OrderCreate orderCreate = OrderCreate.builder().userId(UUIDGenerator.generate()).build();
 		for (int i = 0; i < 10; i++) {
 			Product product = Prepare.product(0, 10);
 			productRepository.save(product);
 
-			order.addOrderItem(product, i + 1, 1000L);
+			OrderItemCreate orderItem = OrderItemCreate.builder()
+				.product(product)
+				.quantity(i + 1)
+				.currentPrice(1000L)
+				.build();
+
+			orderCreate.items().add(orderItem);
 		}
 
-		orderService.create(order);
+		orderService.create(orderCreate);
 	}
 }

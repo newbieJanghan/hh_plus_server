@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.order_item.OrderItem;
-import my.ecommerce.domain.order.order_item.OrderItemStatus;
 
 @Getter
 public class OrderResponse {
@@ -44,10 +43,10 @@ public class OrderResponse {
 		private final UUID orderId;
 		private final ProductResponse product;
 		private final long quantity;
-		private final OrderItemStatus status;
+		private final OrderItem.OrderItemStatus status;
 
 		public OrderItemResponse(UUID id, UUID orderId, ProductResponse product, long quantity,
-			OrderItemStatus status) {
+			OrderItem.OrderItemStatus status) {
 			this.id = id;
 			this.orderId = orderId;
 			this.product = product;

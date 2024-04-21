@@ -23,12 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import my.ecommerce.application.OrderApplication;
-import my.ecommerce.domain.order.Order;
-import my.ecommerce.domain.order.dto.CreateOrderDto;
 import my.ecommerce.api.controller.OrdersController;
 import my.ecommerce.api.dto.request.OrderCreateRequest;
 import my.ecommerce.api.utils.MockAuthentication;
+import my.ecommerce.domain.order.Order;
+import my.ecommerce.usecase.order.OrderCommand;
+import my.ecommerce.usecase.order.OrderUseCase;
 import my.ecommerce.utils.UUIDGenerator;
 
 @WebMvcTest(OrdersController.class)
@@ -39,11 +39,11 @@ public class OrdersControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private OrderApplication orderApplication;
+	private OrderUseCase orderUseCase;
 
 	@BeforeEach
 	void setup() {
-		mockMvc = MockMvcBuilders.standaloneSetup(new OrdersController(orderApplication))
+		mockMvc = MockMvcBuilders.standaloneSetup(new OrdersController(orderUseCase))
 			.alwaysDo(result -> System.out.println("status: " + result.getResponse().getStatus()))
 			.alwaysDo(result -> System.out.println("content: " + result.getResponse().getContentAsString()))
 			.build();
@@ -55,7 +55,7 @@ public class OrdersControllerTest {
 	public void order_success() throws Exception {
 		// when
 		UUID userId = UUIDGenerator.generate();
-		when(orderApplication.run(any(CreateOrderDto.class))).thenReturn(Order.newOrder(userId, 0));
+		when(orderUseCase.run(any(OrderCommand.class))).thenReturn(Order.newOrder(userId));
 
 		// then
 		mockMvc.perform(post("/api/v1/orders")
@@ -65,7 +65,7 @@ public class OrdersControllerTest {
 			.andExpect(jsonPath("$.userId").value(userId.toString()))
 		;
 
-		verify(orderApplication, times(1)).run(any(CreateOrderDto.class));
+		verify(orderUseCase, times(1)).run(any(OrderCommand.class));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class OrdersControllerTest {
 			.andExpect(
 				result -> assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()));
 
-		verify(orderApplication, never()).run(any(CreateOrderDto.class));
+		verify(orderUseCase, never()).run(any(OrderCommand.class));
 	}
 
 	private String createRequestContent() throws JSONException {
@@ -84,19 +84,13 @@ public class OrdersControllerTest {
 	}
 
 	private JSONObject mockCreateRequestJson() throws JSONException {
-		JSONObject body = new JSONObject();
+		JSONObject order = new JSONObject();
 
-		body.put("items", mockOrderItemsRequestJson());
-		body.put("totalPrice", 10);
-
-		return body;
-	}
-
-	private JSONArray mockOrderItemsRequestJson() throws JSONException {
 		JSONArray orderItems = new JSONArray();
-		UUID productId = UUIDGenerator.generate();
-		orderItems.put(new JSONObject().put("productId", productId).put("quantity", 1));
+		orderItems.put(new JSONObject().put("productId", UUIDGenerator.generate()).put("quantity", 1));
 
-		return orderItems;
+		order.put("items", orderItems);
+
+		return order;
 	}
 }
