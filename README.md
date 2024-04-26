@@ -1,10 +1,10 @@
 # 프로젝트 마일스톤
 
-## [Gant Chart](./docs/project/gant.md)
+- [Gant Chart](./docs/project/gant.md)
 
 # 요구사항
 
-## [IA Table](./docs/project/requirement.md)
+- [IA Table](./docs/project/requirement.md)
 
 # API 명세 및 플로우 차트
 
