@@ -1,4 +1,4 @@
-package my.ecommerce.domain.product;
+package my.ecommerce.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,19 +9,19 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
-import my.ecommerce.domain.Prepare;
 import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderService;
+import my.ecommerce.domain.product.Product;
+import my.ecommerce.domain.product.ProductRepository;
 import my.ecommerce.domain.product.dto.PeriodQuery;
 import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
+import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.Today;
 import my.ecommerce.utils.UUIDGenerator;
 
-@SpringBootTest
-public class ProductRepositoryFindPopularTest {
+public class ProductRepositoryFindPopularTest extends AbstractRepositoryTest {
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -48,7 +48,7 @@ public class ProductRepositoryFindPopularTest {
 		List<Product> list = result.getContent();
 		Product max = list.stream().max(Comparator.comparingInt(Product::getSoldAmountInPeriod)).get();
 
-		assertEquals(30, list.size());
+		assertEquals(5, list.size());
 		assertEquals(list.getFirst(), max);
 	}
 

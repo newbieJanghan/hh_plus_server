@@ -1,10 +1,9 @@
-package my.ecommerce.domain;
+package my.ecommerce.utils;
 
 import my.ecommerce.domain.account.Account;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.order_item.OrderItem;
 import my.ecommerce.domain.product.Product;
-import my.ecommerce.utils.UUIDGenerator;
 
 public class Prepare {
 	public static Order order(int itemsCount) {

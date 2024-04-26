@@ -1,4 +1,4 @@
-package my.ecommerce.domain.account;
+package my.ecommerce.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -13,6 +13,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountRepository;
+import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
 import my.ecommerce.utils.UUIDGenerator;

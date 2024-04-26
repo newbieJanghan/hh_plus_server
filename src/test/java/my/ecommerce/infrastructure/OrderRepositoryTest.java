@@ -1,19 +1,19 @@
-package my.ecommerce.domain.order;
+package my.ecommerce.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import my.ecommerce.domain.Prepare;
+import my.ecommerce.domain.order.Order;
+import my.ecommerce.domain.order.OrderRepository;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
+import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
-@SpringBootTest
-public class OrderRepositoryTest {
+public class OrderRepositoryTest extends AbstractRepositoryTest {
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired

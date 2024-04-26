@@ -1,4 +1,4 @@
-package my.ecommerce.domain.account;
+package my.ecommerce.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,13 +7,13 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import my.ecommerce.domain.Prepare;
+import my.ecommerce.domain.account.Account;
+import my.ecommerce.domain.account.AccountRepository;
+import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
-@SpringBootTest
-public class AccountRepositoryTest {
+public class AccountRepositoryTest extends AbstractRepositoryTest {
 	@Autowired
 	private AccountRepository accountRepository;
 

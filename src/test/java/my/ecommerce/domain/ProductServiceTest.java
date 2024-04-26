@@ -1,4 +1,4 @@
-package my.ecommerce.domain.product;
+package my.ecommerce.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -11,6 +11,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import my.ecommerce.domain.product.Product;
+import my.ecommerce.domain.product.ProductRepository;
+import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
 import my.ecommerce.utils.UUIDGenerator;

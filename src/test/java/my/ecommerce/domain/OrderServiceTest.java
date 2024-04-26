@@ -1,4 +1,4 @@
-package my.ecommerce.domain.order;
+package my.ecommerce.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -14,8 +14,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
-import my.ecommerce.domain.Prepare;
+import my.ecommerce.domain.order.Order;
+import my.ecommerce.domain.order.OrderCreate;
+import my.ecommerce.domain.order.OrderRepository;
+import my.ecommerce.domain.order.OrderService;
 import my.ecommerce.domain.order.order_item.OrderItem;
+import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class OrderServiceTest {
