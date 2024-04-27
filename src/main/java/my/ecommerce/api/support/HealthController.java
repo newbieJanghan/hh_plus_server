@@ -1,4 +1,4 @@
-package my.ecommerce.api.controller;
+package my.ecommerce.api.support;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
-public class Controller {
+@RequestMapping("/health")
+public class HealthController {
 	@GetMapping("")
 	@ResponseStatus(HttpStatus.OK)
 	public String healthCheck() {
