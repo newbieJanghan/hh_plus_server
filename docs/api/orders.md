@@ -115,14 +115,14 @@ sequenceDiagram
         server -->> client: 422 INSUFFICIENT_PRODUCT_STOCK
     end
     note over server: Product
-    server ->> db: USER_BALANCE에 잔액 조회
+    server ->> db: ACCOUNT에 잔액 조회
     opt 잔액 부족
-        db -->> server: USER_BALANCE
+        db -->> server: ACCOUNT
         server -->> client: 422 INSUFFICIENT_BALANCE
     end
     note over server: Product
-    server ->> db: USER_BALANCE에 잔액 차감
-    server ->> db: USER_BALANCE_HISTORY에 잔액 이력 저장
+    server ->> db: ACCOUNT에 잔액 차감
+    server ->> db: ACCOUNT_HISTORY에 잔액 이력 저장
     server ->> db: PRODUCT에 재고 차감
     server ->> db: ORDER에 주문 저장
     note over server: Product, Order
