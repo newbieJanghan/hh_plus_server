@@ -99,11 +99,15 @@ erDiagram
 
 ### `dev`
 
-`featrue` 브랜치를 자유롭게 커밋할 수 있는 개발 브랜치
+`featrue` 브랜치를 자유롭게 커밋할 수 있는 개발 브랜치로 여러 feature 가 동시에 존재할 수 있다.
 
-### `prod`
+### `stage`
 
-배포 환경 브랜치로 커밋이 불가능하며 application 환경 변수를 CD 과정에서 주입한다.
+`feature` 브랜치를 배포 환경에서 테스트하기 위한 브랜치로, 프로덕션에 올리고 싶은 feature 만 PR 할 수 있다.
+
+### `main`
+
+프로덕션 환경 브랜치
 
 ## Integration Policy
 
@@ -111,6 +115,10 @@ erDiagram
 
 Merge & PR :ok:
 
-### `dev` -> `prod`
+### `feature` -> `stage`
+
+Only PR :ok:
+
+### `stage` -> `prod`
 
 Only PR :ok:
