@@ -1,7 +1,3 @@
-### Environments ###
-src/main/resources/application-prod.properties
-src/main/resources/application-secret.properties
-
 HELP.md
 .gradle
 build/
