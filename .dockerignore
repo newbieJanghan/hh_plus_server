@@ -2,7 +2,5 @@
 .git
 test
 .gitignore
-.dockerignore
-Dockerfile
 *.md
 *.sh

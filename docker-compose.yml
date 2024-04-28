@@ -1,0 +1,35 @@
+services:
+  database:
+    container_name: db
+    restart: unless-stopped
+    image: postgres:16.2
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_NAME: db
+      TZ: Asia/Seoul
+    volumes:
+      - ./.docker:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+  application:
+    container_name: app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PROFILE: dev
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOSTNAME: database
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - database
+
+volumes:
+  pgdata:
+    external: true
