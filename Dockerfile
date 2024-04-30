@@ -1,4 +1,4 @@
-FROM openjdk:21 as builder
+FROM eclipse-temurin:21-jdk as builder
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
