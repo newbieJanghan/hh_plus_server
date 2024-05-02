@@ -5,6 +5,7 @@
 # 요구사항
 
 - [IA Table](./docs/project/requirement.md)
+- [동시성 제어](./docs/project/concurrency.md)
 
 # API 명세 및 플로우 차트
 
