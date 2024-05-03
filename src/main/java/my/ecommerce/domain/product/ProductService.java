@@ -47,7 +47,7 @@ public class ProductService {
 		return productRepository.save(product);
 	}
 
-	public List<Product> sellAll(List<ProductSell> sells) {
+	public List<Product> sellMany(List<ProductSell> sells) {
 		return sells.stream().map(this::sell).toList();
 	}
 

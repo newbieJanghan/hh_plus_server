@@ -22,6 +22,7 @@ import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.usecase.order.OrderCommand;
+import my.ecommerce.usecase.order.OrderItemCommand;
 import my.ecommerce.usecase.order.OrderUseCase;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
@@ -85,10 +86,10 @@ public class OrderUseCaseTest {
 
 	private OrderCommand prepareCommand() {
 		return new OrderCommand(UUIDGenerator.generate(),
-			List.of(new OrderCommand.OrderItemCommand(UUIDGenerator.generate(), 1, 1000L)));
+			List.of(new OrderItemCommand(UUIDGenerator.generate(), 1, 1000L)));
 	}
 
-	private void mockProductServiceSellProduct(OrderCommand.OrderItemCommand item) {
+	private void mockProductServiceSellProduct(OrderItemCommand item) {
 		doNothing().when(productService).sell(any(ProductSell.class));
 	}
 

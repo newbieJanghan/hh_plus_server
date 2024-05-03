@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 
 import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderService;
+import my.ecommerce.domain.order.order_item.OrderItemCreate;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
 import my.ecommerce.domain.product.dto.PeriodQuery;
@@ -53,11 +54,11 @@ public class ProductRepositoryFindPopularTest extends AbstractRepositoryTest {
 	}
 
 	private void setOrderedProducts(long itemsCount) {
-		List<OrderCreate.OrderItemCreate> items = new ArrayList<>();
+		List<OrderItemCreate> items = new ArrayList<>();
 		for (int i = 0; i < itemsCount; i++) {
 			Product product = productRepository.save(Prepare.product(0, 10));
 
-			OrderCreate.OrderItemCreate orderItem = OrderCreate.OrderItemCreate.builder()
+			OrderItemCreate orderItem = OrderItemCreate.builder()
 				.product(product)
 				.quantity(i + 1)
 				.currentPrice(1000L)

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import my.ecommerce.usecase.order.OrderCommand;
+import my.ecommerce.usecase.order.OrderItemCommand;
 
 @Getter
 public class OrderCreateRequest {
@@ -43,8 +44,8 @@ public class OrderCreateRequest {
 			this.currentPrice = currentPrice;
 		}
 
-		public OrderCommand.OrderItemCommand toCommand() {
-			return new OrderCommand.OrderItemCommand(productId, quantity, currentPrice);
+		public OrderItemCommand toCommand() {
+			return new OrderItemCommand(productId, quantity, currentPrice);
 		}
 	}
 }
