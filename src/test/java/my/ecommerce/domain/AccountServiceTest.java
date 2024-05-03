@@ -18,7 +18,7 @@ import my.ecommerce.domain.account.AccountRepository;
 import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
-import my.ecommerce.utils.UUIDGenerator;
+import my.ecommerce.utils.Prepare;
 
 public class AccountServiceTest {
 	@Mock
@@ -43,7 +43,7 @@ public class AccountServiceTest {
 	@DisplayName("Account 조회 성공")
 	void success_myAccount() {
 		// given
-		Account account = prepareAccount(1000);
+		Account account = Prepare.account(1000);
 		mockAccountRepositoryFindByIdReturn(account);
 
 		// when
@@ -58,7 +58,7 @@ public class AccountServiceTest {
 	@DisplayName("Account 조회 성공 - 새로운 Account 생성")
 	void success_withNewAccount() {
 		// given
-		Account account = prepareAccount(0);
+		Account account = Prepare.account(0);
 
 		mockAccountRepositoryFindByIdReturn(account);
 		when(accountRepository.save(any(Account.class))).thenReturn(account);
@@ -78,7 +78,7 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = 1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
 		mockAccountRepositorySaveReturn();
@@ -103,7 +103,7 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = -1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
 		mockAccountRepositorySaveReturn();
@@ -120,7 +120,7 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
 		mockAccountRepositorySaveReturn();
@@ -143,7 +143,7 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 2000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
 		mockAccountRepositorySaveReturn();
@@ -152,10 +152,6 @@ public class AccountServiceTest {
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> accountService.use(account.getUserId(), useAmount));
-	}
-
-	private Account prepareAccount(long balance) {
-		return Account.builder().id(UUIDGenerator.generate()).userId(UUIDGenerator.generate()).balance(balance).build();
 	}
 
 	private void mockAccountRepositoryFindByIdReturn(Account account) {
