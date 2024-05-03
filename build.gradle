@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
 }
 
 group = 'my'
@@ -27,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -38,6 +40,82 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+def jacocoDir = layout.buildDirectory.dir("jacocoReport/")
+def jacocoExclude = [
+        'my/ecommerce/**/*Config*',
+        'my/ecommerce/**/*Application*',
+        'my/ecommerce/**/*Exception*',
+        'my/ecommerce/**/*Request*',
+        'my/ecommerce/**/*Response*',
+        'my/ecommerce/**/*Dto*',
+        'my/ecommerce/**/*Entity*',
+        '**/test/**',
+        '**/resources/**'
+]
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.destination jacocoDir.get().file("index.html").asFile
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: jacocoExclude)
+                })
+        )
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                minimum = 140
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+
+            excludes = jacocoExclude
+        }
+    }
+}
+
+
+tasks.register('testCoverage', Test) {
+    group 'verification'
+    description 'Run tests and generate coverage report'
+
+    dependsOn('test',
+            'jacocoTestReport',
+            'jacocoTestCoverageVerification')
+
+    tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+    tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+}
+
+
+
