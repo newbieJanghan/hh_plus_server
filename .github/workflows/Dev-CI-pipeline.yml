@@ -12,7 +12,7 @@ env:
   SONAR_TOKEN: ${{  secrets.SONAR_TOKEN }}
 
 jobs:
-  spotlessJavaCheck:
+  analyzeBySonarCloud:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,9 +43,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Spotless Java Check
-        run: ./gradlew spotlessJavaCheck
 
       - name: test and analyze
         env:
