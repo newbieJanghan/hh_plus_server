@@ -30,7 +30,7 @@ public class AccountRepositoryTest extends AbstractRepositoryTest {
 		assertInstanceOf(UUID.class, result.getId());
 		assertNotNull(result.getId());
 		assertEquals(account.getUserId(), result.getUserId());
-		assertEquals(account.getAmount(), result.getAmount());
+		assertEquals(account.getBalance(), result.getBalance());
 
 		// cleanup
 		accountRepository.destroy(result.getId());
@@ -49,7 +49,7 @@ public class AccountRepositoryTest extends AbstractRepositoryTest {
 		assertNotNull(result);
 		assertEquals(persistence.getId(), result.getId());
 		assertEquals(persistence.getUserId(), result.getUserId());
-		assertEquals(persistence.getAmount(), result.getAmount());
+		assertEquals(persistence.getBalance(), result.getBalance());
 
 		// cleanup
 		accountRepository.destroy(persistence.getId());

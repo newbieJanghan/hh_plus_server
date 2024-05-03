@@ -25,13 +25,6 @@ public class ProductService {
 		return productRepository.findAllWithPage(query);
 	}
 
-	// public Product getAvailableProduct(UUID id, Long quantity) {
-	// 	Product product = productRepository.findById(id);
-	// 	checkStock(product, quantity);
-	//
-	// 	return product;
-	// }
-
 	public Page<Product> getPopularProductPage(ProductPageCursorQuery query, PeriodQuery period) {
 		return productRepository.findAllPopularWithPage(query, period);
 	}

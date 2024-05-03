@@ -44,32 +44,31 @@ public class AccountServiceTest {
 	void success_myAccount() {
 		// given
 		Account account = prepareAccount(1000);
-		mockRepositoryFindById(account);
+		mockAccountRepositoryFindByIdReturn(account);
 
 		// when
 		Account result = accountService.myAccount(account.getUserId());
 
 		// then
 		assertEquals(account.getUserId(), result.getUserId());
-		assertEquals(account.getAmount(), result.getAmount());
+		assertEquals(account.getBalance(), result.getBalance());
 	}
 
 	@Test
 	@DisplayName("Account 조회 성공 - 새로운 Account 생성")
 	void success_withNewAccount() {
 		// given
-		UUID userId = UUIDGenerator.generate();
-		Account newAccount = prepareNewAccount(userId);
+		Account account = prepareAccount(0);
 
-		when(accountRepository.findByUserId(userId)).thenReturn(null);
-		when(accountRepository.save(any(Account.class))).thenReturn(newAccount);
+		mockAccountRepositoryFindByIdReturn(account);
+		when(accountRepository.save(any(Account.class))).thenReturn(account);
 
 		// when
-		Account result = accountService.myAccount(userId);
+		Account result = accountService.myAccount(account.getUserId());
 
 		// then
 		assertInstanceOf(UUID.class, result.getId());
-		assertEquals(0, result.getAmount());
+		assertEquals(0, result.getBalance());
 
 	}
 
@@ -81,15 +80,16 @@ public class AccountServiceTest {
 		long chargeAmount = 1000;
 		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn();
+		mockAccountHistoryRepositorySaveReturn();
 
 		// when
 		accountService.charge(account.getUserId(), chargeAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
-		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getAmount());
+		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getBalance());
 
 		verify(historyRepository).save(historyCaptor.capture());
 		assertEquals(AccountHistory.TransactionType.CHARGE, historyCaptor.getValue().getType());
@@ -105,8 +105,9 @@ public class AccountServiceTest {
 		long chargeAmount = -1000;
 		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn();
+		mockAccountHistoryRepositorySaveReturn();
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
@@ -121,15 +122,16 @@ public class AccountServiceTest {
 		long useAmount = 1000;
 		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn();
+		mockAccountHistoryRepositorySaveReturn();
 
 		// when
 		accountService.use(account.getUserId(), useAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
-		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getAmount());
+		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getBalance());
 
 		verify(historyRepository).save(historyCaptor.capture());
 		assertEquals(AccountHistory.TransactionType.USAGE, historyCaptor.getValue().getType());
@@ -143,28 +145,29 @@ public class AccountServiceTest {
 		long useAmount = 2000;
 		Account account = prepareAccount(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn();
+		mockAccountHistoryRepositorySaveReturn();
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> accountService.use(account.getUserId(), useAmount));
 	}
 
-	private Account prepareAccount(long amount) {
-		return Account.builder().userId(UUIDGenerator.generate()).amount(amount).build();
+	private Account prepareAccount(long balance) {
+		return Account.builder().id(UUIDGenerator.generate()).userId(UUIDGenerator.generate()).balance(balance).build();
 	}
 
-	private Account prepareNewAccount(UUID userId) {
-		return Account.newAccount(userId);
-	}
-
-	private void mockRepositoryFindById(Account account) {
+	private void mockAccountRepositoryFindByIdReturn(Account account) {
 		when(accountRepository.findByUserId(account.getUserId())).thenReturn(account);
 	}
 
-	private void mockRepositorySaveMethods() {
+	private void mockAccountRepositorySaveReturn() {
 		when(accountRepository.save(any(Account.class))).thenReturn(null);
+
+	}
+
+	private void mockAccountHistoryRepositorySaveReturn() {
 		when(historyRepository.save(any(AccountHistory.class))).thenReturn(null);
 	}
 }

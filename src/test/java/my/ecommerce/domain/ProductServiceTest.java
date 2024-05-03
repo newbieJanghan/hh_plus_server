@@ -41,10 +41,13 @@ public class ProductServiceTest {
 
 		// Given
 		Product product = prepareProduct(stock);
+		ProductSell productSell = new ProductSell(product.getId(), orderQuantity);
+
+		when(productRepository.findById(product.getId())).thenReturn(product);
 		when(productRepository.save(product)).thenReturn(product);
 
 		// When
-		productService.sell(new ProductSell(product.getId(), orderQuantity));
+		productService.sell(productSell);
 
 		// Then
 		verify(productRepository).save(productCaptor.capture());
@@ -57,15 +60,21 @@ public class ProductServiceTest {
 		long orderQuantity = 1;
 		long stock = 0;
 
-		// Given
 		Product product = prepareProduct(stock);
+		ProductSell productSell = new ProductSell(product.getId(), orderQuantity);
+
+		// Given
+		when(productRepository.findById(product.getId())).thenReturn(product);
 
 		// When & Then
 		assertThrows(InsufficientStockException.class,
-			() -> productService.sell(new ProductSell(product.getId(), orderQuantity)));
+			() -> productService.sell(productSell));
 	}
 
 	private Product prepareProduct(long stock) {
-		return new Product(UUIDGenerator.generate(), "상품", 1000L, stock, 0);
+		return Product.builder()
+			.id(UUIDGenerator.generate())
+			.name("상품").price(1000L).stock(stock)
+			.build();
 	}
 }
