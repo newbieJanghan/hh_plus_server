@@ -60,7 +60,7 @@ public class AccountService {
 	}
 
 	private void validateUsage(Account account, long amount) {
-		if (account.getAmount() < amount) {
+		if (account.getBalance() < amount) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
 		}
 	}

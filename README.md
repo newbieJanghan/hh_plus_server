@@ -42,7 +42,7 @@ erDiagram
     ACCOUNT {
         uuid id PK
         long user_id FK
-        long amount
+        long balance
     }
     ACCOUNT_HISTORY {
         uuid id PK

@@ -24,16 +24,16 @@ public class AccountEntity extends BaseEntity {
 	private UUID userId;
 
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
-	private long amount;
+	private long balance;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
 	private List<AccountHistoryEntity> histories;
 
 	@Builder
-	public AccountEntity(UUID id, UUID userId, long amount, List<AccountHistoryEntity> histories) {
+	public AccountEntity(UUID id, UUID userId, long balance, List<AccountHistoryEntity> histories) {
 		super(id);
 		this.userId = userId;
-		this.amount = amount;
+		this.balance = balance;
 		this.histories = histories;
 	}
 
@@ -41,7 +41,7 @@ public class AccountEntity extends BaseEntity {
 		return AccountEntity.builder()
 			.id(domain.getId())
 			.userId(domain.getUserId())
-			.amount(domain.getAmount())
+			.balance(domain.getBalance())
 			.build();
 	}
 
@@ -49,7 +49,7 @@ public class AccountEntity extends BaseEntity {
 		return Account.builder()
 			.id(getId())
 			.userId(userId)
-			.amount(amount)
+			.balance(balance)
 			.build();
 	}
 }
