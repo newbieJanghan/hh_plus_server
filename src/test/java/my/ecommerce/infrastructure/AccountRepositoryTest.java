@@ -38,7 +38,7 @@ public class AccountRepositoryTest extends AbstractTestWithDatabase {
 	}
 
 	@Test
-	@DisplayName("userId 로 Account 를 조회 성공")
+	@DisplayName("UserId 로 Account 를 조회 성공")
 	public void success_findByUserId() {
 		// given
 		Account persistence = accountRepository.save(Prepare.account(0));
@@ -58,7 +58,7 @@ public class AccountRepositoryTest extends AbstractTestWithDatabase {
 
 	@Test
 	@DisplayName("userId 로 Account 를 조회 시 로우가 없는 경우 null 반환")
-	public void success_findByUserId_withNoRow() {
+	public void success_findById_withNoRow() {
 		// given
 		UUID userId = UUIDGenerator.generate();
 

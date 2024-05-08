@@ -27,6 +27,13 @@ public class AccountRepositoryImpl implements AccountRepository {
 		return jpaRepository.findByUserId(userId).map(AccountEntity::toDomain).orElse(null);
 	}
 
+	public Account findByIdForUpdate(UUID userId) {
+		return jpaRepository
+			.findWithPessimisticLockById(userId)
+			.map(AccountEntity::toDomain)
+			.orElse(null);
+	}
+
 	public void destroy(UUID id) {
 		jpaRepository.deleteById(id);
 	}

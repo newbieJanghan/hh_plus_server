@@ -44,7 +44,7 @@ public class AccountServiceTest {
 	void success_myAccount() {
 		// given
 		Account account = Prepare.account(1000);
-		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositoryFindByUserIdReturn(account);
 
 		// when
 		Account result = accountService.myAccount(account.getUserId());
@@ -60,7 +60,7 @@ public class AccountServiceTest {
 		// given
 		Account account = Prepare.account(0);
 
-		mockAccountRepositoryFindByIdReturn(account);
+		when(accountRepository.findByUserId(account.getUserId())).thenReturn(null);
 		when(accountRepository.save(any(Account.class))).thenReturn(account);
 
 		// when
@@ -81,11 +81,11 @@ public class AccountServiceTest {
 		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
-		mockAccountRepositorySaveReturn();
-		mockAccountHistoryRepositorySaveReturn();
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when
-		accountService.charge(account.getUserId(), chargeAmount);
+		accountService.charge(account.getId(), chargeAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
@@ -106,12 +106,12 @@ public class AccountServiceTest {
 		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
-		mockAccountRepositorySaveReturn();
-		mockAccountHistoryRepositorySaveReturn();
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
-		assertThrows(IllegalArgumentException.class, () -> accountService.charge(account.getUserId(), chargeAmount));
+		assertThrows(IllegalArgumentException.class, () -> accountService.charge(account.getId(), chargeAmount));
 	}
 
 	@Test
@@ -123,11 +123,11 @@ public class AccountServiceTest {
 		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
-		mockAccountRepositorySaveReturn();
-		mockAccountHistoryRepositorySaveReturn();
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when
-		accountService.use(account.getUserId(), useAmount);
+		accountService.use(account.getId(), useAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
@@ -146,24 +146,28 @@ public class AccountServiceTest {
 		Account account = Prepare.account(currentAmount);
 
 		mockAccountRepositoryFindByIdReturn(account);
-		mockAccountRepositorySaveReturn();
-		mockAccountHistoryRepositorySaveReturn();
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> accountService.use(account.getUserId(), useAmount));
 	}
 
-	private void mockAccountRepositoryFindByIdReturn(Account account) {
+	private void mockAccountRepositoryFindByUserIdReturn(Account account) {
 		when(accountRepository.findByUserId(account.getUserId())).thenReturn(account);
 	}
 
-	private void mockAccountRepositorySaveReturn() {
-		when(accountRepository.save(any(Account.class))).thenReturn(null);
+	private void mockAccountRepositoryFindByIdReturn(Account account) {
+		when(accountRepository.findByIdForUpdate(account.getId())).thenReturn(account);
+	}
+
+	private void mockAccountRepositorySaveReturn(Account account) {
+		when(accountRepository.save(any(Account.class))).thenReturn(account);
 
 	}
 
-	private void mockAccountHistoryRepositorySaveReturn() {
-		when(historyRepository.save(any(AccountHistory.class))).thenReturn(null);
+	private void mockAccountHistoryRepositorySaveReturn(AccountHistory history) {
+		when(historyRepository.save(any(AccountHistory.class))).thenReturn(history);
 	}
 }

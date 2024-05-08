@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
 
@@ -29,28 +30,41 @@ public class AccountService {
 		return accountRepository.save(Account.newAccount(userId));
 	}
 
-	public Account charge(UUID userId, long amount) {
+	@Transactional
+	public Account charge(UUID accountId, long amount) {
 		validateCharge(amount);
 
-		Account account = myAccount(userId);
+		Account account = prepareAccountForUpdate(accountId);
 		account.charge(amount);
+		account = accountRepository.save(account);
 
 		AccountHistory chargeHistory = AccountHistory.newChargeHistory(account, amount);
 		historyRepository.save(chargeHistory);
 
-		return accountRepository.save(account);
+		return account;
 	}
 
-	public Account use(UUID userId, long amount) {
-		Account account = myAccount(userId);
+	@Transactional
+	public Account use(UUID accountId, long amount) {
+		Account account = prepareAccountForUpdate(accountId);
 
 		validateUsage(account, amount);
 		account.use(amount);
+		account = accountRepository.save(account);
 
 		AccountHistory usageHistory = AccountHistory.newUsageHistory(account, amount);
 		historyRepository.save(usageHistory);
 
-		return accountRepository.save(account);
+		return account;
+	}
+
+	public Account prepareAccountForUpdate(UUID accountId) {
+		Account account = accountRepository.findByIdForUpdate(accountId);
+		if (account == null) {
+			throw new IllegalArgumentException("계좌가 존재하지 않습니다.");
+		}
+
+		return account;
 	}
 
 	private void validateCharge(long amount) {
