@@ -8,6 +8,9 @@ public interface AccountRepository {
 	@Nullable
 	Account findByUserId(UUID userId);
 
+	@Nullable
+	Account findByIdForUpdate(UUID userId);
+
 	Account save(Account account);
 
 	void destroy(UUID id);

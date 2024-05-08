@@ -13,15 +13,17 @@ import org.springframework.data.domain.Page;
 
 import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderService;
+import my.ecommerce.domain.order.order_item.OrderItemCreate;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
 import my.ecommerce.domain.product.dto.PeriodQuery;
 import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
+import my.ecommerce.utils.AbstractTestWithDatabase;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.Today;
 import my.ecommerce.utils.UUIDGenerator;
 
-public class ProductRepositoryFindPopularTest extends AbstractRepositoryTest {
+public class ProductRepositoryFindPopularTest extends AbstractTestWithDatabase {
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -53,11 +55,11 @@ public class ProductRepositoryFindPopularTest extends AbstractRepositoryTest {
 	}
 
 	private void setOrderedProducts(long itemsCount) {
-		List<OrderCreate.OrderItemCreate> items = new ArrayList<>();
+		List<OrderItemCreate> items = new ArrayList<>();
 		for (int i = 0; i < itemsCount; i++) {
 			Product product = productRepository.save(Prepare.product(0, 10));
 
-			OrderCreate.OrderItemCreate orderItem = OrderCreate.OrderItemCreate.builder()
+			OrderItemCreate orderItem = OrderItemCreate.builder()
 				.product(product)
 				.quantity(i + 1)
 				.currentPrice(1000L)

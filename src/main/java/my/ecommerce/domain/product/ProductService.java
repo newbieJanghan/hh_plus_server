@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import my.ecommerce.domain.product.dto.PeriodQuery;
 import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.domain.product.dto.ProductSell;
@@ -25,13 +26,6 @@ public class ProductService {
 		return productRepository.findAllWithPage(query);
 	}
 
-	// public Product getAvailableProduct(UUID id, Long quantity) {
-	// 	Product product = productRepository.findById(id);
-	// 	checkStock(product, quantity);
-	//
-	// 	return product;
-	// }
-
 	public Page<Product> getPopularProductPage(ProductPageCursorQuery query, PeriodQuery period) {
 		return productRepository.findAllPopularWithPage(query, period);
 	}
@@ -40,14 +34,15 @@ public class ProductService {
 		return productRepository.findById(id);
 	}
 
+	@Transactional
 	public Product sell(ProductSell sell) {
-		Product product = productRepository.findById(sell.id());
+		Product product = productRepository.findByIdForUpdate(sell.id());
 		checkStock(product, sell.quantity());
 		product.sell(sell.quantity());
 		return productRepository.save(product);
 	}
 
-	public List<Product> sellAll(List<ProductSell> sells) {
+	public List<Product> sellMany(List<ProductSell> sells) {
 		return sells.stream().map(this::sell).toList();
 	}
 

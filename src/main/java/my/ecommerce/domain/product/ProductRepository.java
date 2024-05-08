@@ -5,12 +5,14 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 import my.ecommerce.domain.product.dto.PeriodQuery;
+import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
 
 @Repository
 public interface ProductRepository {
 	Product findById(UUID id);
+
+	Product findByIdForUpdate(UUID id);
 
 	Page<Product> findAllWithPage(ProductPageCursorQuery query);
 

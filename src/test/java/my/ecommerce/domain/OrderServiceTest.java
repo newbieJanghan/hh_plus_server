@@ -18,15 +18,13 @@ import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderRepository;
 import my.ecommerce.domain.order.OrderService;
-import my.ecommerce.domain.order.order_item.OrderItem;
+import my.ecommerce.domain.order.order_item.OrderItemCreate;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
 public class OrderServiceTest {
 	@Captor
 	ArgumentCaptor<Order> orderCaptor;
-	@Captor
-	ArgumentCaptor<OrderItem> orderItemCaptor;
 
 	@Mock
 	private OrderRepository orderRepository;
@@ -49,9 +47,9 @@ public class OrderServiceTest {
 		long quantityPerItem = 1;
 
 		// given OrderCreate
-		List<OrderCreate.OrderItemCreate> orderItemCreateList = new ArrayList<>();
+		List<OrderItemCreate> orderItemCreateList = new ArrayList<>();
 		for (int i = 0; i < itemsCount; i++) {
-			orderItemCreateList.add(OrderCreate.OrderItemCreate.builder()
+			orderItemCreateList.add(OrderItemCreate.builder()
 				.product(Prepare.product(pricePerItem, stockPerItem))
 				.quantity(quantityPerItem)
 				.currentPrice(pricePerItem)
@@ -62,7 +60,7 @@ public class OrderServiceTest {
 			.items(orderItemCreateList)
 			.build();
 
-		when(orderRepository.save(any(Order.class))).thenReturn(Prepare.order(itemsCount));
+		when(orderRepository.save(any(Order.class))).thenReturn(Prepare.order(orderCreate.userId(), itemsCount));
 
 		// when
 		orderService.create(orderCreate);

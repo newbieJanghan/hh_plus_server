@@ -18,11 +18,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        PROFILE: dev
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       DB_HOSTNAME: database
       DB_PORT: 5432
       DB_USERNAME: postgres

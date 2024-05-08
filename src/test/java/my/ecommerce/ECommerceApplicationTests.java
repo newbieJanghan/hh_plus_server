@@ -1,13 +1,11 @@
 package my.ecommerce;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class ECommerceApplicationTests {
+import my.ecommerce.utils.AbstractTestWithDatabase;
 
+class ECommerceApplicationTests extends AbstractTestWithDatabase {
 	@Test
 	void contextLoads() {
 	}
-
 }

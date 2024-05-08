@@ -25,7 +25,7 @@ public class OrderUseCase {
 	}
 
 	public Order run(OrderCommand command) {
-		List<Product> products = productService.sellAll(command.toProductSell());
+		List<Product> products = productService.sellMany(command.toProductSellList());
 		Order order = orderService.create(command.toOrderCreate(products));
 		accountService.use(order.getUserId(), order.getTotalPrice());
 

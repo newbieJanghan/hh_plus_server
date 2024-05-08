@@ -10,10 +10,11 @@ import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderRepository;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
+import my.ecommerce.utils.AbstractTestWithDatabase;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
-public class OrderRepositoryTest extends AbstractRepositoryTest {
+public class OrderRepositoryTest extends AbstractTestWithDatabase {
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired

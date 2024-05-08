@@ -18,7 +18,7 @@ import my.ecommerce.domain.account.AccountRepository;
 import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
-import my.ecommerce.utils.UUIDGenerator;
+import my.ecommerce.utils.Prepare;
 
 public class AccountServiceTest {
 	@Mock
@@ -43,33 +43,32 @@ public class AccountServiceTest {
 	@DisplayName("Account 조회 성공")
 	void success_myAccount() {
 		// given
-		Account account = prepareAccount(1000);
-		mockRepositoryFindById(account);
+		Account account = Prepare.account(1000);
+		mockAccountRepositoryFindByUserIdReturn(account);
 
 		// when
 		Account result = accountService.myAccount(account.getUserId());
 
 		// then
 		assertEquals(account.getUserId(), result.getUserId());
-		assertEquals(account.getAmount(), result.getAmount());
+		assertEquals(account.getBalance(), result.getBalance());
 	}
 
 	@Test
 	@DisplayName("Account 조회 성공 - 새로운 Account 생성")
 	void success_withNewAccount() {
 		// given
-		UUID userId = UUIDGenerator.generate();
-		Account newAccount = prepareNewAccount(userId);
+		Account account = Prepare.account(0);
 
-		when(accountRepository.findByUserId(userId)).thenReturn(null);
-		when(accountRepository.save(any(Account.class))).thenReturn(newAccount);
+		when(accountRepository.findByUserId(account.getUserId())).thenReturn(null);
+		when(accountRepository.save(any(Account.class))).thenReturn(account);
 
 		// when
-		Account result = accountService.myAccount(userId);
+		Account result = accountService.myAccount(account.getUserId());
 
 		// then
 		assertInstanceOf(UUID.class, result.getId());
-		assertEquals(0, result.getAmount());
+		assertEquals(0, result.getBalance());
 
 	}
 
@@ -79,17 +78,18 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = 1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when
-		accountService.charge(account.getUserId(), chargeAmount);
+		accountService.charge(account.getId(), chargeAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
-		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getAmount());
+		assertEquals(currentAmount + chargeAmount, accountCaptor.getValue().getBalance());
 
 		verify(historyRepository).save(historyCaptor.capture());
 		assertEquals(AccountHistory.TransactionType.CHARGE, historyCaptor.getValue().getType());
@@ -103,14 +103,15 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long chargeAmount = -1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
-		assertThrows(IllegalArgumentException.class, () -> accountService.charge(account.getUserId(), chargeAmount));
+		assertThrows(IllegalArgumentException.class, () -> accountService.charge(account.getId(), chargeAmount));
 	}
 
 	@Test
@@ -119,17 +120,18 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 1000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when
-		accountService.use(account.getUserId(), useAmount);
+		accountService.use(account.getId(), useAmount);
 
 		// then
 		verify(accountRepository).save(accountCaptor.capture());
-		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getAmount());
+		assertEquals(currentAmount - useAmount, accountCaptor.getValue().getBalance());
 
 		verify(historyRepository).save(historyCaptor.capture());
 		assertEquals(AccountHistory.TransactionType.USAGE, historyCaptor.getValue().getType());
@@ -141,30 +143,31 @@ public class AccountServiceTest {
 		// given
 		long currentAmount = 1000;
 		long useAmount = 2000;
-		Account account = prepareAccount(currentAmount);
+		Account account = Prepare.account(currentAmount);
 
-		mockRepositoryFindById(account);
-		mockRepositorySaveMethods();
+		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositorySaveReturn(account);
+		mockAccountHistoryRepositorySaveReturn(null);
 
 		// when & then
 		verify(historyRepository, never()).save(any(AccountHistory.class));
 		assertThrows(IllegalArgumentException.class, () -> accountService.use(account.getUserId(), useAmount));
 	}
 
-	private Account prepareAccount(long amount) {
-		return Account.builder().userId(UUIDGenerator.generate()).amount(amount).build();
-	}
-
-	private Account prepareNewAccount(UUID userId) {
-		return Account.newAccount(userId);
-	}
-
-	private void mockRepositoryFindById(Account account) {
+	private void mockAccountRepositoryFindByUserIdReturn(Account account) {
 		when(accountRepository.findByUserId(account.getUserId())).thenReturn(account);
 	}
 
-	private void mockRepositorySaveMethods() {
-		when(accountRepository.save(any(Account.class))).thenReturn(null);
-		when(historyRepository.save(any(AccountHistory.class))).thenReturn(null);
+	private void mockAccountRepositoryFindByIdReturn(Account account) {
+		when(accountRepository.findByIdForUpdate(account.getId())).thenReturn(account);
+	}
+
+	private void mockAccountRepositorySaveReturn(Account account) {
+		when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+	}
+
+	private void mockAccountHistoryRepositorySaveReturn(AccountHistory history) {
+		when(historyRepository.save(any(AccountHistory.class))).thenReturn(history);
 	}
 }

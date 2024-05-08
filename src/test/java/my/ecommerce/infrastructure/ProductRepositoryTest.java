@@ -15,10 +15,11 @@ import my.ecommerce.api.dto.page.Sort;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductRepository;
 import my.ecommerce.domain.product.dto.ProductPageCursorQuery;
+import my.ecommerce.utils.AbstractTestWithDatabase;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
 
-public class ProductRepositoryTest extends AbstractRepositoryTest {
+public class ProductRepositoryTest extends AbstractTestWithDatabase {
 	@Autowired
 	private ProductRepository productRepository;
 

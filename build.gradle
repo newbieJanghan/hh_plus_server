@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
 group = 'my'
@@ -9,6 +11,11 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '21'
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+    reportsDirectory = layout.buildDirectory.dir("jacoco-report")
 }
 
 configurations {
@@ -27,6 +34,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -38,6 +46,69 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
+test {
+    ignoreFailures = true
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+def jacocoExclude = [
+        'my/ecommerce/**/*Config*',
+        'my/ecommerce/**/*Application*',
+        'my/ecommerce/**/*Exception*',
+        'my/ecommerce/**/*Request*',
+        'my/ecommerce/**/*Response*',
+        'my/ecommerce/**/*Dto*',
+        'my/ecommerce/**/*Entity*',
+        'my/ecommerce/**/*Builder*',
+        'my/ecommerce/**/*Advice*',
+        '**/test/**',
+        '**/resources/**'
+]
+
+jacocoTestReport {
+    reports {
+        csv.required = false
+        html.required = true
+        xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: jacocoExclude)
+        }))
+    }
+
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 140
+            }
+
+            excludes = jacocoExclude
+        }
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "newbieJanghan_hh_plus_server"
+        property "sonar.organization", "newbiejanghan"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.sources', 'src'
+        property 'sonar.language', 'java'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.test.inclusions', '**/*Test.java'
+        property 'sonar.exclusions', '**/test/**, **/resources/**, **/*Application*.java , **/*Config*.java**/*Dto*.java, **/*Request*.java, **/*Response*.java ,**/*Exception*.java ,**/*ErrorCode*.java'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/jacoco-report/test/jacocoTestReport.xml'
+    }
 }

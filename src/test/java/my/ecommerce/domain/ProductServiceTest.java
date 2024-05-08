@@ -16,7 +16,7 @@ import my.ecommerce.domain.product.ProductRepository;
 import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.domain.product.exceptions.InsufficientStockException;
-import my.ecommerce.utils.UUIDGenerator;
+import my.ecommerce.utils.Prepare;
 
 public class ProductServiceTest {
 	@Captor
@@ -40,11 +40,14 @@ public class ProductServiceTest {
 		long stock = 10;
 
 		// Given
-		Product product = prepareProduct(stock);
+		Product product = Prepare.product(0, stock);
+		ProductSell productSell = new ProductSell(product.getId(), orderQuantity);
+
+		when(productRepository.findById(product.getId())).thenReturn(product);
 		when(productRepository.save(product)).thenReturn(product);
 
 		// When
-		productService.sell(new ProductSell(product.getId(), orderQuantity));
+		productService.sell(productSell);
 
 		// Then
 		verify(productRepository).save(productCaptor.capture());
@@ -57,15 +60,14 @@ public class ProductServiceTest {
 		long orderQuantity = 1;
 		long stock = 0;
 
+		Product product = Prepare.product(0, stock);
+		ProductSell productSell = new ProductSell(product.getId(), orderQuantity);
+
 		// Given
-		Product product = prepareProduct(stock);
+		when(productRepository.findById(product.getId())).thenReturn(product);
 
 		// When & Then
 		assertThrows(InsufficientStockException.class,
-			() -> productService.sell(new ProductSell(product.getId(), orderQuantity)));
-	}
-
-	private Product prepareProduct(long stock) {
-		return new Product(UUIDGenerator.generate(), "상품", 1000L, stock, 0);
+			() -> productService.sell(productSell));
 	}
 }

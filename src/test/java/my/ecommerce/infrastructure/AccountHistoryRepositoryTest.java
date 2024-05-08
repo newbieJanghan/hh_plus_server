@@ -12,9 +12,10 @@ import my.ecommerce.domain.account.Account;
 import my.ecommerce.domain.account.AccountRepository;
 import my.ecommerce.domain.account.account_history.AccountHistory;
 import my.ecommerce.domain.account.account_history.AccountHistoryRepository;
+import my.ecommerce.utils.AbstractTestWithDatabase;
 import my.ecommerce.utils.UUIDGenerator;
 
-public class AccountHistoryRepositoryTest extends AbstractRepositoryTest {
+public class AccountHistoryRepositoryTest extends AbstractTestWithDatabase {
 	@Autowired
 	private AccountHistoryRepository accountHistoryRepository;
 

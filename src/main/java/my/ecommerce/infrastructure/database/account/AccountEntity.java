@@ -1,22 +1,21 @@
 package my.ecommerce.infrastructure.database.account;
 
-import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import my.ecommerce.domain.account.Account;
-import my.ecommerce.infrastructure.database.account_history.AccountHistoryEntity;
 import my.ecommerce.infrastructure.database.common.BaseEntity;
 
 @Entity
-@Table(name = "account")
+@Table(
+	name = "account",
+	indexes = {@Index(name = "idx_user_id", columnList = "user_id", unique = true)})
 @Getter
 @NoArgsConstructor
 public class AccountEntity extends BaseEntity {
@@ -24,32 +23,24 @@ public class AccountEntity extends BaseEntity {
 	private UUID userId;
 
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
-	private long amount;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
-	private List<AccountHistoryEntity> histories;
+	private long balance;
 
 	@Builder
-	public AccountEntity(UUID id, UUID userId, long amount, List<AccountHistoryEntity> histories) {
+	public AccountEntity(UUID id, UUID userId, long balance) {
 		super(id);
 		this.userId = userId;
-		this.amount = amount;
-		this.histories = histories;
+		this.balance = balance;
 	}
 
 	public static AccountEntity fromDomain(Account domain) {
 		return AccountEntity.builder()
 			.id(domain.getId())
 			.userId(domain.getUserId())
-			.amount(domain.getAmount())
+			.balance(domain.getBalance())
 			.build();
 	}
 
 	public Account toDomain() {
-		return Account.builder()
-			.id(getId())
-			.userId(userId)
-			.amount(amount)
-			.build();
+		return Account.builder().id(getId()).userId(userId).balance(balance).build();
 	}
 }

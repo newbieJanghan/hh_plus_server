@@ -18,10 +18,12 @@ import my.ecommerce.domain.account.AccountService;
 import my.ecommerce.domain.order.Order;
 import my.ecommerce.domain.order.OrderCreate;
 import my.ecommerce.domain.order.OrderService;
+import my.ecommerce.domain.order.order_item.OrderItemCreate;
 import my.ecommerce.domain.product.Product;
 import my.ecommerce.domain.product.ProductService;
 import my.ecommerce.domain.product.dto.ProductSell;
 import my.ecommerce.usecase.order.OrderCommand;
+import my.ecommerce.usecase.order.OrderItemCommand;
 import my.ecommerce.usecase.order.OrderUseCase;
 import my.ecommerce.utils.Prepare;
 import my.ecommerce.utils.UUIDGenerator;
@@ -29,11 +31,11 @@ import my.ecommerce.utils.UUIDGenerator;
 public class OrderUseCaseTest {
 
 	@Captor
-	ArgumentCaptor<UUID> userIdCaptor;
-	@Captor
-	ArgumentCaptor<ProductSell> productSellCaptor;
+	ArgumentCaptor<List<ProductSell>> productSellListCaptor;
 	@Captor
 	ArgumentCaptor<OrderCreate> orderCreateCaptor;
+	@Captor
+	ArgumentCaptor<UUID> userIdCaptor;
 	@Captor
 	ArgumentCaptor<Long> totalPriceCaptor;
 
@@ -56,44 +58,47 @@ public class OrderUseCaseTest {
 	@DisplayName("올바른 Dto 로 각 서비스를 호출하여 주문 성공")
 	void success_order() {
 		// Given
+		Product product = Prepare.product(1000, 10);
+		long sellQuantity = 1;
 
-		OrderCommand command = prepareCommand();
-		Product product = Product.builder().id(command.items().getFirst().productId()).build();
-		Order expect = Prepare.order(command.items().size());
+		OrderCommand orderCommand = prepareCommand(product, sellQuantity);
+		OrderItemCommand orderItemCommand = orderCommand.items().getFirst();
 
+		Order expect = Prepare.order(orderCommand.userId(), orderCommand.items().size());
+
+		when(productService.sellMany(anyList())).thenReturn(List.of(product));
 		when(orderService.create(any(OrderCreate.class))).thenReturn(expect);
-		mockAccountService();
-		mockProductServiceSellProduct(command.items().getFirst());
+		when(accountService.use(any(UUID.class), anyLong())).thenReturn(null);
 
 		// When
-		orderUseCase.run(command);
+		orderUseCase.run(orderCommand);
 
-		verify(productService).sell(productSellCaptor.capture());
-		assertEquals(product.getId(), productSellCaptor.getValue().id());
-		assertEquals(command.items().getFirst().quantity(), productSellCaptor.getValue().quantity());
+		verify(productService).sellMany(productSellListCaptor.capture());
+		ProductSell productSell = productSellListCaptor.getValue().getFirst();
+		assertEquals(product.getId(), productSell.id());
+		assertEquals(sellQuantity, productSell.quantity());
 
 		verify(orderService).create(orderCreateCaptor.capture());
 		OrderCreate orderCreate = orderCreateCaptor.getValue();
-		assertEquals(command.userId(), orderCreate.userId());
-		assertEquals(command.items().size(), orderCreate.items().size());
-		assertInstanceOf(Product.class, orderCreate.items().getFirst().product());
+		assertEquals(orderCommand.userId(), orderCreate.userId());
+		assertEquals(orderCommand.items().size(), orderCreate.items().size());
+
+		OrderItemCreate orderItemCreate = orderCreate.items().getFirst();
+		assertEquals(product.getId(), orderItemCreate.product().getId());
+		assertEquals(orderItemCommand.quantity(), orderItemCreate.quantity());
 
 		verify(accountService).use(userIdCaptor.capture(), totalPriceCaptor.capture());
-		assertEquals(command.userId(), userIdCaptor.getValue());
+		assertEquals(orderCommand.userId(), userIdCaptor.getValue());
 		assertEquals(expect.getTotalPrice(), totalPriceCaptor.getValue());
 	}
 
-	private OrderCommand prepareCommand() {
+	private OrderItemCommand prepareOrderItemCommand(Product product, long quantity) {
+		return new OrderItemCommand(product.getId(), quantity, 1000L);
+	}
+
+	private OrderCommand prepareCommand(Product product, long quantity) {
 		return new OrderCommand(UUIDGenerator.generate(),
-			List.of(new OrderCommand.OrderItemCommand(UUIDGenerator.generate(), 1, 1000L)));
-	}
-
-	private void mockProductServiceSellProduct(OrderCommand.OrderItemCommand item) {
-		doNothing().when(productService).sell(any(ProductSell.class));
-	}
-
-	private void mockAccountService() {
-		doNothing().when(accountService).use(any(UUID.class), anyLong());
+			List.of(prepareOrderItemCommand(product, quantity)));
 	}
 
 }

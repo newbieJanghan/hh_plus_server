@@ -50,7 +50,7 @@ TBU
 
 MVCC 기반의 모델에 `Read commited` 이상의 고립 수준에서   
 단순히 `select` 문을 사용하면 각 트랜잭션은 동시에 들어온 다른 트랜잭션의 커밋을 기다리지 않는다.  
-명시적으로 락 기능을 설정하여
+명시적으로 락 기능을 설정하여 해결하자.
 
 #### Optimistic Locking ❌
 
@@ -70,14 +70,4 @@ MVCC 기반의 모델에 `Read commited` 이상의 고립 수준에서
     ```
     select * from account where id = 1 for update; -- 조회
     update account set balance = 100 where id = 1; -- 사용 or 충전
-    ```
-
-- JPA 의 `PessimisticWrite`을 사용한다.
-    ```Java
-    public class AccountService {
-        @Lock(PessimisticWrite)
-        public Account use(UUID userId, long amount) {
-            // Business logic
-        }
-    }
     ```

@@ -7,7 +7,6 @@ COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
-FROM openjdk:21
+FROM eclipse-temurin:21-jdk
 COPY --from=builder build/libs/*.jar app.jar
-ARG PROFILE
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=${PROFILE}", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

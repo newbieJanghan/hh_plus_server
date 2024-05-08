@@ -108,7 +108,7 @@ sequenceDiagram
     - Body:
         ```json
         {
-            "amount": 0
+            "balance": 0
         }
         ```
 - Response
@@ -185,8 +185,8 @@ sequenceDiagram
         participant AccountHistoryRepository
     end
 
-    AccountController ->> AccountService: charge(userId, amount)
-    AccountService ->> AccountApp: chargeToUser(userId, amount)
+    AccountController ->> AccountService: charge(userId, balance)
+    AccountService ->> AccountApp: chargeToUser(userId, balance)
 #
     AccountApp ->> AccountRepository: findOneByUserId(userId)
     alt Account NotFound
