@@ -31,6 +31,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 		return jpaRepository.findById(id).map(ProductEntity::toDomain).orElse(null);
 	}
 
+	public Product findByIdForUpdate(UUID id) {
+		return jpaRepository.findWithPessimisticWriteLockById(id).map(ProductEntity::toDomain).orElse(null);
+	}
+
 	public Page<Product> findAllWithPage(ProductPageCursorQuery query) {
 		PageRequest pageRequest = makePageRequest(query);
 		if (query.getCursor() == null) {

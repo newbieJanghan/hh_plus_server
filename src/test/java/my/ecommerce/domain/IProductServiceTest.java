@@ -11,44 +11,46 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import my.ecommerce.domain.account.Account;
-import my.ecommerce.domain.account.AccountRepository;
-import my.ecommerce.domain.account.AccountService;
+import my.ecommerce.domain.product.Product;
+import my.ecommerce.domain.product.ProductRepository;
+import my.ecommerce.domain.product.ProductService;
+import my.ecommerce.domain.product.dto.ProductSell;
+import my.ecommerce.domain.product.exceptions.InsufficientStockException;
 import my.ecommerce.utils.AbstractTestWithDatabase;
 import my.ecommerce.utils.Prepare;
 
-public class IAccountServiceTest extends AbstractTestWithDatabase {
+public class IProductServiceTest extends AbstractTestWithDatabase {
 	@Autowired
-	private AccountService accountService;
+	private ProductService productService;
 	@Autowired
-	private AccountRepository accountRepository;
+	private ProductRepository productRepository;
 
 	@Test
-	@DisplayName("포인트 사용 성공")
-	void success_use() {
+	@DisplayName("상품 재고 감소 성공")
+	void success_decreaseStock() {
 		// given
-		long currentAmount = 500;
-		long useAmount = 100;
-		Account account = Prepare.account(currentAmount);
-		accountRepository.save(account);
+		long currentStock = 100;
+		long decreaseStock = 10;
+		Product product = Prepare.product(1000, currentStock);
+		productRepository.save(product);
 
 		// when
-		Account result = accountService.use(account.getId(), useAmount);
+		Product sold = productService.sell(new ProductSell(product.getId(), decreaseStock));
 
 		// then
-		assertEquals(currentAmount - useAmount, result.getBalance());
+		assertEquals(currentStock - decreaseStock, sold.getStock());
 	}
 
 	@Test
-	@DisplayName("동시성 제어 성공 - 동시의 사용 요청에 절반은 잔액 부족 에러 발생")
-	void success_concurrently_use() throws InterruptedException {
+	@DisplayName("동시성 제어 성공 - 동시의 판매 요청에 절반은 재고 부족 에러 발생")
+	void success_concurrently_sell() throws InterruptedException {
 		// given
-		long currentAmount = 500;
-		long useAmount = 100;
+		long currentStock = 50;
+		long sellStock = 10;
 		int threadsCount = 10;
 
-		Account account = Prepare.account(currentAmount);
-		accountRepository.save(account);
+		Product product = Prepare.product(1000, currentStock);
+		productRepository.save(product);
 
 		// when
 		CountDownLatch latch = new CountDownLatch(threadsCount);
@@ -60,11 +62,9 @@ public class IAccountServiceTest extends AbstractTestWithDatabase {
 		for (int i = 0; i < threadsCount; i++) {
 			executor.execute(() -> {
 				try {
-					accountService.use(account.getId(), useAmount);
-					System.out.println("Success thread" + Thread.currentThread().getName());
+					productService.sell(new ProductSell(product.getId(), sellStock));
 					successCount.incrementAndGet();
-				} catch (IllegalArgumentException e) {
-					System.out.println("Fail thread" + Thread.currentThread().getName());
+				} catch (InsufficientStockException e) {
 					failCount.incrementAndGet();
 				} finally {
 					latch.countDown();
@@ -73,7 +73,6 @@ public class IAccountServiceTest extends AbstractTestWithDatabase {
 		}
 
 		latch.await();
-		executor.shutdown();
 
 		// then
 		assertEquals(threadsCount / 2, successCount.get());

@@ -29,7 +29,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
 	public Account findByIdForUpdate(UUID userId) {
 		return jpaRepository
-			.findWithPessimisticLockById(userId)
+			.findWithPessimisticWriteLockById(userId)
 			.map(AccountEntity::toDomain)
 			.orElse(null);
 	}
