@@ -1,5 +1,6 @@
 package my.ecommerce.infrastructure.database.account_history;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -50,6 +51,15 @@ public class AccountHistoryEntity extends BaseEntity {
 			.build();
 	}
 
+	public static List<AccountHistoryEntity> fromDomain(List<AccountHistory> histories) {
+		if (histories == null) {
+			return List.of();
+		}
+		return histories.stream()
+			.map(AccountHistoryEntity::fromDomain)
+			.toList();
+	}
+
 	public static TransactionType fromDomainType(AccountHistory.TransactionType type) {
 		return switch (type) {
 			case CHARGE -> TransactionType.DEPOSIT;
@@ -60,7 +70,6 @@ public class AccountHistoryEntity extends BaseEntity {
 	public AccountHistory toDomain() {
 		return AccountHistory.builder()
 			.id(getId())
-			.account(account.toDomain())
 			.amount(amount)
 			.type(toDomainType())
 			.build();
