@@ -22,7 +22,7 @@ public abstract class BaseEntity {
 	protected UUID id;
 
 	@CreationTimestamp
-	@Column(nullable = false, name = "created_at")
+	@Column(nullable = false, updatable = false, name = "created_at")
 	protected LocalDateTime createdAt;
 
 	@UpdateTimestamp
