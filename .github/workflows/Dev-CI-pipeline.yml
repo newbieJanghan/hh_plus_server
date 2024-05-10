@@ -2,9 +2,9 @@ name: Test and Analyze
 
 on:
   push:
-    branches: [ "dev", "main" ]
+    branches: [ "dev", "stage" ]
   pull_request:
-    branches: [ "dev", "main" ]
+    branches: [ "dev", "stage" ]
 
 
 env:
