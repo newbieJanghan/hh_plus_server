@@ -6,6 +6,7 @@
 
 - [IA Table](./docs/project/requirement.md)
 - [동시성 제어](./docs/project/concurrency.md)
+- [쿼리 최적화](./docs/project/optimization.md)
 
 # API 명세 및 플로우 차트
 
