@@ -38,3 +38,6 @@ out/
 
 .dockerignore
 .docker
+
+.env.dev
+.env.prod
