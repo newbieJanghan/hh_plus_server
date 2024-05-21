@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -18,10 +18,12 @@ public class SecurityConfig {
 		return http
 			.csrf(CsrfConfigurer::disable)
 			.formLogin(FormLoginConfigurer::disable)
-			.authorizeHttpRequests(authorize -> authorize.requestMatchers("/swagger-ui/**").permitAll()
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/swagger-ui/**").permitAll()
+				.requestMatchers("/error").permitAll()
 				.anyRequest().authenticated())
+			.addFilterBefore(new AuthenticationFilter(), BasicAuthenticationFilter.class)
 			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.build();
 	}
 }

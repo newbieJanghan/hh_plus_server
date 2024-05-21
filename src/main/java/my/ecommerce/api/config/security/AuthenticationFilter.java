@@ -1,10 +1,13 @@
 package my.ecommerce.api.config.security;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -37,7 +40,10 @@ public class AuthenticationFilter extends GenericFilterBean {
 			User user = parseUser(httpRequest);
 
 			SecurityContext context = SecurityContextHolder.createEmptyContext();
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null);
+
+			GrantedAuthority authority = new SimpleGrantedAuthority("USER");
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null,
+				List.of(authority));
 
 			context.setAuthentication(token);
 			SecurityContextHolder.setContext(context);
@@ -51,7 +57,6 @@ public class AuthenticationFilter extends GenericFilterBean {
 
 	private User parseUser(HttpServletRequest httpRequest) throws BadRequestException {
 		String authToken = httpRequest.getHeader("Authorization");
-		System.out.println("authToken: " + authToken);
 		if (authToken == null) {
 			throw new BadRequestException("Authorization header is missing");
 		}
