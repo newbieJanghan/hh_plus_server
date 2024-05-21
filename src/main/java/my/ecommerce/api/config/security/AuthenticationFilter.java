@@ -7,6 +7,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,11 +18,11 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import my.ecommerce.domain.user.User;
 import my.ecommerce.api.ErrorResponse;
+import my.ecommerce.domain.user.User;
 
+@Component
 public class AuthenticationFilter extends GenericFilterBean {
-
 	public AuthenticationFilter() {
 	}
 
@@ -50,6 +51,7 @@ public class AuthenticationFilter extends GenericFilterBean {
 
 	private User parseUser(HttpServletRequest httpRequest) throws BadRequestException {
 		String authToken = httpRequest.getHeader("Authorization");
+		System.out.println("authToken: " + authToken);
 		if (authToken == null) {
 			throw new BadRequestException("Authorization header is missing");
 		}

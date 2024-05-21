@@ -22,9 +22,9 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: '${SPRING_PROFILES_ACTIVE}'
-      DB_HOSTNAME: '${DB_HOST_NAME}'
+      DB_HOSTNAME: '${DB_HOSTNAME}'
       DB_PORT: '${DB_PORT}'
-      DB_USERNAME: '${DB_USER_NAME}'
+      DB_USERNAME: '${DB_USERNAME}'
       DB_PASSWORD: '${DB_PASSWORD}'
     depends_on:
       - database
