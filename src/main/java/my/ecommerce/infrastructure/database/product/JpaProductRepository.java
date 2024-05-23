@@ -25,7 +25,7 @@ public interface JpaProductRepository extends JpaRepository<ProductEntity, UUID>
 		value =
 			"SELECT p as product, SUM(oi.quantity) as soldAmountInPeriod " +
 				"FROM ProductEntity p JOIN OrderItemEntity oi ON oi.product.id = p.id " +
-				"WHERE p.createdAt > :from AND p.createdAt < :to " +
+				"WHERE oi.createdAt >= :from AND oi.createdAt < :to " +
 				"GROUP BY p.id",
 		countQuery = "SELECT COUNT(p) FROM ProductEntity p"
 	)
