@@ -80,7 +80,7 @@ public class AccountServiceTest {
 		long chargeAmount = 1000;
 		Account account = Prepare.account(currentAmount);
 
-		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositoryFindByUserIdForUpdateReturn(account);
 		mockAccountRepositorySaveReturn(account);
 		mockAccountHistoryRepositorySaveReturn(null);
 
@@ -105,7 +105,7 @@ public class AccountServiceTest {
 		long chargeAmount = -1000;
 		Account account = Prepare.account(currentAmount);
 
-		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositoryFindByUserIdForUpdateReturn(account);
 		mockAccountRepositorySaveReturn(account);
 		mockAccountHistoryRepositorySaveReturn(null);
 
@@ -122,7 +122,7 @@ public class AccountServiceTest {
 		long useAmount = 1000;
 		Account account = Prepare.account(currentAmount);
 
-		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositoryFindByUserIdForUpdateReturn(account);
 		mockAccountRepositorySaveReturn(account);
 		mockAccountHistoryRepositorySaveReturn(null);
 
@@ -145,7 +145,7 @@ public class AccountServiceTest {
 		long useAmount = 2000;
 		Account account = Prepare.account(currentAmount);
 
-		mockAccountRepositoryFindByIdReturn(account);
+		mockAccountRepositoryFindByUserIdForUpdateReturn(account);
 		mockAccountRepositorySaveReturn(account);
 		mockAccountHistoryRepositorySaveReturn(null);
 
@@ -158,8 +158,8 @@ public class AccountServiceTest {
 		when(accountRepository.findByUserId(account.getUserId())).thenReturn(account);
 	}
 
-	private void mockAccountRepositoryFindByIdReturn(Account account) {
-		when(accountRepository.findByIdForUpdate(account.getId())).thenReturn(account);
+	private void mockAccountRepositoryFindByUserIdForUpdateReturn(Account account) {
+		when(accountRepository.findByUserIdForUpdate(account.getUserId())).thenReturn(account);
 	}
 
 	private void mockAccountRepositorySaveReturn(Account account) {

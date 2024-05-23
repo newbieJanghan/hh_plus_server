@@ -9,7 +9,7 @@ public interface AccountRepository {
 	Account findByUserId(UUID userId);
 
 	@Nullable
-	Account findByIdForUpdate(UUID userId);
+	Account findByUserIdForUpdate(UUID userId);
 
 	Account save(Account account);
 

@@ -31,10 +31,10 @@ public class AccountService {
 	}
 
 	@Transactional
-	public Account charge(UUID accountId, long amount) {
+	public Account charge(UUID userId, long amount) {
 		validateCharge(amount);
 
-		Account account = prepareAccountForUpdate(accountId);
+		Account account = prepareAccountForUpdate(userId);
 		account.charge(amount);
 		account = accountRepository.save(account);
 
@@ -45,8 +45,8 @@ public class AccountService {
 	}
 
 	@Transactional
-	public Account use(UUID accountId, long amount) {
-		Account account = prepareAccountForUpdate(accountId);
+	public Account use(UUID userId, long amount) {
+		Account account = prepareAccountForUpdate(userId);
 
 		validateUsage(account, amount);
 		account.use(amount);
@@ -58,8 +58,8 @@ public class AccountService {
 		return account;
 	}
 
-	public Account prepareAccountForUpdate(UUID accountId) {
-		Account account = accountRepository.findByIdForUpdate(accountId);
+	public Account prepareAccountForUpdate(UUID userId) {
+		Account account = accountRepository.findByUserIdForUpdate(userId);
 		if (account == null) {
 			throw new IllegalArgumentException("계좌가 존재하지 않습니다.");
 		}
