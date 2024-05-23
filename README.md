@@ -1,12 +1,13 @@
-# 프로젝트 마일스톤
+# 프로젝트 진행 상황
 
 - [Gant Chart](./docs/project/gant.md)
-
-# 요구사항
-
 - [IA Table](./docs/project/requirement.md)
+
+# 개선기
+
 - [동시성 제어](./docs/project/concurrency.md)
 - [쿼리 최적화](./docs/project/optimization.md)
+- [성능 테스트](./docs/project/performance.md)
 
 # API 명세 및 플로우 차트
 
