@@ -2,6 +2,8 @@ package my.batch.repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +13,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import my.batch.utils.RandomDate;
 import my.ecommerce.infrastructure.database.order.OrderEntity;
 import my.ecommerce.infrastructure.database.order_item.OrderItemEntity;
 import my.ecommerce.infrastructure.database.product.ProductEntity;
@@ -53,9 +56,13 @@ public class OrderItemBulkInsertRepository {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				OrderItemEntity entity = entities.get(i);
 
+				LocalDateTime randomDateTime = RandomDate.between(LocalDateTime.of(2024, 1, 1, 0, 0),
+					LocalDateTime.of(2024, 12, 31, 23, 59));
+				Timestamp randomTimestamp = Timestamp.valueOf(randomDateTime);
+
 				ps.setObject(1, entity.getId());
-				ps.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
-				ps.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis()));
+				ps.setTimestamp(2, randomTimestamp);
+				ps.setTimestamp(3, randomTimestamp);
 				ps.setObject(4, entity.getProduct().getId());
 				ps.setObject(5, entity.getOrder().getId());
 				ps.setLong(6, entity.getQuantity());
