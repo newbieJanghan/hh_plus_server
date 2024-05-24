@@ -18,7 +18,7 @@ import my.ecommerce.infrastructure.database.common.BaseEntity;
 import my.ecommerce.infrastructure.database.order_item.OrderItemEntity;
 
 @Entity
-@Table(name = "`order`")
+@Table(name = "`orders`")
 @Getter
 @NoArgsConstructor
 public class OrderEntity extends BaseEntity {
