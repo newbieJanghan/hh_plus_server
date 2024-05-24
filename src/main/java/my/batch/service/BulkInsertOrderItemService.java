@@ -1,13 +1,13 @@
-package my.ecommerce.batch.service;
+package my.batch.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import my.ecommerce.batch.repository.OrderBulkInsertRepository;
-import my.ecommerce.batch.repository.OrderItemBulkInsertRepository;
-import my.ecommerce.batch.repository.ProductBulkInsertRepository;
+import my.batch.repository.OrderBulkInsertRepository;
+import my.batch.repository.OrderItemBulkInsertRepository;
+import my.batch.repository.ProductBulkInsertRepository;
 import my.ecommerce.infrastructure.database.order.OrderEntity;
 import my.ecommerce.infrastructure.database.order_item.OrderItemEntity;
 import my.ecommerce.infrastructure.database.product.ProductEntity;

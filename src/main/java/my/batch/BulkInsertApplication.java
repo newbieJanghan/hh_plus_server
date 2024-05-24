@@ -1,11 +1,11 @@
-package my.ecommerce.batch;
+package my.batch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import my.ecommerce.batch.service.BulkInsertOrderItemService;
+import my.batch.service.BulkInsertOrderItemService;
 
 @SpringBootApplication()
 public class BulkInsertApplication implements CommandLineRunner {
@@ -17,6 +17,6 @@ public class BulkInsertApplication implements CommandLineRunner {
 	}
 
 	public void run(String... args) {
-		bulkInsertOrderItemService.execute(1000, 10, 1000);
+		bulkInsertOrderItemService.execute(1, 1, 0);
 	}
 }

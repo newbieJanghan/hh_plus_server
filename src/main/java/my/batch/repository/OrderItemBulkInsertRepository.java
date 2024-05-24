@@ -1,4 +1,4 @@
-package my.ecommerce.batch.repository;
+package my.batch.repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
