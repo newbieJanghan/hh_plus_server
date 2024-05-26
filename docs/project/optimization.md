@@ -28,8 +28,17 @@
 ## 인기 상품 랭킹 조회
 
 > 기존 API 는 요청 즉시 당일 판매량을 계산하고 있다. 응답 시간이 늦어지는 문제는 캐싱으로 해결할 수 있다.  
-> 다만 캐시가 준비되어 있지 않은 경우의 DB로 직접 조회하는 경우가 발생할 수 있다.
+> 다만 캐시가 준비되어 있지 않은 경우의 DB로 직접 조회하는 경우가 발생할 수 있다.  
 > 해당 API 의 성능을 확인하고, 통계 테이블과 batch process 를 통해 성능을 개선할 수 있는지 확인한다.
+
+**[ 성능 테스트 ]**
+1,000,000 product / 1,000,000 order_item  
+order_item 은 랜덤한 product_id 와 랜덤한 quantity 를 가지고 있는 데이터로 테스트 진행
+
+![performance.png](../.asset/popular_products_query_test.png)
+하루의 인기 상품 TOP 50을 집계하는 쿼리의 소요 시간은 fetching 만 봐도 1239ms로 개선이 필요함을 알 수 있다.
+
+![explain.png](../.asset/popular_products_query_explain.png)
 
 **[ 통계 테이블 ]**
 
